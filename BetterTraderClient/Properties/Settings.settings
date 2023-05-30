@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Menthus15Mods.Valheim.BetterTraderClient.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="AssetBundlePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Menthus15Mods.Valheim.BetterTraderClient.Assets.canvas.unity</Value>
+    </Setting>
+    <Setting Name="UIAssetName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">BetterTraderClient_Canvas</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

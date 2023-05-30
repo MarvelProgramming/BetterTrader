@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Menthus15Mods.Valheim.BetterTraderLibrary.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="RPCKeyNamePrefix" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Menthus15Mods.Valheim.</Value>
+    </Setting>
+    <Setting Name="TraderConfigurationFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">trader</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
