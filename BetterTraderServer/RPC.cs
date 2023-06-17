@@ -9,24 +9,32 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
         {
             if (ZNet.instance.IsServer())
             {
-                RPCUtils.RegisterMethod(nameof(RPC_RequestTraderInfo), RPC_RequestTraderInfo);
+                RPCUtils.RegisterMethod(nameof(RPC_RequestTraderCoins), RPC_RequestTraderCoins);
+                RPCUtils.RegisterMethod(nameof(RPC_RequestTraderInventory), RPC_RequestTraderInventory);
             }
         }
 
         [Server]
-        public static void RPC_RequestTraderInfo(long sender, ZPackage pkg)
+        public static void RPC_RequestTraderCoins(long sender, ZPackage _)
         {
-            var traderInfoPackage = new ZPackage();
-            traderInfoPackage.Write(BetterTraderServer.TraderInstance.CurrentCoins);
+            var package = new ZPackage();
+            package.Write(BetterTraderServer.TraderInstance.CurrentCoins);
+            RPCUtils.InvokeClientServerRoutedRPC(sender, nameof(RPC_RequestTraderCoins), package);
+        }
+
+        [Server]
+        public static void RPC_RequestTraderInventory(long sender, ZPackage _)
+        {
+            var package = new ZPackage();
             var yamlSerializer = new YamlConfigurationSerializer();
 
             foreach (var item in BetterTraderServer.TraderInstance.CurrentItems)
             {
                 var serializedItem = yamlSerializer.Serialize(item);
-                traderInfoPackage.Write(serializedItem);
+                package.Write(serializedItem);
             }
 
-            RPCUtils.InvokeClientServerRoutedRPC(sender, nameof(RPC_RequestTraderInfo), new object[] { traderInfoPackage });
+            RPCUtils.InvokeClientServerRoutedRPC(sender, nameof(RPC_RequestTraderInventory), new object[] { package });
         }
     }
 }
