@@ -154,23 +154,20 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\BuildProps\Paths.props"/>
   <PropertyGroup>
-    <PostBuildEvent>if NOT EXIST "C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\plugins\$(ProjectName)" (
-mkdir "C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\plugins\$(ProjectName)"
-)
+    <PostBuildEvent>
+      if NOT EXIST "$(BT_INSTALL)" (
+      mkdir "$(BT_INSTALL)"
+      )
 
-xcopy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\plugins\$(ProjectName)" /Y
+      xcopy "$(TargetPath)" "$(BT_INSTALL)" /Y
 
 
-if "$(ConfigurationName)" == "Debug" (
-cd "$(TargetDir)"
-"$(ProjectDir)pdb2mdb.exe" "$(TargetPath)"
-xcopy "$(TargetDir)$(TargetName).dll.mdb" "C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\plugins\$(ProjectName)" /Y
-)
-
-xcopy "$(TargetPath)" "C:\Users\marve\Desktop\Unity\BetterTrader2\Assets" /Y</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>xcopy "C:\Users\marve\Desktop\Unity\BetterTrader2\Assets\AssetBundles\canvas.unity" "$(ProjectDir)\assets" /Y</PreBuildEvent>
+      if "$(ConfigurationName)" == "Debug" (
+      cd "$(TargetDir)"
+      "$(ProjectDir)pdb2mdb.exe" "$(TargetPath)"
+      xcopy "$(TargetDir)$(TargetName).dll.mdb" "$(BT_INSTALL)" /Y
+      )</PostBuildEvent>
   </PropertyGroup>
 </Project>
