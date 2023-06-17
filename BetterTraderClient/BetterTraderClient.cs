@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Logging;
 using HarmonyLib;
 using Menthus15Mods.Valheim.BetterTraderClient.Interfaces;
 using System.Reflection;
@@ -10,13 +11,15 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
     [BepInPlugin(GUID, NAME, VERSION)]
     public class BetterTraderClient : BaseUnityPlugin
     {
+        public static ManualLogSource LoggerInstance;
+        public static GameObject UI_ASSET;
         private const string GUID = "Menthus15Mods.Valheim." + nameof(BetterTraderClient);
         private const string NAME = nameof(BetterTraderClient);
         private const string VERSION = "1.0.0";
-        public static GameObject UI_ASSET;
 
         private void Awake()
         {
+            LoggerInstance = Logger;
             Setup();
         }
 

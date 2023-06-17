@@ -9,7 +9,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.patches
         [HarmonyPatch(nameof(ItemDrop.Awake)), HarmonyPostfix]
         public static void Awake(ItemDrop __instance)
         {
-            Debug.Log(__instance.gameObject.name);
+            BetterTraderClient.LoggerInstance.LogInfo(__instance.gameObject.name);
         }
     }
 }

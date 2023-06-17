@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using HarmonyLib;
+using BepInEx.Logging;
 
 namespace Menthus15Mods.Valheim.BetterTraderServer
 {
@@ -12,6 +13,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
     [BepInPlugin(GUID, NAME, VERSION)]
     public class BetterTraderServer : BaseUnityPlugin
     {
+        internal static ManualLogSource LoggerInstance { get; private set; }
         internal static Trader TraderInstance { get; private set; }
         private const string GUID = "Menthus15Mods.Valheim." + nameof(BetterTraderServer);
         private const string NAME = nameof(BetterTraderServer);
@@ -19,6 +21,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
 
         private void Awake()
         {
+            LoggerInstance = Logger;
             EventManager.OnFinishedRecordingObjectDBItems += SetupConfiguration;
             SetupPatches();
         }

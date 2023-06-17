@@ -38,7 +38,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         public void SetBuyTradeMode()
         {
             tradeMode = TradeMode.Buy;
-            RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestTraderInfo));
+            RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestTraderInventory));
         }
 
         public void SetSellTradeMode()
@@ -93,19 +93,18 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         private void SetupItemDetailsPopupPanel()
         {
             itemDetailsPopupPanel.Setup(lastHoveredItemPanel);
-            itemDetailsPopupPanel.gameObject.SetActive(true);
+            itemDetailsPopupPanel.CanvasGroup.alpha = 1;
         }
 
         private void DisableItemDetailsPopupPanel()
         {
             CancelInvoke(nameof(SetupItemDetailsPopupPanel));
-            itemDetailsPopupPanel.gameObject.SetActive(false);
+            itemDetailsPopupPanel.CanvasGroup.alpha = 0;
         }
 
         private void InitializeItemDetailsPopupPanel()
         {
             itemDetailsPopupPanel = Instantiate(ItemDetailsPopupPanelPrefab, transform.parent);
-            itemDetailsPopupPanel.gameObject.SetActive(false);
         }
 
         private void HandleFetchedTraderInfo(int coins, List<Item> items)

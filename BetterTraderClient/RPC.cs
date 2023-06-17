@@ -8,15 +8,15 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
     {
         public static void RegisterRPCMethods()
         {
-            RPCUtils.RegisterMethod(nameof(RPC_RequestTraderInfo), RPC_RequestTraderInfo);
+            RPCUtils.RegisterMethod(nameof(RPC_RequestTraderInventory), RPC_RequestTraderInventory);
+            RPCUtils.RegisterMethod(nameof(RPC_RequestTraderInventory), RPC_RequestTraderInventory);
         }
 
         [Client]
-        public static void RPC_RequestTraderInfo(long sender, ZPackage pkg)
+        public static void RPC_RequestTraderInventory(long sender, ZPackage pkg)
         {
             if (sender == ZRoutedRpc.instance.GetServerPeerID() && pkg.Size() > 0)
             {
-                var coins = pkg.ReadInt();
                 var items = new List<Item>();
                 var serializer = new YamlConfigurationSerializer();
 
@@ -26,7 +26,8 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
                     items.Add(item);
                 }
 
-                EventManager.RaiseFetchedTraderInfo(coins,items);
+                // TODO: Update this to include the trader's available coins instead of 0
+                EventManager.RaiseFetchedTraderInventory(0, items);
             }
         }
     }
