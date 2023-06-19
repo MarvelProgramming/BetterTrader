@@ -22,6 +22,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         public bool Sellable { get; private set; } = true;
         public bool RequireDiscovery { get; private set; } = false;
 
+        // Empty .ctor required for YamlDotNet to work with this type
         public Item() { }
 
         public Item(string name)

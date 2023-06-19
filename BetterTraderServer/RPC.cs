@@ -26,7 +26,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
         public static void RPC_RequestTraderInventory(long sender, ZPackage _)
         {
             var package = new ZPackage();
-            var yamlSerializer = new YamlConfigurationSerializer();
+            var yamlSerializer = new YamlSerializer();
 
             foreach (var item in BetterTraderServer.TraderInstance.CurrentItems)
             {

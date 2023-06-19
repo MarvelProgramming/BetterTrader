@@ -11,6 +11,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer.patches
         [HarmonyPatch(nameof(ObjectDB.Awake)), HarmonyPostfix]
         private static void Awake(ObjectDB __instance)
         {
+            // Only runs if client has loaded into world
             if (Game.instance != null)
             {
                 var tradableItems = __instance.GetTradableItems();

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Menthus15Mods.Valheim.BetterTraderClient.utils
+namespace Menthus15Mods.Valheim.BetterTraderClient.Utils
 {
     public static class StoreGui_Utils
     {

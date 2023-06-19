@@ -9,7 +9,6 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         public static void RegisterRPCMethods()
         {
             RPCUtils.RegisterMethod(nameof(RPC_RequestTraderInventory), RPC_RequestTraderInventory);
-            RPCUtils.RegisterMethod(nameof(RPC_RequestTraderInventory), RPC_RequestTraderInventory);
         }
 
         [Client]
@@ -18,7 +17,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
             if (sender == ZRoutedRpc.instance.GetServerPeerID() && pkg.Size() > 0)
             {
                 var items = new List<Item>();
-                var serializer = new YamlConfigurationSerializer();
+                var serializer = new YamlSerializer();
 
                 while (pkg.GetPos() < pkg.Size())
                 {

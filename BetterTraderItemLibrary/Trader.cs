@@ -1,9 +1,9 @@
 ﻿using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using System.Collections.Generic;
 
-namespace Menthus15Mods.Valheim.BetterTraderServer
+namespace Menthus15Mods.Valheim.BetterTraderLibrary
 {
-    internal class Trader
+    public class Trader
     {
         public int CurrentCoins { get; private set; } = 1000;
         public bool RefreshInventoryAtInterval { get; private set; } = true;
@@ -12,6 +12,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
         public int GlobalItemPriceScalar { get; private set; } = 1;
         public List<ITradable> CurrentItems { get; private set; } = new List<ITradable>();
 
+        // Empty .ctor required for YamlDotNet to work with this type
         public Trader() { }
 
         public Trader(int currentCoins, bool refreshInventoryAtInterval, int inventoryRefreshInterval, int daysSinceLastInventoryRefresh, int globalItemPriceScalar, List<ITradable> currentItems)

@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
+using System.Collections.Generic;
 
 namespace Menthus15Mods.Valheim.BetterTraderLibrary.Extensions
 {
     public static class ObjectDBExtensions
     {
-        public static List<Item> GetTradableItems(this ObjectDB objectDB)
+        public static List<ITradable> GetTradableItems(this ObjectDB objectDB)
         {
-            var items = new List<Item>();
+            var items = new List<ITradable>();
 
             foreach (var item in objectDB.m_items)
             {
