@@ -34,7 +34,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
             EventManager.OnFinishedRecordingObjectDBItems -= SetupConfiguration;
         }
 
-        private void SetupConfiguration(List<ITradable> tradableItems, string worldSave)
+        private void SetupConfiguration(List<ITradableConfig> tradableItems, string worldSave)
         {
             string traderConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "configs", worldSave, "trader.yml");
             string tradableItemConfigPath = Path.Combine(Path.GetDirectoryName(traderConfigFilePath), "items");
@@ -50,8 +50,12 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
             {
                 configManager.GenerateDefaultTraderConfig();
                 configManager.GenerateDefaultItemConfigs<Item>(tradableItems);
-                TraderInstance = configManager.LoadTrader();
-                TraderInstance.CurrentItems.AddRange(configManager.LoadItems<Item>());
+                TraderInstance = configManager.LoadTrader<Item>();
+
+                if (TraderInstance.GetNumberOfItemsInCirculation() == 0)
+                {
+                    TraderInstance.UpdateCirculatedItems();
+                }
             }
             catch(Exception e)
             {

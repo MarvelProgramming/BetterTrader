@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterTraderLibrary", "BetterTraderItemLibrary\BetterTraderLibrary.csproj", "{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterTraderClient", "BetterTraderClient\BetterTraderClient.csproj", "{AFA7A6FC-B9B4-4891-AFE8-2C814063D1A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterTraderServer", "BetterTraderServer\BetterTraderServer.csproj", "{AF7D7AD0-6ED4-4D94-A1B4-476A86F0005A}"
@@ -14,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildProps", "BuildProps", 
 		Paths.props = Paths.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterTraderLibrary", "BetterTraderLibrary\BetterTraderLibrary.csproj", "{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (Create Default Configs)|Any CPU = Debug (Create Default Configs)|Any CPU
@@ -21,12 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Debug (Create Default Configs)|Any CPU.ActiveCfg = Debug|Any CPU
-		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Debug (Create Default Configs)|Any CPU.Build.0 = Debug|Any CPU
-		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AFA7A6FC-B9B4-4891-AFE8-2C814063D1A1}.Debug (Create Default Configs)|Any CPU.ActiveCfg = Debug|Any CPU
 		{AFA7A6FC-B9B4-4891-AFE8-2C814063D1A1}.Debug (Create Default Configs)|Any CPU.Build.0 = Debug|Any CPU
 		{AFA7A6FC-B9B4-4891-AFE8-2C814063D1A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -39,6 +33,12 @@ Global
 		{AF7D7AD0-6ED4-4D94-A1B4-476A86F0005A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF7D7AD0-6ED4-4D94-A1B4-476A86F0005A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF7D7AD0-6ED4-4D94-A1B4-476A86F0005A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Debug (Create Default Configs)|Any CPU.ActiveCfg = Debug|Any CPU
+		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Debug (Create Default Configs)|Any CPU.Build.0 = Debug|Any CPU
+		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

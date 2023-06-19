@@ -102,7 +102,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BetterTraderItemLibrary\BetterTraderLibrary.csproj">
+    <ProjectReference Include="..\BetterTraderLibrary\BetterTraderLibrary.csproj">
       <Project>{02fdf2cd-bdaa-47e3-a15d-1988f67b1e45}</Project>
       <Name>BetterTraderLibrary</Name>
     </ProjectReference>

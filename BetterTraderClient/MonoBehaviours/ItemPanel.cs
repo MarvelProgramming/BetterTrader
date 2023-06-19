@@ -1,4 +1,5 @@
 ﻿using Menthus15Mods.Valheim.BetterTraderLibrary;
+using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,13 +19,13 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         [field: SerializeField]
         public GameObject IsSelectedDecoration { get; private set; }
 #pragma warning restore CS0649
-        public Item Item { get; private set; }
+        public ICirculatedItem Item { get; private set; }
 
-        public void SetupUI(Item item, TradingMenu.TradeMode tradeMode)
+        public void SetupUI(ICirculatedItem item, TradingMenu.TradeMode tradeMode)
         {
             ItemIcon.sprite = item.Drop.m_itemData.GetIcon();
             ItemNameText.text = Localization.instance.Localize(item.Drop.GetHoverName());
-            ItemValueText.text = (tradeMode == TradingMenu.TradeMode.Buy ? item.PurchasePrice.ToString() : item.SalesPrice.ToString()) + "c";
+            ItemValueText.text = (tradeMode == TradingMenu.TradeMode.Buy ? item.CurrentPurchasePrice.ToString() : item.CurrentSalesPrice.ToString()) + "c";
             Item = item;
         }
 

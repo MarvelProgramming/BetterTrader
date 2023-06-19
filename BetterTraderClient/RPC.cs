@@ -1,4 +1,5 @@
 ﻿using Menthus15Mods.Valheim.BetterTraderLibrary;
+using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using System.Collections.Generic;
 using static Menthus15Mods.Valheim.BetterTraderLibrary.Attributes.RPC_Attribute;
 
@@ -16,16 +17,16 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         {
             if (sender == ZRoutedRpc.instance.GetServerPeerID() && pkg.Size() > 0)
             {
-                var items = new List<Item>();
+                var items = new List<ICirculatedItem>();
                 var serializer = new YamlSerializer();
 
                 while (pkg.GetPos() < pkg.Size())
                 {
-                    var item = serializer.Deserialize<Item>(pkg.ReadString());
+                    var item = serializer.Deserialize<CirculatedItem>(pkg.ReadString());
                     items.Add(item);
                 }
 
-                // TODO: Update this to include the trader's available coins instead of 0
+                // TODO: Update this to include the trader's available coins instead of 0.
                 EventManager.RaiseFetchedTraderInventory(0, items);
             }
         }

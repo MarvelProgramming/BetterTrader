@@ -58,7 +58,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             Directory.CreateDirectory(tradableItemConfigFolderPath);
         }
 
-        public Trader LoadTrader()
+        public Trader LoadTrader<T>() where T : ITradableConfig
         {
             Trader trader = null;
 
@@ -77,12 +77,14 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
                 }
             }
 
+            trader.ItemConfigurations = LoadItems<T>();
+
             return trader;
         }
 
-        public List<ITradable> LoadItems<T>() where T : ITradable
+        public List<ITradableConfig> LoadItems<T>() where T : ITradableConfig
         {
-            ConcurrentBag<ITradable> loadedItems = new ConcurrentBag<ITradable>();
+            ConcurrentBag<ITradableConfig> loadedItems = new ConcurrentBag<ITradableConfig>();
             string[] tradableItemConfigFilePaths = Directory.GetFiles(tradableItemConfigFolderPath);
 
             // Loads all items from existing configs into a collection.
@@ -141,27 +143,27 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             File.WriteAllText(traderConfigOutputPath, traderConfig);
         }
 
-        public void Save(List<ITradable> items)
+        public void Save(List<ITradableConfig> items)
         {
             string[] itemConfigFilePaths = Directory.GetFiles(tradableItemConfigFolderPath);
             ConcurrentDictionary<string, string> itemConfigsFileByName = new ConcurrentDictionary<string, string>();
 
             // Items that will override existing config values.
-            ConcurrentDictionary<string, ConcurrentBag<ITradable>> itemConfigsByConfig = new ConcurrentDictionary<string, ConcurrentBag<ITradable>>();
+            ConcurrentDictionary<string, ConcurrentBag<ITradableConfig>> itemConfigsByConfig = new ConcurrentDictionary<string, ConcurrentBag<ITradableConfig>>();
 
             // Items that don't have configurations yet, which will be saved to an auxilliary file.
-            ConcurrentBag<ITradable> leftOverConfigs = new ConcurrentBag<ITradable>();
+            ConcurrentBag<ITradableConfig> leftOverConfigs = new ConcurrentBag<ITradableConfig>();
 
             // Creates "item name -> config file path" associations for all item configs.
             Parallel.ForEach(itemConfigFilePaths, (itemConfigFilePath) =>
             {
                 string tradableItemConfig = File.ReadAllText(itemConfigFilePath);
                 ISerializer serializer = GetSerializerBasedOnFile(itemConfigFilePath);
-                List<ITradable> loadedItems;
+                List<ITradableConfig> loadedItems;
 
                 try
                 {
-                    loadedItems = serializer.Deserialize<List<ITradable>>(tradableItemConfig);
+                    loadedItems = serializer.Deserialize<List<ITradableConfig>>(tradableItemConfig);
                 }
                 catch(Exception e)
                 {
@@ -183,13 +185,13 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             {
                 if (itemConfigsFileByName.TryGetValue(item.Name, out string associatedConfigFile))
                 {
-                    if (itemConfigsByConfig.TryGetValue(associatedConfigFile, out ConcurrentBag<ITradable> configs))
+                    if (itemConfigsByConfig.TryGetValue(associatedConfigFile, out ConcurrentBag<ITradableConfig> configs))
                     {
                         configs.Add(item);
                     }
                     else
                     {
-                        ConcurrentBag<ITradable> newConfig = new ConcurrentBag<ITradable>
+                        ConcurrentBag<ITradableConfig> newConfig = new ConcurrentBag<ITradableConfig>
                         {
                             item
                         };
@@ -207,7 +209,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             });
 
             // Overwrites existing configurations with new data.
-            foreach(KeyValuePair<string, ConcurrentBag<ITradable>> config in itemConfigsByConfig)
+            foreach(KeyValuePair<string, ConcurrentBag<ITradableConfig>> config in itemConfigsByConfig)
             {
                 ISerializer serializer = GetSerializerBasedOnFile(config.Key);
                 string configFileContents = serializer.Serialize(config.Value.ToList());
@@ -223,16 +225,16 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 
         public void GenerateDefaultTraderConfig()
         {
-            Trader trader = LoadTrader() ?? new Trader();
+            Trader trader = LoadTrader<Item>() ?? new Trader();
             Save(trader);
         }
 
-        public void GenerateDefaultItemConfigs<T>(List<ITradable> items) where T : ITradable
+        public void GenerateDefaultItemConfigs<T>(List<ITradableConfig> items) where T : ITradableConfig
         {
             // Used as an ad-hock, thread-safe hashmap.
             ConcurrentDictionary<string, byte> itemsByName = new ConcurrentDictionary<string, byte>();
-            List<ITradable> existingItems = LoadItems<T>();
-            ConcurrentBag<ITradable> itemsWithoutConfigs = new ConcurrentBag<ITradable>();
+            List<ITradableConfig> existingItems = LoadItems<T>();
+            ConcurrentBag<ITradableConfig> itemsWithoutConfigs = new ConcurrentBag<ITradableConfig>();
 
             // Caching the names of items that have configs already.
             Parallel.ForEach(existingItems, item =>

@@ -14,6 +14,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .IgnoreUnmatchedProperties()
+                .IncludeNonPublicProperties()
                 .Build();
             T deserializedObj = deserializer.Deserialize<T>(obj);
 
@@ -25,6 +26,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             var serializer = new SerializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .WithIndentedSequences()
+                .IncludeNonPublicProperties()
                 .Build();
             string serializedObj = serializer.Serialize(obj);
 

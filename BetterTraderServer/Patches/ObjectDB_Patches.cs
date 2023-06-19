@@ -16,7 +16,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer.patches
             // Only runs if client has loaded into world
             if (Game.instance != null)
             {
-                List<ITradable> tradableItems = __instance.GetTradableItems();
+                List<ITradableConfig> tradableItems = __instance.GetTradableItems();
 
                 // https://github.com/Digitalroot/Menthus123-BetterTrader/blob/c96fb1bfde80e3123dc5a6436fe294a02d11d6c5/src/BetterTraderRemake/Core/FileConfiguration.cs#LL113C11-L113C82
                 string worldSaveFolderName = $"{ZNet.instance.GetWorldName()}_{ZNet.instance.GetWorldUID()}";

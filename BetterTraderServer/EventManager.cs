@@ -7,9 +7,9 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
 {
     internal static class EventManager
     {
-        public static Action<List<ITradable>, string> OnFinishedRecordingObjectDBItems;
+        public static Action<List<ITradableConfig>, string> OnFinishedRecordingObjectDBItems;
 
-        public static void RaiseFinishedGatheringObjectDBItems(List<ITradable> tradableItems, string worldSave)
+        public static void RaiseFinishedGatheringObjectDBItems(List<ITradableConfig> tradableItems, string worldSave)
         {
             OnFinishedRecordingObjectDBItems?.Invoke(tradableItems, worldSave);
         }
