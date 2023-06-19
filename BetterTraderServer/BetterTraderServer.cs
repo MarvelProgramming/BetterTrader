@@ -34,9 +34,9 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
             EventManager.OnFinishedRecordingObjectDBItems -= SetupConfiguration;
         }
 
-        private void SetupConfiguration(List<ITradable> tradableItems)
+        private void SetupConfiguration(List<ITradable> tradableItems, string worldSave)
         {
-            string traderConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "config", "trader.yml");
+            string traderConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "configs", worldSave, "trader.yml");
             string tradableItemConfigPath = Path.Combine(Path.GetDirectoryName(traderConfigFilePath), "items");
             Dictionary<string, ISerializer> serializersByFileExtension = new Dictionary<string, ISerializer>()
             {
