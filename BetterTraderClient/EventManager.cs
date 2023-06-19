@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using Menthus15Mods.Valheim.BetterTraderLibrary;
+using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient
 {
     internal static class EventManager
     {
-        public static Action<int> OnFetchedTraderCoins;
-        public static Action<int, List<Item>> OnFetchedTraderInfo;
+        public static Action<int, List<ICirculatedItem>> OnFetchedTraderInfo;
         public static Action<ItemPanel> OnMousePointerEnterItemPanel;
         public static Action OnMousePointerExitItemPanel;
         public static Action<ItemPanel> OnMouseClickedItemPanel;
 
-        public static void RaiseFetchedTraderCoins(int traderCoins)
-        {
-            OnFetchedTraderCoins?.Invoke(traderCoins);
-        }
-
-        public static void RaiseFetchedTraderInventory(int coins, List<Item> items)
+        public static void RaiseFetchedTraderInventory(int coins, List<ICirculatedItem> items)
         {
             OnFetchedTraderInfo?.Invoke(coins, items);
         }

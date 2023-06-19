@@ -1,8 +1,8 @@
 ﻿using HarmonyLib;
-using Menthus15Mods.Valheim.BetterTraderClient.utils;
+using Menthus15Mods.Valheim.BetterTraderClient.Utils;
 using UnityEngine;
 
-namespace Menthus15Mods.Valheim.BetterTraderClient.patches
+namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
 {
     [HarmonyPatch(typeof(StoreGui))]
     internal class StoreGui_Patches

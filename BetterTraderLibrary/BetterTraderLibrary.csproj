@@ -45,13 +45,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\RPC_Attribute.cs" />
+    <Compile Include="CirculatedItem.cs" />
     <Compile Include="ConfigurationManager.cs" />
-    <Compile Include="ConfigurationUtils.cs" />
     <Compile Include="Extensions\ItemDropExtensions.cs" />
     <Compile Include="Extensions\ObjectDBExtensions.cs" />
     <Compile Include="Extensions\ZNetExtensions.cs" />
-    <Compile Include="Interfaces\IConfigurationManager.cs" />
-    <Compile Include="Interfaces\IConfigurationSerializer.cs" />
+    <Compile Include="Interfaces\IAssociable.cs" />
+    <Compile Include="Interfaces\ICirculatable.cs" />
+    <Compile Include="Interfaces\ICirculatedItem.cs" />
+    <Compile Include="Interfaces\IConfigurable.cs" />
+    <Compile Include="Interfaces\ISerializer.cs" />
+    <Compile Include="Interfaces\ITradableConfig.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Interfaces\ITradable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,9 +64,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Trader.cs" />
     <Compile Include="Utils\ObjectDBUtils.cs" />
     <Compile Include="Utils\RPCUtils.cs" />
-    <Compile Include="YamlConfigurationSerializer.cs" />
+    <Compile Include="YamlSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Digitalroot.Valheim.Common.References">

@@ -1,5 +1,6 @@
 ﻿using Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours;
 using Menthus15Mods.Valheim.BetterTraderLibrary;
+using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -27,7 +28,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         private ItemPanel lastHoveredItemPanel;
         private ItemPanel lastSelectedItemPanel;
         private ItemDetailsPopupPanel itemDetailsPopupPanel;
-        private readonly List<Item> traderInventoryItems = new List<Item>();
+        private readonly List<ICirculatedItem> traderInventoryItems = new List<ICirculatedItem>();
         private TradeMode tradeMode = TradeMode.Sell;
         public enum TradeMode
         {
@@ -107,7 +108,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
             itemDetailsPopupPanel = Instantiate(ItemDetailsPopupPanelPrefab, transform.parent);
         }
 
-        private void HandleFetchedTraderInfo(int coins, List<Item> items)
+        private void HandleFetchedTraderInfo(int coins, List<ICirculatedItem> items)
         {
             TraderCoinsText.text = coins.ToString() + "c";
             traderInventoryItems.Clear();
@@ -149,7 +150,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
             Player.m_localPlayer.m_inventory.GetAllItems().ForEach(inventoryItem =>
             {
                 var itemPanel = Instantiate(ItemPanelPrefab, ItemListPanel);
-                var item = new Item(inventoryItem.m_dropPrefab.name);
+                var item = new CirculatedItem(inventoryItem.m_dropPrefab.name);
                 itemPanel.SetupUI(item, tradeMode);
             });
         }

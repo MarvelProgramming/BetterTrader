@@ -1,4 +1,6 @@
 ﻿using Menthus15Mods.Valheim.BetterTraderLibrary;
+using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
+using System.Collections.Generic;
 using static Menthus15Mods.Valheim.BetterTraderLibrary.Attributes.RPC_Attribute;
 
 namespace Menthus15Mods.Valheim.BetterTraderServer
@@ -26,9 +28,10 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
         public static void RPC_RequestTraderInventory(long sender, ZPackage _)
         {
             var package = new ZPackage();
-            var yamlSerializer = new YamlConfigurationSerializer();
+            var yamlSerializer = new YamlSerializer();
+            List<ICirculatedItem> items = BetterTraderServer.TraderInstance.GetItemsInCirculation();
 
-            foreach (var item in BetterTraderServer.TraderInstance.CurrentItems)
+            foreach (var item in items)
             {
                 var serializedItem = yamlSerializer.Serialize(item);
                 package.Write(serializedItem);
