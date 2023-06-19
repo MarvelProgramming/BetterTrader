@@ -8,6 +8,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
         [HarmonyPatch(nameof(Game.Start)), HarmonyPrefix]
         public static void Start()
         {
+            if (ZNet.instance == null)
+            {
+                return;
+            }
+
             RPC.RegisterRPCMethods();
         }
     }
