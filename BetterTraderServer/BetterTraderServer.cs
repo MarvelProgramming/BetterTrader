@@ -9,10 +9,10 @@ using BepInEx.Logging;
 using System.IO;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using System;
+using Menthus15Mods.Valheim.BetterTraderLibrary.Utils;
 
 namespace Menthus15Mods.Valheim.BetterTraderServer
 {
-    [BepInProcess("valheim.exe")]
     [BepInPlugin(GUID, NAME, VERSION)]
     public class BetterTraderServer : BaseUnityPlugin
     {

@@ -2,12 +2,12 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using Menthus15Mods.Valheim.BetterTraderClient.Interfaces;
+using Menthus15Mods.Valheim.BetterTraderLibrary.Utils;
 using System.Reflection;
 using UnityEngine;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient
 {
-    [BepInProcess("valheim.exe")]
     [BepInPlugin(GUID, NAME, VERSION)]
     public class BetterTraderClient : BaseUnityPlugin
     {
