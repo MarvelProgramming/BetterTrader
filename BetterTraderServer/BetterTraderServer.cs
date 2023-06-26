@@ -17,24 +17,34 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
     public class BetterTraderServer : BaseUnityPlugin
     {
         internal static ManualLogSource LoggerInstance { get; private set; }
-        internal static BetterTraderLibrary.Trader TraderInstance { get; private set; }
+        internal static BetterTraderLibrary.BTrader TraderInstance { get; private set; }
         private const string GUID = "Menthus15Mods.Valheim." + nameof(BetterTraderServer);
         private const string NAME = nameof(BetterTraderServer);
         private const string VERSION = "1.0.0";
+        private ConfigurationManager configurationManager;
 
         private void Awake()
         {
             LoggerInstance = Logger;
-            EventManager.OnFinishedRecordingObjectDBItems += SetupConfiguration;
+            EventManager.OnFinishedRecordingObjectDBItems += HandleFinishedRecordingObjectDBItems;
+            EventManager.OnGameSave += HandleGameSave;
+            EventManager.OnNewDay += HandleNewDay;
             SetupPatches();
         }
 
         private void OnDestroy()
         {
-            EventManager.OnFinishedRecordingObjectDBItems -= SetupConfiguration;
+            EventManager.OnFinishedRecordingObjectDBItems -= HandleFinishedRecordingObjectDBItems;
+            EventManager.OnGameSave -= HandleGameSave;
+            EventManager.OnNewDay -= HandleNewDay;
         }
 
-        private void SetupConfiguration(List<ITradableConfig> tradableItems, string worldSave)
+        private void FixedUpdate()
+        {
+            ThreadingUtils.ExecutePendingActions();
+        }
+
+        private void HandleFinishedRecordingObjectDBItems(List<ITradableConfig> tradableItems, string worldSave)
         {
             string traderConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "configs", worldSave, "trader.yml");
             string tradableItemConfigPath = Path.Combine(Path.GetDirectoryName(traderConfigFilePath), "items");
@@ -44,23 +54,35 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
                 { ".yaml", new YamlSerializer() }
             };
 
-            ConfigurationManager configManager = new ConfigurationManager(traderConfigFilePath, tradableItemConfigPath, serializersByFileExtension);
+            configurationManager = new ConfigurationManager(traderConfigFilePath, tradableItemConfigPath, serializersByFileExtension);
 
             try
             {
-                configManager.GenerateDefaultTraderConfig();
-                configManager.GenerateDefaultItemConfigs<Item>(tradableItems);
-                TraderInstance = configManager.LoadTrader<Item>();
+                configurationManager.GenerateDefaultTraderConfig();
+                configurationManager.GenerateDefaultItemConfigs<Item>(tradableItems);
+                TraderInstance = configurationManager.LoadTrader<Item>();
+                TraderInstance.UpdateAllItemAssociations();
 
-                if (TraderInstance.GetNumberOfItemsInCirculation() == 0)
+                if (TraderInstance.activelyPurchasableItems.Count == 0)
                 {
-                    TraderInstance.UpdateCirculatedItems();
+                    TraderInstance.UpdateCirculatedItems(skipRefreshIntervalCheck: true);
                 }
             }
             catch(Exception e)
             {
                 LoggerInstance.LogError(e);
             }
+        }
+
+        private void HandleGameSave()
+        {
+            configurationManager.Save(TraderInstance);
+        }
+
+        private void HandleNewDay()
+        {
+            TraderInstance.IncreaseDaysSinceLastInventoryRefresh();
+            TraderInstance.UpdateCirculatedItems();
         }
 
         private void SetupPatches()

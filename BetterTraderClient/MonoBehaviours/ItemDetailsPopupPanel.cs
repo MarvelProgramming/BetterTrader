@@ -4,7 +4,7 @@ using TMPro;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 {
-    internal class ItemDetailsPopupPanel : MonoBehaviour
+    public class ItemDetailsPopupPanel : MonoBehaviour
     {
         [field: SerializeField]
         public Image ItemIcon { get; private set; }

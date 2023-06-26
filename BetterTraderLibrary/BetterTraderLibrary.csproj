@@ -47,13 +47,16 @@
     <Compile Include="Attributes\RPC_Attribute.cs" />
     <Compile Include="CirculatedItem.cs" />
     <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="Extensions\InventoryExtensions.cs" />
     <Compile Include="Extensions\ItemDropExtensions.cs" />
     <Compile Include="Extensions\ObjectDBExtensions.cs" />
+    <Compile Include="Extensions\Trader_Extensions.cs" />
     <Compile Include="Extensions\ZNetExtensions.cs" />
     <Compile Include="Interfaces\IAssociable.cs" />
     <Compile Include="Interfaces\ICirculatable.cs" />
     <Compile Include="Interfaces\ICirculatedItem.cs" />
     <Compile Include="Interfaces\IConfigurable.cs" />
+    <Compile Include="Interfaces\IDiscoverable.cs" />
     <Compile Include="Interfaces\ISerializer.cs" />
     <Compile Include="Interfaces\ITradableConfig.cs" />
     <Compile Include="Item.cs" />
@@ -64,9 +67,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Trader.cs" />
+    <Compile Include="BTrader.cs" />
     <Compile Include="Utils\ObjectDBUtils.cs" />
     <Compile Include="Utils\RPCUtils.cs" />
+    <Compile Include="Utils\ThreadingUtils.cs" />
     <Compile Include="YamlSerializer.cs" />
   </ItemGroup>
   <ItemGroup>

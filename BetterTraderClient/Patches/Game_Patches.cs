@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Menthus15Mods.Valheim.BetterTraderLibrary.Extensions;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
 {
@@ -8,12 +9,10 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
         [HarmonyPatch(nameof(Game.Start)), HarmonyPrefix]
         public static void Start()
         {
-            if (ZNet.instance == null)
+            if(ZNet.instance != null && (ZNet.IsSinglePlayer || ZNet.instance.IsClientServer() || !ZNet.instance.IsServer()))
             {
-                return;
+                RPC.RegisterRPCMethods();
             }
-
-            RPC.RegisterRPCMethods();
         }
     }
 }

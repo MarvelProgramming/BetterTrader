@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Menthus15Mods.Valheim.BetterTraderClient
+namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 {
-    internal class ItemPanel : MonoBehaviour, ISelectHandler, IPointerEnterHandler, IPointerExitHandler
+    public class ItemPanel : MonoBehaviour, ISelectHandler, IPointerEnterHandler, IPointerExitHandler
     {
 #pragma warning disable CS0649
         [field: SerializeField]
@@ -17,7 +17,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         [field: SerializeField]
         public TMP_Text ItemValueText { get; private set; }
         [field: SerializeField]
+        public TMP_Text ItemQuantityText { get; private set; }
+        [field: SerializeField]
         public GameObject IsSelectedDecoration { get; private set; }
+        [field: SerializeField]
+        public GameObject IsEquippedDecoration { get; private set; }
 #pragma warning restore CS0649
         public ICirculatedItem Item { get; private set; }
 
@@ -26,6 +30,8 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
             ItemIcon.sprite = item.Drop.m_itemData.GetIcon();
             ItemNameText.text = Localization.instance.Localize(item.Drop.GetHoverName());
             ItemValueText.text = (tradeMode == TradingMenu.TradeMode.Buy ? item.CurrentPurchasePrice.ToString() : item.CurrentSalesPrice.ToString()) + "c";
+            ItemQuantityText.text = $"x{item.CurrentStock}";
+            IsEquippedDecoration.SetActive(tradeMode == TradingMenu.TradeMode.Sell && item.IsEquipped);
             Item = item;
         }
 

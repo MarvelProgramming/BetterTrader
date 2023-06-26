@@ -15,6 +15,7 @@
     <TargetFrameworkProfile />
     <DependsOnNETStandard>false</DependsOnNETStandard>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -95,9 +96,14 @@
     <Compile Include="Interfaces\IAssetBundleManager.cs" />
     <Compile Include="MonoBehaviours\ItemDetailsPopupPanel.cs" />
     <Compile Include="MonoBehaviours\ItemPanel.cs" />
+    <Compile Include="MonoBehaviours\NotificationPopupPanel.cs" />
+    <Compile Include="Patches\ConsoleCommand_Patches.cs" />
     <Compile Include="Patches\Game_Patches.cs" />
+    <Compile Include="Patches\Player_Patches.cs" />
     <Compile Include="Patches\ItemDrop_Patches.cs" />
     <Compile Include="Patches\StoreGui_Patches.cs" />
+    <Compile Include="Patches\Terminal_Patches.cs" />
+    <Compile Include="Patches\ZoneSystem_Patches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -157,17 +163,39 @@
   <Import Project="..\BuildProps\Paths.props" />
   <PropertyGroup>
     <PostBuildEvent>
+      if NOT "$(VALHEIM_INSTALL)" == "" (
       if NOT EXIST "$(BT_INSTALL)" (
       mkdir "$(BT_INSTALL)"
       )
+      )
 
+      if NOT "$(VALHEIM_DEDICATED_INSTALL)" == "" (
+      if NOT EXIST "$(BT_DEDICATED_INSTALL)" (
+      mkdir "$(BT_DEDICATED_INSTALL)"
+      )
+      )
+
+      echo "Valheim dedicated install is set to $(VALHEIM_DEDICATED_INSTALL) and bt dedicated install to $(BT_DEDICATED_INSTALL)"
+
+      if EXIST "$(BT_INSTALL)" (
       xcopy "$(TargetPath)" "$(BT_INSTALL)" /Y
+      )
+
+      if EXIST "$(BT_DEDICATED_INSTALL)" (
+      xcopy "$(TargetPath)" "$(BT_DEDICATED_INSTALL)" /Y
+      )
 
 
       if "$(ConfigurationName)" == "Debug" (
       cd "$(TargetDir)"
       "$(ProjectDir)pdb2mdb.exe" "$(TargetPath)"
+      if EXIST "$(BT_INSTALL)" (
       xcopy "$(TargetDir)$(TargetName).dll.mdb" "$(BT_INSTALL)" /Y
-      )</PostBuildEvent>
+      )
+      if EXIST "$(BT_DEDICATED_INSTALL)" (
+      xcopy "$(TargetDir)$(TargetName).dll.mdb" "$(BT_DEDICATED_INSTALL)" /Y
+      )
+      )
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
