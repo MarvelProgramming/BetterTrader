@@ -1,113 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AFA7A6FC-B9B4-4891-AFE8-2C814063D1A1}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Menthus15Mods.Valheim.BetterTraderClient</RootNamespace>
     <AssemblyName>BetterTraderClient</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
-    <DependsOnNETStandard>false</DependsOnNETStandard>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+    <TargetFrameworks>net462</TargetFrameworks>
+    <LangVersion>10</LangVersion>
+    <RootNamespace>Menthus15Mods.Valheim.BetterTraderClient</RootNamespace>
+    <IsPublishable>False</IsPublishable>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <DebugType>pdbonly</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright © Menthus 2021 - 2023</Copyright>
+    <PackageProjectUrl>https://github.com/MarvelProgramming/BetterTrader</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MarvelProgramming/BetterTrader</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Authors>Menthus, Digitalroot</Authors>
+    <Company>Menthus15Mods</Company>
+    <Product>BetterTraderClient</Product>
+    <Description>BetterTraderClient for Valheim</Description>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreAdditionalProjectSources>
+      https://nuget.bepinex.dev/v3/index.json;
+    </RestoreAdditionalProjectSources>
+    <VersionPrefix>3.0.0</VersionPrefix>
+    <Configurations>Debug;Release</Configurations>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="0Harmony, Version=2.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>libs\0Harmony.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="BepInEx">
-      <HintPath>libs\BepInEx.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="BepInEx.Harmony">
-      <HintPath>libs\BepInEx.Harmony.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.1\System.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.ComponentModel.Composition">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Core">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.1\System.Core.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Numerics">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Xml.Linq">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Microsoft.CSharp">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Data">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Net.Http">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Xml">
-      <Private>False</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssetBundleManager.cs" />
-    <Compile Include="BetterTraderClient.cs" />
-    <Compile Include="EventManager.cs" />
-    <Compile Include="Interfaces\IAssetBundleManager.cs" />
-    <Compile Include="MonoBehaviours\ItemDetailsPopupPanel.cs" />
-    <Compile Include="MonoBehaviours\ItemPanel.cs" />
-    <Compile Include="Patches\Game_Patches.cs" />
-    <Compile Include="Patches\ItemDrop_Patches.cs" />
-    <Compile Include="Patches\StoreGui_Patches.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="MonoBehaviours\TradingMenu.cs" />
-    <Compile Include="RPC.cs" />
-    <Compile Include="Utils\StoreGui_Utils.cs" />
-  </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="Assets\canvas.unity" />
   </ItemGroup>
@@ -118,56 +39,46 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Digitalroot.Valheim.Common.References">
-      <Version>0.214.305</Version>
-    </PackageReference>
-    <PackageReference Include="Fody">
-      <Version>6.7.0</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="ILMerge.Fody">
-      <Version>1.24.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Diagnostics.DiagnosticSource">
-      <Version>7.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Security.Cryptography.Algorithms">
-      <Version>4.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Text.Json">
-      <Version>7.0.0</Version>
-    </PackageReference>
-  </ItemGroup>
+
   <ItemGroup>
     <Content Include="FodyWeaver.xml" />
+    <Content Include="FodyWeavers.xml" />
     <Content Include="pdb2mdb.exe" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\BetterTraderLibrary\BetterTraderLibrary.csproj">
-      <Project>{02fdf2cd-bdaa-47e3-a15d-1988f67b1e45}</Project>
-      <Name>BetterTraderLibrary</Name>
-    </ProjectReference>
+    <PackageReference Include="BepInEx.Core" Version="[5.4.21]">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Digitalroot.Valheim.Common.References" Version="0.216.902">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Fody" Version="[6.6.0]">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ILMerge.Fody" Version="[1.22.0]">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="7.0.2" />
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+    <PackageReference Include="System.Text.Json" Version="7.0.3" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\BetterTraderLibrary\BetterTraderLibrary.csproj" />
+  </ItemGroup>
+
   <Import Project="..\BuildProps\Paths.props" />
-  <PropertyGroup>
-    <PostBuildEvent>
-      if NOT EXIST "$(BT_INSTALL)" (
-      mkdir "$(BT_INSTALL)"
-      )
 
-      xcopy "$(TargetPath)" "$(BT_INSTALL)" /Y
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <!-- ToDo: Clean this up w/ MSBuild -->
+    <Exec Command="      if NOT EXIST &quot;$(BT_INSTALL)&quot; (&#xD;&#xA;      mkdir &quot;$(BT_INSTALL)&quot;&#xD;&#xA;      )&#xD;&#xA;&#xD;&#xA;      xcopy &quot;$(TargetPath)&quot; &quot;$(BT_INSTALL)&quot; /Y&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;      if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; (&#xD;&#xA;      cd &quot;$(TargetDir)&quot;&#xD;&#xA;      &quot;$(ProjectDir)pdb2mdb.exe&quot; &quot;$(TargetPath)&quot;&#xD;&#xA;      xcopy &quot;$(TargetDir)$(TargetName).dll.mdb&quot; &quot;$(BT_INSTALL)&quot; /Y&#xD;&#xA;      )&#xD;&#xA;" />
+  </Target>
 
-
-      if "$(ConfigurationName)" == "Debug" (
-      cd "$(TargetDir)"
-      "$(ProjectDir)pdb2mdb.exe" "$(TargetPath)"
-      xcopy "$(TargetDir)$(TargetName).dll.mdb" "$(BT_INSTALL)" /Y
-      )</PostBuildEvent>
-  </PropertyGroup>
 </Project>
