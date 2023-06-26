@@ -23,6 +23,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
             Setup();
         }
 
+        private void FixedUpdate()
+        {
+            ThreadingUtils.ExecutePendingActions();
+        }
+
         private void Setup()
         {
             SetupAssets();

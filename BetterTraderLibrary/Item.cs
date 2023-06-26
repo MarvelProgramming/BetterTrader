@@ -20,7 +20,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         public bool Purchasable { get; private set; } = true;
 
         public bool Sellable { get; private set; } = true;
-        public bool RequireDiscovery { get; private set; } = false;
+        public bool RequireDiscovery { get; set; } = false;
 
         public bool CanBeOnDiscount { get; private set; } = false;
 

@@ -58,9 +58,9 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             Directory.CreateDirectory(tradableItemConfigFolderPath);
         }
 
-        public Trader LoadTrader<T>() where T : ITradableConfig
+        public BTrader LoadTrader<T>() where T : ITradableConfig
         {
-            Trader trader = null;
+            BTrader trader = null;
 
             if (File.Exists(traderConfigFilePath))
             {
@@ -69,7 +69,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 
                 try
                 {
-                    trader = serializer.Deserialize<Trader>(traderConfiguration);
+                    trader = serializer.Deserialize<BTrader>(traderConfiguration);
                 }
                 catch (Exception e)
                 {
@@ -77,7 +77,10 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
                 }
             }
 
-            trader.ItemConfigurations = LoadItems<T>();
+            if (trader != null)
+            {
+                trader.ItemConfigurations = LoadItems<T>();
+            }
 
             return trader;
         }
@@ -109,7 +112,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             return loadedItems.ToList();
         }
 
-        public void Save(Trader trader)
+        public void Save(BTrader trader)
         {
             Directory.CreateDirectory(Path.GetDirectoryName(traderConfigFilePath));
             ISerializer serializer;
@@ -225,7 +228,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 
         public void GenerateDefaultTraderConfig()
         {
-            Trader trader = LoadTrader<Item>() ?? new Trader();
+            BTrader trader = LoadTrader<Item>() ?? new BTrader();
             Save(trader);
         }
 

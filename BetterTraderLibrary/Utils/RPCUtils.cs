@@ -1,6 +1,7 @@
 ﻿using Menthus15Mods.Valheim.BetterTraderLibrary.Attributes;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Extensions;
 using System;
+using System.Collections.Concurrent;
 using System.Reflection;
 using UnityEngine;
 
@@ -45,7 +46,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
                 else if (targetPeerID == ZRoutedRpc.Everybody)
                 {
                     // Explicitly making another RPC to account for the uniquely keyed method that is created for client-server setups
-                    ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), GetKeyWithPrefix(methodName) + "_Client", parameters);
+                    InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), GetKeyWithPrefix(methodName) + "_Client", parameters);
                 }
             }
 
@@ -59,8 +60,12 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         /// </summary>
         public static void InvokeRoutedRPC(long targetPeerID, string methodName, params object[] parameters)
         {
+            var pkg = new ZPackage();
+            ZRpc.Serialize(parameters, ref pkg);
+            pkg.SetPos(0);
+
             var formattedKey = GetKeyWithPrefix(methodName);
-            ZRoutedRpc.instance.InvokeRoutedRPC(targetPeerID, formattedKey, parameters.Length == 0 ? new object[] { new ZPackage() } : parameters);
+            ZRoutedRpc.instance.InvokeRoutedRPC(targetPeerID, formattedKey, pkg);
         }
 
         private static ZRoutedRpc ZRoutedRpc => ZRoutedRpc.instance;

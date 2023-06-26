@@ -4,7 +4,7 @@ using HarmonyLib;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using System.Collections.Generic;
 
-namespace Menthus15Mods.Valheim.BetterTraderServer.patches
+namespace Menthus15Mods.Valheim.BetterTraderServer.Patches
 {
 
     [HarmonyPatch(typeof(ObjectDB)), HarmonyPriority(int.MaxValue - 999), HarmonyAfter("randyknapp.mods.epicloot", "com.jotunn.jotunn")]
@@ -13,8 +13,8 @@ namespace Menthus15Mods.Valheim.BetterTraderServer.patches
         [HarmonyPatch(nameof(ObjectDB.Awake)), HarmonyPostfix]
         private static void Awake(ObjectDB __instance)
         {
-            // Only runs if client has loaded into world
-            if (Game.instance != null)
+            // Only runs if client has loaded into world.
+            if (Game.instance != null && ZNet.instance != null && (ZNet.IsSinglePlayer || ZNet.instance.IsServer()))
             {
                 List<ITradableConfig> tradableItems = __instance.GetTradableItems();
 

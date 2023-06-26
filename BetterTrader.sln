@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterTraderServer", "Bette
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildProps", "BuildProps", "{5566B1BB-BCC8-44CC-9513-B122DEEFC605}"
 	ProjectSection(SolutionItems) = preProject
-		Paths.props = Paths.props
+		BuildProps\Paths.props = BuildProps\Paths.props
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterTraderLibrary", "BetterTraderLibrary\BetterTraderLibrary.csproj", "{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}"
