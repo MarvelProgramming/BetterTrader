@@ -42,7 +42,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
 
         private void SetupPatches()
         {
-            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
+            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), GUID);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 
             try
             {
-                ZRoutedRpc.Register(formattedKey, protectedAction);
+                ZRoutedRpc.instance.Register(formattedKey, protectedAction);
             }
             catch (ArgumentException e)
             {
@@ -37,7 +37,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         {
             var formattedKey = methodName;
 
-            if (ZNet.instance.IsClientServer())
+            if (ZNet.IsSinglePlayer || ZNet.instance.IsClientServer())
             {
                 if (targetPeerID == ZRoutedRpc.instance.GetServerPeerID())
                 {
@@ -68,9 +68,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             ZRoutedRpc.instance.InvokeRoutedRPC(targetPeerID, formattedKey, pkg);
         }
 
-        private static ZRoutedRpc ZRoutedRpc => ZRoutedRpc.instance;
-
-        private static string GetFormattedRPCRegistrationKey(string key, Action<long, ZPackage> action = null)
+        private static string GetFormattedRPCRegistrationKey(string key, Action<long, ZPackage> action)
         {
             var formattedKey = GetKeyWithPrefix(key);
             formattedKey = GetKeyWithClientServerContextPostfix(formattedKey, action);
@@ -79,7 +77,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         }
 
         /// <summary>
-        /// Creates and returns a key with the unique BetterTrader prefix for RPC method registration
+        /// Creates and returns a key with the unique BetterTrader prefix for RPC method registration.
         /// </summary>
         /// <param name="key">Original key</param>
         private static string GetKeyWithPrefix(string key)
@@ -100,11 +98,11 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         /// </summary>
         private static string GetKeyWithClientServerContextPostfix(string key, Action<long, ZPackage> action)
         {
-            var formattedKey = key;
-            var actionMethodInfo = action?.GetMethodInfo();
+            string formattedKey = key;
+            MethodInfo actionMethodInfo = action?.GetMethodInfo();
 
             if (
-                ZNet.instance.IsClientServer() &&
+                (ZNet.IsSinglePlayer || ZNet.instance.IsClientServer()) &&
                 actionMethodInfo.GetCustomAttribute<RPC_Attribute.ClientAttribute>() != null &&
                 ZRoutedRpc.instance.m_functions.ContainsKey(key.GetStableHashCode())
                 )
