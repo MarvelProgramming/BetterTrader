@@ -87,7 +87,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
 
         private void SetupPatches()
         {
-            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
+            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), GUID);
         }
     }
 }
