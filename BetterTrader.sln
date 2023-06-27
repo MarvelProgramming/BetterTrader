@@ -7,12 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterTraderClient", "Bette
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterTraderServer", "BetterTraderServer\BetterTraderServer.csproj", "{AF7D7AD0-6ED4-4D94-A1B4-476A86F0005A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildProps", "BuildProps", "{5566B1BB-BCC8-44CC-9513-B122DEEFC605}"
-	ProjectSection(SolutionItems) = preProject
-		BuildProps\Paths.props = BuildProps\Paths.props
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterTraderLibrary", "BetterTraderLibrary\BetterTraderLibrary.csproj", "{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BC160D98-4722-4BF5-A603-49492BF906B9}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.Props = Directory.Build.Props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
