@@ -2,7 +2,6 @@
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
 * text=auto
-
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
@@ -11,7 +10,6 @@
 # Note: This is only used by command line
 ###############################################################################
 #*.cs     diff=csharp
-
 ###############################################################################
 # Set the merge driver for project and solution files
 #
@@ -34,7 +32,6 @@
 #*.modelproj merge=binary
 #*.sqlproj   merge=binary
 #*.wwaproj   merge=binary
-
 ###############################################################################
 # behavior for image files
 #
@@ -43,7 +40,6 @@
 #*.jpg   binary
 #*.png   binary
 #*.gif   binary
-
 ###############################################################################
 # diff behavior for common document formats
 # 
@@ -61,3 +57,60 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+## Source: https://gist.github.com/Sthuarty/fe215c9a2199f4ebe0837ba651a4eaf8 ##
+## Unity ##
+
+UI/**/*.cs diff=csharp text
+UI/**/*.cginc text
+UI/**/*.shader text
+UI/**/*.mat merge=unityyamlmerge eol=lf
+UI/**/*.anim merge=unityyamlmerge eol=lf
+UI/**/*.unity merge=unityyamlmerge eol=lf
+UI/**/*.prefab merge=unityyamlmerge eol=lf
+UI/**/*.physicsMaterial2D merge=unityyamlmerge eol=lf
+UI/**/*.physicMaterial merge=unityyamlmerge eol=lf
+UI/**/*.asset merge=unityyamlmerge eol=lf
+UI/**/*.meta merge=unityyamlmerge eol=lf
+UI/**/*.controller merge=unityyamlmerge eol=lf
+
+## git-lfs ##
+
+#Image
+UI/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+UI/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+UI/**/*.png filter=lfs diff=lfs merge=lfs -text
+UI/**/*.gif filter=lfs diff=lfs merge=lfs -text
+UI/**/*.psd filter=lfs diff=lfs merge=lfs -text
+UI/**/*.ai filter=lfs diff=lfs merge=lfs -text
+UI/**/*.tif filter=lfs diff=lfs merge=lfs -text
+UI/**/*.tga filter=lfs diff=lfs merge=lfs -text
+#Audio
+
+UI/**/*.mp3 filter=lfs diff=lfs merge=lfs -text
+UI/**/*.wav filter=lfs diff=lfs merge=lfs -text
+UI/**/*.ogg filter=lfs diff=lfs merge=lfs -text
+#Video
+UI/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
+UI/**/*.mov filter=lfs diff=lfs merge=lfs -text
+
+#3D Object
+UI/**/*.FBX filter=lfs diff=lfs merge=lfs -text
+UI/**/*.fbx filter=lfs diff=lfs merge=lfs -text
+UI/**/*.blend filter=lfs diff=lfs merge=lfs -text
+UI/**/*.obj filter=lfs diff=lfs merge=lfs -text
+UI/**/*.ma filter=lfs diff=lfs merge=lfs -text
+
+#ETC
+UI/**/*.a filter=lfs diff=lfs merge=lfs -text
+UI/**/*.exr filter=lfs diff=lfs merge=lfs -text
+UI/**/*.tga filter=lfs diff=lfs merge=lfs -text
+UI/**/*.pdf filter=lfs diff=lfs merge=lfs -text
+UI/**/*.zip filter=lfs diff=lfs merge=lfs -text
+UI/**/*.dll filter=lfs diff=lfs merge=lfs -text
+UI/**/*.unitypackage filter=lfs diff=lfs merge=lfs -text
+UI/**/*.aif filter=lfs diff=lfs merge=lfs -text
+UI/**/*.ttf filter=lfs diff=lfs merge=lfs -text
+UI/**/*.rns filter=lfs diff=lfs merge=lfs -text
+UI/**/*.reason filter=lfs diff=lfs merge=lfs -text
+UI/**/*.lxo filter=lfs diff=lfs merge=lfs -text
