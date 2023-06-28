@@ -31,8 +31,14 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         public NotificationPopupPanel NotificationPopupPanelPrefab { get; private set; }
         [field: SerializeField]
         public TMP_InputField TradeQuantityInput { get; private set; }
+        [field: SerializeField]
+        public TMP_InputField TradeItemFilterInput { get; private set; }
+        [field: SerializeField]
+        public TMP_Dropdown TradeItemFilterDropdown { get; private set; }
 #pragma warning restore CS0649
         private float itemPanelHoverDelay = 0.5f;
+        private float itemFilterDebounceTime = 0.4f;
+        private string itemFilter;
         private ItemPanel lastHoveredItemPanel;
         private ItemPanel lastSelectedItemPanel;
         private ICirculatedItem lastSelectedItem => lastSelectedItemPanel?.Item;
@@ -49,6 +55,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         
         public void SetBuyTradeMode()
         {
+            TradeItemFilterInput.SetTextWithoutNotify(string.Empty);
             tradeMode = TradeMode.Buy;
             traderInventoryItems.Clear();
             UpdateMenu();
@@ -57,6 +64,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         public void SetSellTradeMode()
         {
+            TradeItemFilterInput.SetTextWithoutNotify(string.Empty);
             tradeMode = TradeMode.Sell;
             sellablePlayerInventoryItems.Clear();
             UpdateMenu();
@@ -165,6 +173,18 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             }
         }
 
+        public void OnItemFilterChanged(string inputFilter)
+        {
+            itemFilter = inputFilter;
+            CancelInvoke(nameof(UpdateMenu));
+            Invoke(nameof(UpdateMenu), itemFilterDebounceTime);
+        }
+
+        public void OnItemDropdownFilterChanged(int inputFilter)
+        {
+            
+        }
+
         public void OnScroll(PointerEventData eventData)
         {
             ItemListPanel.NudgeScrollValue(eventData.scrollDelta.y);
@@ -195,7 +215,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             EventManager.OnMousePointerEnterItemPanel += HandleItemPanelHover;
             EventManager.OnMousePointerExitItemPanel += HandleMousePointerExitItemPanel;
             EventManager.OnMouseClickedItemPanel += HandleSelectedItemPanel;
-            InitializePanels();
+            InitializeUI();
         }
 
         private void Start()
@@ -240,10 +260,19 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             itemDetailsPopupPanel.CanvasGroup.alpha = 1;
         }
 
-        private void InitializePanels()
+        private void InitializeUI()
         {
+            TradeItemFilterDropdown.AddOptions(Enum.GetNames(typeof(ItemDrop.ItemData.ItemType)).ToList());
             itemDetailsPopupPanel = Instantiate(ItemDetailsPopupPanelPrefab, transform.parent);
             notificationPopupPanel = Instantiate(NotificationPopupPanelPrefab, transform.parent);
+        }
+
+        private void Reset()
+        {
+            TradeQuantityInput.text = "1";
+            TotalTradeValueText.text = "total: 0c";
+            lastSelectedItemPanel = null;
+            lastHoveredItemPanel = null;
         }
 
         private void HandleSelectedItemPanel(ItemPanel newlySelectedItemPanel)
@@ -257,14 +286,6 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
             OnTradeQuantityChanged(TradeQuantityInput.text);
             UpdateTradeTotal();
-        }
-
-        private void Reset()
-        {
-            TradeQuantityInput.text = "1";
-            TotalTradeValueText.text = "total: 0c";
-            lastSelectedItemPanel = null;
-            lastHoveredItemPanel = null;
         }
 
         private void HandlePlayerInventoryChanged()
@@ -316,27 +337,22 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private void UpdateMenu()
         {
             TradeButtonText.text = tradeMode.ToString();
-
-            if (tradeMode == TradeMode.Buy)
-            {
-                PopulateWithTraderInventoryItems();
-            }
-            else
-            {
-                PopulateWithPlayerInventoryItems();
-            }
-        }
-
-        private void PopulateWithTraderInventoryItems()
-        {
-            ItemListPanel.SetupItems(traderInventoryItems, tradeMode);
+            List<ICirculatedItem> filteredItems = GetFilteredItemCollection(tradeMode == TradeMode.Buy ? traderInventoryItems : sellablePlayerInventoryItems);
+            ItemListPanel.SetupItems(filteredItems, tradeMode);
             ItemListPanel.UpdateView();
         }
 
-        private void PopulateWithPlayerInventoryItems()
+        private List<ICirculatedItem> GetFilteredItemCollection(List<ICirculatedItem> baseItems)
         {
-            ItemListPanel.SetupItems(sellablePlayerInventoryItems, tradeMode);
-            ItemListPanel.UpdateView();
+            if (string.IsNullOrEmpty(itemFilter))
+            {
+                return baseItems;
+            }
+
+            List<ICirculatedItem> filteredItems = new List<ICirculatedItem>(baseItems);
+            filteredItems = filteredItems.Where(item => item.Name.ToLower().Contains(itemFilter.ToLower())).ToList();
+
+            return filteredItems;
         }
 
         private void ClearTransformChildren(Transform transform)
