@@ -6,14 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 {
-    public class TradingMenu : MonoBehaviour
+    public class TradingMenu : MonoBehaviour, IScrollHandler
     {
 #pragma warning disable CS0649
         [field: SerializeField]
-        public Transform ItemListPanel { get; private set; }
+        public CustomScrollView ItemListPanel { get; private set; }
         [field: SerializeField]
         public ItemPanel ItemPanelPrefab { get; private set; }
         [field: SerializeField]
@@ -164,6 +165,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             }
         }
 
+        public void OnScroll(PointerEventData eventData)
+        {
+            ItemListPanel.NudgeScrollValue(eventData.scrollDelta.y);
+        }
+
         private void UpdateTradeTotal()
         {
             if (int.TryParse(TradeQuantityInput.text, out int currentTradeQuantity))
@@ -310,7 +316,6 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private void UpdateMenu()
         {
             TradeButtonText.text = tradeMode.ToString();
-            ClearTransformChildren(ItemListPanel);
 
             if (tradeMode == TradeMode.Buy)
             {
@@ -324,20 +329,14 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void PopulateWithTraderInventoryItems()
         {
-            traderInventoryItems.ForEach(inventoryItem =>
-            {
-                var itemPanel = Instantiate(ItemPanelPrefab, ItemListPanel);
-                itemPanel.SetupUI(inventoryItem, tradeMode);
-            });
+            ItemListPanel.SetupItems(traderInventoryItems, tradeMode);
+            ItemListPanel.UpdateView();
         }
 
         private void PopulateWithPlayerInventoryItems()
         {
-            sellablePlayerInventoryItems.ForEach(inventoryItem =>
-            {
-                var itemPanel = Instantiate(ItemPanelPrefab, ItemListPanel);
-                itemPanel.SetupUI(inventoryItem, tradeMode);
-            });
+            ItemListPanel.SetupItems(sellablePlayerInventoryItems, tradeMode);
+            ItemListPanel.UpdateView();
         }
 
         private void ClearTransformChildren(Transform transform)
