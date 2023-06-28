@@ -26,7 +26,7 @@
       https://nuget.bepinex.dev/v3/index.json;
     </RestoreAdditionalProjectSources>
     <VersionPrefix>3.0.0</VersionPrefix>
-    <Configurations>Debug;Release;Debug %28Create Default Configs%29</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
@@ -35,11 +35,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28Create Default Configs%29|AnyCPU'">
-    <OutputPath>bin\Debug %28Create Default Configs%29\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>TRACE;DEBUG;CREATE_DEFAULT_CONFIGS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -87,8 +82,6 @@
   <ItemGroup>
     <ProjectReference Include="..\BetterTraderLibrary\BetterTraderLibrary.csproj" />
   </ItemGroup>
-
-  <Import Project="..\BuildProps\Paths.props" />
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <!-- ToDo: Clean this up w/ MSBuild -->

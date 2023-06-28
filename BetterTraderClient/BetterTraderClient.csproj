@@ -86,8 +86,6 @@
     <ProjectReference Include="..\BetterTraderLibrary\BetterTraderLibrary.csproj" />
   </ItemGroup>
 
-  <Import Project="..\BuildProps\Paths.props" />
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <!-- ToDo: Clean this up w/ MSBuild -->
     <Exec Command="      if NOT EXIST &quot;$(BT_INSTALL)&quot; (&#xD;&#xA;      mkdir &quot;$(BT_INSTALL)&quot;&#xD;&#xA;      )&#xD;&#xA;&#xD;&#xA;      xcopy &quot;$(TargetPath)&quot; &quot;$(BT_INSTALL)&quot; /Y&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;      if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; (&#xD;&#xA;      cd &quot;$(TargetDir)&quot;&#xD;&#xA;      &quot;$(ProjectDir)pdb2mdb.exe&quot; &quot;$(TargetPath)&quot;&#xD;&#xA;      xcopy &quot;$(TargetDir)$(TargetName).dll.mdb&quot; &quot;$(BT_INSTALL)&quot; /Y&#xD;&#xA;      )&#xD;&#xA;" />
