@@ -3,42 +3,30 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterTraderClient", "BetterTraderClient\BetterTraderClient.csproj", "{AFA7A6FC-B9B4-4891-AFE8-2C814063D1A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetterTraderClient", "BetterTraderClient\BetterTraderClient.csproj", "{5B2105E2-A206-4912-84EE-2D96947631AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterTraderServer", "BetterTraderServer\BetterTraderServer.csproj", "{AF7D7AD0-6ED4-4D94-A1B4-476A86F0005A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetterTraderLibrary", "BetterTraderLibrary\BetterTraderLibrary.csproj", "{356F5DC9-3E5A-4124-A366-6AA8527C1328}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterTraderLibrary", "BetterTraderLibrary\BetterTraderLibrary.csproj", "{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BC160D98-4722-4BF5-A603-49492BF906B9}"
-	ProjectSection(SolutionItems) = preProject
-		Directory.Build.Props = Directory.Build.Props
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetterTraderServer", "BetterTraderServer\BetterTraderServer.csproj", "{CE70C6E1-9182-4232-9B9B-218C4B5BFE0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug (Create Default Configs)|Any CPU = Debug (Create Default Configs)|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AFA7A6FC-B9B4-4891-AFE8-2C814063D1A1}.Debug (Create Default Configs)|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFA7A6FC-B9B4-4891-AFE8-2C814063D1A1}.Debug (Create Default Configs)|Any CPU.Build.0 = Debug|Any CPU
-		{AFA7A6FC-B9B4-4891-AFE8-2C814063D1A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFA7A6FC-B9B4-4891-AFE8-2C814063D1A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFA7A6FC-B9B4-4891-AFE8-2C814063D1A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFA7A6FC-B9B4-4891-AFE8-2C814063D1A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AF7D7AD0-6ED4-4D94-A1B4-476A86F0005A}.Debug (Create Default Configs)|Any CPU.ActiveCfg = Debug (Create Default Configs)|Any CPU
-		{AF7D7AD0-6ED4-4D94-A1B4-476A86F0005A}.Debug (Create Default Configs)|Any CPU.Build.0 = Debug (Create Default Configs)|Any CPU
-		{AF7D7AD0-6ED4-4D94-A1B4-476A86F0005A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF7D7AD0-6ED4-4D94-A1B4-476A86F0005A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF7D7AD0-6ED4-4D94-A1B4-476A86F0005A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF7D7AD0-6ED4-4D94-A1B4-476A86F0005A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Debug (Create Default Configs)|Any CPU.ActiveCfg = Debug|Any CPU
-		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Debug (Create Default Configs)|Any CPU.Build.0 = Debug|Any CPU
-		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02FDF2CD-BDAA-47E3-A15D-1988F67B1E45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B2105E2-A206-4912-84EE-2D96947631AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B2105E2-A206-4912-84EE-2D96947631AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B2105E2-A206-4912-84EE-2D96947631AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B2105E2-A206-4912-84EE-2D96947631AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{356F5DC9-3E5A-4124-A366-6AA8527C1328}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{356F5DC9-3E5A-4124-A366-6AA8527C1328}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{356F5DC9-3E5A-4124-A366-6AA8527C1328}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{356F5DC9-3E5A-4124-A366-6AA8527C1328}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE70C6E1-9182-4232-9B9B-218C4B5BFE0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE70C6E1-9182-4232-9B9B-218C4B5BFE0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE70C6E1-9182-4232-9B9B-218C4B5BFE0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE70C6E1-9182-4232-9B9B-218C4B5BFE0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

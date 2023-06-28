@@ -1,26 +1,42 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
+    <AssemblyName>BetterTraderLibrary</AssemblyName>
+    <TargetFrameworks>net462</TargetFrameworks>
+    <LangVersion>10</LangVersion>
     <RootNamespace>Menthus15Mods.Valheim.BetterTraderLibrary</RootNamespace>
-    <TargetFramework>net462</TargetFramework>
-    <AssemblyTitle>BetterTraderLibrary</AssemblyTitle>
+    <IsPublishable>False</IsPublishable>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <DebugType>pdbonly</DebugType>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright © Menthus 2021 - 2023</Copyright>
+    <PackageProjectUrl>https://github.com/MarvelProgramming/BetterTrader</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MarvelProgramming/BetterTrader</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Authors>Menthus, Digitalroot</Authors>
+    <Company>Menthus15Mods</Company>
     <Product>BetterTraderLibrary</Product>
-    <Copyright>Copyright ©  2023</Copyright>
+    <Description>BetterTraderLibrary for Valheim</Description>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreAdditionalProjectSources>
+      https://nuget.bepinex.dev/v3/index.json;
+    </RestoreAdditionalProjectSources>
+    <VersionPrefix>3.0.0</VersionPrefix>
+    <Configurations>Debug;Release</Configurations>
     <OutputPath>bin\$(Configuration)\</OutputPath>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
-  <PropertyGroup>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Net.Http" />
-  </ItemGroup>
+
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -28,14 +44,22 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Digitalroot.Valheim.Common.References" Version="0.214.305" />
-    <PackageReference Include="YamlDotNet" Version="13.1.0" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Digitalroot.Valheim.Common.References" Version="0.216.902">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="YamlDotNet" Version="13.1.1" />
+  </ItemGroup>
+
 </Project>

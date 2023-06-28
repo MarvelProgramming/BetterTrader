@@ -1,17 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <RootNamespace>Menthus15Mods.Valheim.BetterTraderServer</RootNamespace>
-    <TargetFramework>net462</TargetFramework>
-    <LangVersion>10</LangVersion>
-    <AssemblyTitle>BetterTraderServer</AssemblyTitle>
     <AssemblyName>BetterTraderServer</AssemblyName>
+    <AssemblyTitle>BetterTraderServer</AssemblyTitle>
+    <TargetFrameworks>net462</TargetFrameworks>
     <LangVersion>10</LangVersion>
+    <RootNamespace>Menthus15Mods.Valheim.BetterTraderServer</RootNamespace>
     <IsPublishable>False</IsPublishable>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <DebugType>pdbonly</DebugType>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright © Menthus 2021 - 2023</Copyright>
     <PackageProjectUrl>https://github.com/MarvelProgramming/BetterTrader</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MarvelProgramming/BetterTrader</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -20,15 +21,27 @@
     <Product>BetterTraderServer</Product>
     <Description>BetterTraderServer for Valheim</Description>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <RestoreAdditionalProjectSources>
       https://nuget.bepinex.dev/v3/index.json;
     </RestoreAdditionalProjectSources>
     <VersionPrefix>3.0.0</VersionPrefix>
-    <Copyright>Copyright © Menthus 2021 - 2023</Copyright>
     <Configurations>Debug;Release</Configurations>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="FodyWeaver.xml" />
+    <Content Include="FodyWeavers.xml" />
+    <Content Include="pdb2mdb.exe" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
@@ -39,16 +52,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="FodyWeaver.xml" />
-    <Content Include="FodyWeavers.xml" />
-    <Content Include="pdb2mdb.exe" />
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BepInEx.Core" Version="5.4.21">
-      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <ExcludeAssets>runtime</ExcludeAssets>
+    <PackageReference Include="BepInEx.Core" Version="[5.4.21]">
       <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Digitalroot.Valheim.Common.References" Version="0.216.902">
       <PrivateAssets>all</PrivateAssets>
@@ -65,18 +80,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BetterTraderLibrary\BetterTraderLibrary.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <!-- ToDo: Clean this up w/ MSBuild -->
-    <Exec Command="      if NOT &quot;$(VALHEIM_INSTALL)&quot; == &quot;&quot; (&#xD;&#xA;      if NOT EXIST &quot;$(BT_INSTALL)&quot; (&#xD;&#xA;      mkdir &quot;$(BT_INSTALL)&quot;&#xD;&#xA;      )&#xD;&#xA;      )&#xD;&#xA;&#xD;&#xA;      if NOT &quot;$(VALHEIM_DEDICATED_INSTALL)&quot; == &quot;&quot; (&#xD;&#xA;      if NOT EXIST &quot;$(BT_DEDICATED_INSTALL)&quot; (&#xD;&#xA;      mkdir &quot;$(BT_DEDICATED_INSTALL)&quot;&#xD;&#xA;      )&#xD;&#xA;      )&#xD;&#xA;&#xD;&#xA;      echo &quot;Valheim dedicated install is set to $(VALHEIM_DEDICATED_INSTALL) and bt dedicated install to $(BT_DEDICATED_INSTALL)&quot;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;      if EXIST &quot;$(BT_INSTALL)&quot; (&#xD;&#xA;      xcopy &quot;$(TargetPath)&quot; &quot;$(BT_INSTALL)&quot; /Y&#xD;&#xA;      )&#xD;&#xA;&#xD;&#xA;      if EXIST &quot;$(BT_DEDICATED_INSTALL)&quot; (&#xD;&#xA;      xcopy &quot;$(TargetPath)&quot; &quot;$(BT_DEDICATED_INSTALL)&quot; /Y&#xD;&#xA;      )&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;      if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; (&#xD;&#xA;      cd &quot;$(TargetDir)&quot;&#xD;&#xA;      &quot;$(ProjectDir)pdb2mdb.exe&quot; &quot;$(TargetPath)&quot;&#xD;&#xA;      if EXIST &quot;$(BT_INSTALL)&quot; (&#xD;&#xA;      xcopy &quot;$(TargetDir)$(TargetName).dll.mdb&quot; &quot;$(BT_INSTALL)&quot; /Y&#xD;&#xA;      )&#xD;&#xA;      if EXIST &quot;$(BT_DEDICATED_INSTALL)&quot; (&#xD;&#xA;      xcopy &quot;$(TargetDir)$(TargetName).dll.mdb&quot; &quot;$(BT_DEDICATED_INSTALL)&quot; /Y&#xD;&#xA;      )&#xD;&#xA;      )&#xD;&#xA;    " />
+    <Exec Command="      if NOT EXIST &quot;$(BT_INSTALL)&quot; (&#xD;&#xA;      mkdir &quot;$(BT_INSTALL)&quot;&#xD;&#xA;      )&#xD;&#xA;&#xD;&#xA;      xcopy &quot;$(TargetPath)&quot; &quot;$(BT_INSTALL)&quot; /Y&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;      if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; (&#xD;&#xA;      cd &quot;$(TargetDir)&quot;&#xD;&#xA;      &quot;$(ProjectDir)pdb2mdb.exe&quot; &quot;$(TargetPath)&quot;&#xD;&#xA;      xcopy &quot;$(TargetDir)$(TargetName).dll.mdb&quot; &quot;$(BT_INSTALL)&quot; /Y&#xD;&#xA;      )&#xD;&#xA;" />
   </Target>
+
 </Project>
