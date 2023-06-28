@@ -1,6 +1,8 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using JetBrains.Annotations;
+using Jotunn.Utils;
 using Menthus15Mods.Valheim.BetterTraderClient.Interfaces;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Utils;
 using System.Reflection;
@@ -9,6 +11,9 @@ using UnityEngine;
 namespace Menthus15Mods.Valheim.BetterTraderClient
 {
     [BepInPlugin(GUID, NAME, VERSION)]
+    [BepInDependency(Jotunn.Main.ModGuid)]
+    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Minor)]
+    [UsedImplicitly]
     public class BetterTraderClient : BaseUnityPlugin
     {
         public static ManualLogSource LoggerInstance;
@@ -17,16 +22,22 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         private const string NAME = nameof(BetterTraderClient);
         private const string VERSION = "1.0.0";
 
+        #region Unity
+
+        [UsedImplicitly]
         private void Awake()
         {
             LoggerInstance = Logger;
             Setup();
         }
 
-        private void FixedUpdate()
+        [UsedImplicitly]
+        private void FixedUpdate() // ToDo: Is this really the update to use?
         {
             ThreadingUtils.ExecutePendingActions();
         }
+
+        #endregion
 
         private void Setup()
         {

@@ -1,14 +1,10 @@
 ﻿using HarmonyLib;
 using Menthus15Mods.Valheim.BetterTraderClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Menthus15Mods.Valheim.BetterTraderServer.Patches
 {
     [HarmonyPatch(typeof(ZNet))]
+    // ReSharper disable once InconsistentNaming
     internal class ZNet_Patches
     {
         [HarmonyPatch(nameof(ZNet.Save)), HarmonyPostfix]

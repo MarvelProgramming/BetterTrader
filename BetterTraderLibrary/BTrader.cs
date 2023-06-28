@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using UnityEngine;
 using YamlDotNet.Serialization;
 
@@ -14,14 +13,14 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         public bool HasLimitedItems { get; private set; } = true;
         public int UpperItemLimit { get; private set; } = 15;
         public int LowerItemLimit { get; private set; } = 5;
-        public bool HasRandomItems { get; private set; } = false;
+        public bool HasRandomItems { get; private set; }
         public int InventoryRefreshInterval { get; private set; } = 1;
         public int GlobalItemPriceScalar { get; private set; } = 1;
         [YamlIgnore]
         public int Coins
         {
             get => RealtimeData.CurrentCoins;
-            set => RealtimeData.CurrentCoins = value;
+            private set => RealtimeData.CurrentCoins = value;
         }
         [YamlIgnore]
         public List<CirculatedItem> ItemsInCirculation => new List<CirculatedItem>(RealtimeData.ItemsInCirculation);
@@ -32,9 +31,9 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         [YamlIgnore]
         public readonly Dictionary<int, Tuple<ICirculatedItem, ITradableConfig>> hashItemAssociations = new Dictionary<int, Tuple<ICirculatedItem, ITradableConfig>>();
         [YamlIgnore]
-        public readonly List<Tuple<ICirculatedItem, ITradableConfig>> purchasableItems = new List<Tuple<ICirculatedItem, ITradableConfig>>();
+        public readonly List<Tuple<ICirculatedItem, ITradableConfig>> purchasableItemsList = new List<Tuple<ICirculatedItem, ITradableConfig>>();
         [YamlIgnore]
-        public readonly List<Tuple<ICirculatedItem, ITradableConfig>> activelyPurchasableItems = new List<Tuple<ICirculatedItem, ITradableConfig>>();
+        public readonly List<Tuple<ICirculatedItem, ITradableConfig>> activelyPurchasableItemsList = new List<Tuple<ICirculatedItem, ITradableConfig>>();
         private TraderRealtimeData RealtimeData { get; set; }
 
         public class TraderRealtimeData
@@ -78,7 +77,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 
         public void UpdateCirculatedItems(bool skipRefreshIntervalCheck = false)
         {
-            List<Tuple<ICirculatedItem, ITradableConfig>> itemsToCirculate = new List<Tuple<ICirculatedItem, ITradableConfig>>(purchasableItems);
+            List<Tuple<ICirculatedItem, ITradableConfig>> itemsToCirculate = new List<Tuple<ICirculatedItem, ITradableConfig>>(purchasableItemsList);
 
             if (!skipRefreshIntervalCheck && RealtimeData.DaysSinceLastInventoryRefresh < InventoryRefreshInterval)
             {
@@ -90,17 +89,17 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 
             if (HasRandomItems)
             {
-                foreach(Tuple<ICirculatedItem, ITradableConfig> circulatedItem in activelyPurchasableItems)
+                foreach(Tuple<ICirculatedItem, ITradableConfig> circulatedItem in activelyPurchasableItemsList)
                 {
                     circulatedItem.Item1.IsActivelyPurchasable = false;
                 }
 
-                activelyPurchasableItems.Clear();
+                activelyPurchasableItemsList.Clear();
                 itemsToCirculate.Clear();
 
-                for (int i = 0; i < Math.Min(UnityEngine.Random.Range(LowerItemLimit, UpperItemLimit), purchasableItems.Count); i++)
+                for (int i = 0; i < Math.Min(UnityEngine.Random.Range(LowerItemLimit, UpperItemLimit), purchasableItemsList.Count); i++)
                 {
-                    Tuple<ICirculatedItem, ITradableConfig> item = purchasableItems[UnityEngine.Random.Range(0, purchasableItems.Count - 1)];
+                    Tuple<ICirculatedItem, ITradableConfig> item = purchasableItemsList[UnityEngine.Random.Range(0, purchasableItemsList.Count - 1)];
                     itemsToCirculate.Add(item);
                 }
             }
@@ -112,7 +111,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 
             foreach (Tuple<ICirculatedItem, ITradableConfig> item in itemsToCirculate)
             {
-                bool isDiscounted = item.Item2.CanBeOnDiscount ? Mathf.Lerp(0, UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)) > 0.8f : false;
+                bool isDiscounted = item.Item2.CanBeOnDiscount && Mathf.Lerp(0, UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)) > 0.8f;
                 int purchasePrice = item.Item2.BasePurchasePrice;
 
                 if (isDiscounted)
@@ -125,13 +124,13 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
                 circulatedItem.IsOnDiscount = isDiscounted;
                 circulatedItem.CurrentPurchasePrice = purchasePrice;
                 circulatedItem.IsActivelyPurchasable = true;
-                activelyPurchasableItems.Add(Tuple.Create(circulatedItem, item.Item2));
+                activelyPurchasableItemsList.Add(Tuple.Create(circulatedItem, item.Item2));
             }
         }
 
         public List<ICirculatedItem> GetItemsClientCanPurchase()
         {
-            List<ICirculatedItem> purchasableItems = activelyPurchasableItems.Select(item => item.Item1).ToList();
+            List<ICirculatedItem> purchasableItems = activelyPurchasableItemsList.Select(item => item.Item1).ToList();
 
             return purchasableItems;
         }
@@ -156,9 +155,9 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 
             pkg.Write(sellableItems.Count);
 
-            foreach(CirculatedItem item in sellableItems)
+            foreach (var item in sellableItems.Select(circulatedItem => circulatedItem as CirculatedItem))
             {
-                item.Serialize(ref pkg);
+                item?.Serialize(ref pkg);
             }
         }
 
@@ -197,7 +196,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 
                 if (item.Item1.CurrentStock == 0)
                 {
-                    activelyPurchasableItems.RemoveAt(activelyPurchasableItems.FindIndex(purchasableItem => purchasableItem.Item1.Name == item.Item1.Name));
+                    activelyPurchasableItemsList.RemoveAt(activelyPurchasableItemsList.FindIndex(purchasableItem => purchasableItem.Item1.Name == item.Item1.Name));
                 }
             }
         }
@@ -210,9 +209,9 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
                 item.Item1.CurrentStock += quantity;
                 item.Item1.CurrentSalesPrice = Mathf.Max((int)(item.Item1.CurrentSalesPrice * 0.8f), 1);
 
-                if (!activelyPurchasableItems.Any(purchasableItem => purchasableItem.Item1.Name == item.Item1.Name))
+                if (activelyPurchasableItemsList.All(purchasableItem => purchasableItem.Item1.Name != item.Item1.Name))
                 {
-                    activelyPurchasableItems.Add(item);
+                    activelyPurchasableItemsList.Add(item);
                 }
             }
         }
@@ -225,8 +224,8 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         public void UpdateAllItemAssociations()
         {
             hashItemAssociations.Clear();
-            activelyPurchasableItems.Clear();
-            purchasableItems.Clear();
+            activelyPurchasableItemsList.Clear();
+            purchasableItemsList.Clear();
 
             foreach (ITradableConfig itemConfig in ItemConfigurations)
             {
@@ -234,13 +233,13 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
                 int itemNameHash = itemConfig.Name.GetStableHashCode();
                 var itemRepresentation = Tuple.Create((ICirculatedItem)circulatedItem, itemConfig);
 
-                if (!RealtimeData.ItemsInCirculation.Any(item => item.Name == itemConfig.Name))
+                if (RealtimeData.ItemsInCirculation.All(item => item.Name != itemConfig.Name))
                 {
                     RealtimeData.ItemsInCirculation.Add(circulatedItem);
                     
                     if (itemConfig.Purchasable)
                     {
-                        purchasableItems.Add(itemRepresentation);
+                        purchasableItemsList.Add(itemRepresentation);
                     }
                 }
 
@@ -260,12 +259,12 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 
                     if (item.Item2.Purchasable)
                     {
-                        purchasableItems.Add(itemRepresentation);
+                        purchasableItemsList.Add(itemRepresentation);
                     }
 
                     if (circulatedItem.IsActivelyPurchasable)
                     {
-                        activelyPurchasableItems.Add(itemRepresentation);
+                        activelyPurchasableItemsList.Add(itemRepresentation);
                     }
                 }
             }

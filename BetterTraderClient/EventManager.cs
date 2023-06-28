@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours;
-using Menthus15Mods.Valheim.BetterTraderLibrary;
+﻿using Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient
 {
