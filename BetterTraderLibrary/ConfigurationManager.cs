@@ -1,14 +1,10 @@
-﻿using Menthus15Mods.Valheim.BetterTraderLibrary.Extensions;
-using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
+﻿using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace Menthus15Mods.Valheim.BetterTraderLibrary
 {
@@ -91,7 +87,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             string[] tradableItemConfigFilePaths = Directory.GetFiles(tradableItemConfigFolderPath);
 
             // Loads all items from existing configs into a collection.
-            Parallel.ForEach(tradableItemConfigFilePaths, (tradableItemConfigFilePath, _, idx) =>
+            Parallel.ForEach(tradableItemConfigFilePaths, (tradableItemConfigFilePath, _, _) =>
             {
                 ISerializer serializer = GetSerializerBasedOnFile(tradableItemConfigFilePath);
                 string tradableItemConfiguration = File.ReadAllText(tradableItemConfigFilePath);
@@ -114,10 +110,10 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 
         public void Save(BTrader trader)
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(traderConfigFilePath));
+            Directory.CreateDirectory(Path.GetDirectoryName(traderConfigFilePath) ?? throw new InvalidOperationException());
             ISerializer serializer;
             string traderConfigOutputPath = traderConfigFilePath;
-            string[] traderConfigFileSearchResults = Directory.GetFiles(Path.GetDirectoryName(traderConfigFilePath), "trader.*");
+            string[] traderConfigFileSearchResults = Directory.GetFiles(Path.GetDirectoryName(traderConfigFilePath) ?? throw new InvalidOperationException(), "trader.*");
             string existingTraderConfigFilePath = traderConfigFilePath;
 
             if (traderConfigFileSearchResults.Length != 0)

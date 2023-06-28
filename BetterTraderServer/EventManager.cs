@@ -1,5 +1,4 @@
-﻿using Menthus15Mods.Valheim.BetterTraderLibrary;
-using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
+﻿using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 

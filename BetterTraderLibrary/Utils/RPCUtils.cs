@@ -23,7 +23,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             }
             catch (ArgumentException e)
             {
-                Debug.LogError($"Attempted to register {formattedKey} from {action.GetMethodInfo().DeclaringType.AssemblyQualifiedName} but it already exists in the ZRoutedRpc method dictionary!");
+                Debug.LogError($"Attempted to register {formattedKey} from {action.GetMethodInfo().DeclaringType?.AssemblyQualifiedName} but it already exists in the ZRoutedRpc method dictionary!");
                 Debug.LogError(e);
             }
         }
