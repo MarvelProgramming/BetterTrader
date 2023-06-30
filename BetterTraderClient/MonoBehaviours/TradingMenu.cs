@@ -7,6 +7,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.CustomDropdown;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 {
@@ -34,11 +35,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         [field: SerializeField]
         public TMP_InputField TradeItemFilterInput { get; private set; }
         [field: SerializeField]
-        public TMP_Dropdown TradeItemFilterDropdown { get; private set; }
+        public CustomDropdown TradeItemFilterDropdown { get; private set; }
 #pragma warning restore CS0649
         private float itemPanelHoverDelay = 0.5f;
         private float itemFilterDebounceTime = 0.4f;
-        private string itemFilter;
+        private string itemFilter = string.Empty;
         private ItemPanel lastHoveredItemPanel;
         private ItemPanel lastSelectedItemPanel;
         private ICirculatedItem lastSelectedItem => lastSelectedItemPanel?.Item;
@@ -52,10 +53,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             Buy,
             Sell
         }
-        
+
         public void SetBuyTradeMode()
         {
             TradeItemFilterInput.SetTextWithoutNotify(string.Empty);
+            TradeItemFilterDropdown.Reset();
             tradeMode = TradeMode.Buy;
             traderInventoryItems.Clear();
             UpdateMenu();
@@ -65,6 +67,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         public void SetSellTradeMode()
         {
             TradeItemFilterInput.SetTextWithoutNotify(string.Empty);
+            TradeItemFilterDropdown.Reset();
             tradeMode = TradeMode.Sell;
             sellablePlayerInventoryItems.Clear();
             UpdateMenu();
@@ -180,9 +183,9 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             Invoke(nameof(UpdateMenu), itemFilterDebounceTime);
         }
 
-        public void OnItemDropdownFilterChanged(int inputFilter)
+        public void OnItemDropdownFilterChanged()
         {
-            
+            UpdateMenu();
         }
 
         public void OnScroll(PointerEventData eventData)
@@ -262,7 +265,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void InitializeUI()
         {
-            TradeItemFilterDropdown.AddOptions(Enum.GetNames(typeof(ItemDrop.ItemData.ItemType)).ToList());
+            TradeItemFilterDropdown.AddOptions(typeof(ItemDrop.ItemData.ItemType));
             itemDetailsPopupPanel = Instantiate(ItemDetailsPopupPanelPrefab, transform.parent);
             notificationPopupPanel = Instantiate(NotificationPopupPanelPrefab, transform.parent);
         }
@@ -337,20 +340,15 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private void UpdateMenu()
         {
             TradeButtonText.text = tradeMode.ToString();
-            List<ICirculatedItem> filteredItems = GetFilteredItemCollection(tradeMode == TradeMode.Buy ? traderInventoryItems : sellablePlayerInventoryItems);
+            List<ICirculatedItem> targetCollection = tradeMode == TradeMode.Buy ? traderInventoryItems : sellablePlayerInventoryItems;
+            List<ICirculatedItem> filteredItems = GetFilteredItemCollection(targetCollection);
             ItemListPanel.SetupItems(filteredItems, tradeMode);
             ItemListPanel.UpdateView();
         }
 
-        private List<ICirculatedItem> GetFilteredItemCollection(List<ICirculatedItem> baseItems)
+        private List<ICirculatedItem> GetFilteredItemCollection(List<ICirculatedItem> filteredItems)
         {
-            if (string.IsNullOrEmpty(itemFilter))
-            {
-                return baseItems;
-            }
-
-            List<ICirculatedItem> filteredItems = new List<ICirculatedItem>(baseItems);
-            filteredItems = filteredItems.Where(item => item.Name.ToLower().Contains(itemFilter.ToLower())).ToList();
+            filteredItems = filteredItems.Where(item => (string.IsNullOrEmpty(itemFilter) || item.Name.ToLower().Contains(itemFilter.ToLower())) && ((ItemDrop.ItemData.ItemType)TradeItemFilterDropdown.GetBitField()).HasFlag(item.Drop.m_itemData.m_shared.m_itemType)).ToList();
 
             return filteredItems;
         }
