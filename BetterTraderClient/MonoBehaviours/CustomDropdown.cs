@@ -93,22 +93,23 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             OnChanged.Invoke();
         }
 
-        public void AddOptions(Type enumType)
+        public void SetOptions(List<Option> additionalOptions)
         {
-            // Resetting "All" option before appending all flags.
+            // Resetting "All" option before appending new flags.
             options[1].value = 0;
+            options.RemoveRange(2, options.Count - 2);
 
-            Enum.GetNames(enumType).ToList().ForEach(name =>
+            additionalOptions.ForEach(option =>
             {
-                if (name.ToLower() == "none" || name.ToLower() == "all")
+                string label = option.label;
+
+                if (label.ToLower() == "none" || label.ToLower() == "all")
                 {
                     return;
                 }
 
-                // Using Mathf.Pow since Valheim's ItemDrop.ItemData.ItemType enum doesn't use powers of 2, causing bitfield comparisons to fail.
-                var newOption = new Option(name, (int)Mathf.Pow(2, (int)Enum.Parse(enumType, name)), true);
-                options.Add(newOption);
-                options[1].value |= newOption.value;
+                options.Add(option);
+                options[1].value |= option.value;
             });
 
             InitializeUI();

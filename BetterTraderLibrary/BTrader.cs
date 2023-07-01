@@ -123,6 +123,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
                 ICirculatedItem circulatedItem = item.Item1;
                 circulatedItem.IsOnDiscount = isDiscounted;
                 circulatedItem.CurrentPurchasePrice = purchasePrice;
+                circulatedItem.CurrentStock = item.Item2.BaseTraderStorage;
                 circulatedItem.IsActivelyPurchasable = true;
                 activelyPurchasableItemsList.Add(Tuple.Create(circulatedItem, item.Item2));
             }
@@ -194,8 +195,12 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
                 Coins += item.Item1.CurrentPurchasePrice * quantity;
                 item.Item1.CurrentStock -= quantity;
 
+                Debug.Log($"{item.Item1.Name} now has a current stock of {item.Item1.CurrentStock}");
+
                 if (item.Item1.CurrentStock == 0)
                 {
+                    Debug.Log($"{item.Item1.Name} was removed from the activelyPurchasableItemList!");
+                    item.Item1.IsActivelyPurchasable = false;
                     activelyPurchasableItemsList.RemoveAt(activelyPurchasableItemsList.FindIndex(purchasableItem => purchasableItem.Item1.Name == item.Item1.Name));
                 }
             }
@@ -211,6 +216,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 
                 if (activelyPurchasableItemsList.All(purchasableItem => purchasableItem.Item1.Name != item.Item1.Name))
                 {
+                    item.Item1.IsActivelyPurchasable = true;
                     activelyPurchasableItemsList.Add(item);
                 }
             }

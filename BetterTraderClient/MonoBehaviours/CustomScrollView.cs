@@ -56,6 +56,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             UpdatePanels();
         }
 
+        public void Reset()
+        {
+            selectedItemPanelIndex = -1;
+        }
+
         private void UpdatePanels()
         {
             float baseItemPanelPosition = GetBaseItemPanelPosition();
@@ -72,7 +77,6 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
                 if (itemIndex < items.Count)
                 {
-                    BetterTraderClient.LoggerInstance.LogInfo(itemIndex);
                     panel.IsSelectedDecoration.SetActive(selectedItemPanelIndex == itemIndex);
                     panel.SetupUI(items[itemIndex], tradeMode);
                 }
@@ -156,7 +160,8 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void UpdateScrollHandleSize()
         {
-            Scrollbar.size = Math.Min(items.Count == 0 ? 1 : panelCount / (items.Count + 1) - (panelHeightRemainder > 0 ? panelHeightRemainder / panelHeight : 0), 1);
+            Scrollbar.size = Math.Min(items.Count == 0 ? 1 : panelCount / (items.Count + 1) - ((panelHeightRemainder > 0 && (items.Count + 1) >= panelCount) ? panelHeightRemainder / panelHeight : 0), 1);
+            Scrollbar.gameObject.SetActive(Scrollbar.size != 1);
         }
     }
 }

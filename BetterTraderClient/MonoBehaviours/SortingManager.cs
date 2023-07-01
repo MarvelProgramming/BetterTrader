@@ -77,9 +77,13 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             }
         }
 
-        private void Start()
+        private void Awake()
         {
             OnBeforeSerialize();
+        }
+
+        private void Start()
+        {
             InitializeUI();
         }
 
