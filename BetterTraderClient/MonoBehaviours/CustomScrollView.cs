@@ -72,6 +72,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
                 if (itemIndex < items.Count)
                 {
+                    BetterTraderClient.LoggerInstance.LogInfo(itemIndex);
                     panel.IsSelectedDecoration.SetActive(selectedItemPanelIndex == itemIndex);
                     panel.SetupUI(items[itemIndex], tradeMode);
                 }

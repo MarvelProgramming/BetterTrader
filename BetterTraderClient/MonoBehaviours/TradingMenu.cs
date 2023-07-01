@@ -7,7 +7,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.CustomDropdown;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 {
@@ -48,6 +47,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private readonly List<ICirculatedItem> traderInventoryItems = new List<ICirculatedItem>();
         private readonly List<ICirculatedItem> sellablePlayerInventoryItems = new List<ICirculatedItem>();
         private TradeMode tradeMode = TradeMode.Sell;
+        [SerializeField]
+#pragma warning disable IDE0044 // Add readonly modifier
+        private SortingManager sortingManager;
+#pragma warning restore IDE0044 // Add readonly modifier
+
         public enum TradeMode
         {
             Buy,
@@ -58,6 +62,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         {
             TradeItemFilterInput.SetTextWithoutNotify(string.Empty);
             TradeItemFilterDropdown.Reset();
+            sortingManager.SetItemSortingState(SortingManager.SortingState.Off, false);
             tradeMode = TradeMode.Buy;
             traderInventoryItems.Clear();
             UpdateMenu();
@@ -70,6 +75,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             TradeItemFilterDropdown.Reset();
             tradeMode = TradeMode.Sell;
             sellablePlayerInventoryItems.Clear();
+            sortingManager.SetItemSortingState(SortingManager.SortingState.Off, false);
             UpdateMenu();
             RequestNewestData();
         }
@@ -193,6 +199,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             ItemListPanel.NudgeScrollValue(eventData.scrollDelta.y);
         }
 
+        public void OnSortingModeChanged()
+        {
+            UpdateMenu();
+        }
+
         private void UpdateTradeTotal()
         {
             if (int.TryParse(TradeQuantityInput.text, out int currentTradeQuantity))
@@ -272,8 +283,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void Reset()
         {
+            TradeItemFilterInput.text = string.Empty;
+            sortingManager.SetItemSortingState(SortingManager.SortingState.Off, false);
             TradeQuantityInput.text = "1";
             TotalTradeValueText.text = "total: 0c";
+            itemFilter = string.Empty;
             lastSelectedItemPanel = null;
             lastHoveredItemPanel = null;
         }
@@ -342,15 +356,77 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             TradeButtonText.text = tradeMode.ToString();
             List<ICirculatedItem> targetCollection = tradeMode == TradeMode.Buy ? traderInventoryItems : sellablePlayerInventoryItems;
             List<ICirculatedItem> filteredItems = GetFilteredItemCollection(targetCollection);
-            ItemListPanel.SetupItems(filteredItems, tradeMode);
+            List<ICirculatedItem> sortedItems = GetSortedItemCollection(filteredItems);
+            ItemListPanel.SetupItems(sortedItems, tradeMode);
             ItemListPanel.UpdateView();
         }
 
-        private List<ICirculatedItem> GetFilteredItemCollection(List<ICirculatedItem> filteredItems)
+        private List<ICirculatedItem> GetFilteredItemCollection(List<ICirculatedItem> items)
         {
-            filteredItems = filteredItems.Where(item => (string.IsNullOrEmpty(itemFilter) || item.Name.ToLower().Contains(itemFilter.ToLower())) && ((ItemDrop.ItemData.ItemType)TradeItemFilterDropdown.GetBitField()).HasFlag(item.Drop.m_itemData.m_shared.m_itemType)).ToList();
+            List<ICirculatedItem> result;
+            result = items.Where(item => (string.IsNullOrEmpty(itemFilter) || Localization.instance.Localize(item.Drop.m_itemData.m_shared.m_name).ToLower().Replace(" ", "").StartsWith(itemFilter.ToLower().Replace(" ", ""))) && (TradeItemFilterDropdown.GetBitField() & (int)Mathf.Pow(2, (int)item.Drop.m_itemData.m_shared.m_itemType)) != 0).ToList();
 
-            return filteredItems;
+            return result;
+        }
+
+        private List<ICirculatedItem> GetSortedItemCollection(List<ICirculatedItem> items)
+        {
+            if (sortingManager.CurrentSortingState == SortingManager.SortingState.Off)
+            {
+                return items;
+            }
+
+            List<ICirculatedItem> result = new List<ICirculatedItem>(items);
+
+            switch(sortingManager.CurrentSortingMode)
+            {
+                case SortingManager.SortingMode.Alphabetical:
+                    result.Sort((firstItem, secondItem) =>
+                    {
+                        string sanitizedFirstItemName = Localization.instance.Localize(firstItem.Drop.m_itemData.m_shared.m_name).ToLower().Replace(" ", "");
+                        string sanitizedSecondItemName = Localization.instance.Localize(secondItem.Drop.m_itemData.m_shared.m_name).ToLower().Replace(" ", "");
+
+                        for (int i = 0; i < Mathf.Min(sanitizedFirstItemName.Length, sanitizedSecondItemName.Length); i++)
+                        {
+                            int firstNameCurCharVal = sanitizedFirstItemName[i];
+                            int secondNameCurCharVal = sanitizedSecondItemName[i];
+
+                            if (firstNameCurCharVal > secondNameCurCharVal)
+                            {
+                                return 1;
+                            }
+                            else if (firstNameCurCharVal < secondNameCurCharVal)
+                            {
+                                return -1;
+                            }
+                        }
+
+                        return sanitizedFirstItemName.Length - sanitizedSecondItemName.Length;
+                    });
+
+                    break;
+                case SortingManager.SortingMode.Stack:
+                    result.Sort((firstItem, secondItem) => secondItem.CurrentStock - firstItem.CurrentStock);
+
+                    break;
+                case SortingManager.SortingMode.Value:
+                    result.Sort((firstItem, secondItem) =>
+                    {
+                        int firstItemValue = tradeMode == TradeMode.Buy ? firstItem.CurrentPurchasePrice : firstItem.CurrentSalesPrice;
+                        int secondItemValue = tradeMode == TradeMode.Buy ? secondItem.CurrentPurchasePrice : secondItem.CurrentSalesPrice;
+
+                        return secondItemValue - firstItemValue;
+                    });
+
+                    break;
+            }
+
+            if (sortingManager.CurrentSortingState == SortingManager.SortingState.Descending)
+            {
+                result.Reverse();
+            }
+
+            return result;
         }
 
         private void ClearTransformChildren(Transform transform)

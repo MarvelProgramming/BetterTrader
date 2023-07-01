@@ -106,8 +106,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                 }
 
                 // Using Mathf.Pow since Valheim's ItemDrop.ItemData.ItemType enum doesn't use powers of 2, causing bitfield comparisons to fail.
-                // Also subtracting by 1 to account for the 'None' field that already exists and is created by the CustomDropdown component.
-                var newOption = new Option(name, (int)Mathf.Pow(2, (int)Enum.Parse(enumType, name) - 1), true);
+                var newOption = new Option(name, (int)Mathf.Pow(2, (int)Enum.Parse(enumType, name)), true);
                 options.Add(newOption);
                 options[1].value |= newOption.value;
             });
