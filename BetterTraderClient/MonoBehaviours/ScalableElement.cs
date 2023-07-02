@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 {
     public class ScalableElement : MonoBehaviour, IDragHandler, IEndDragHandler
     {
+        [SerializeField]
+        private UnityEvent onChanged;
         [SerializeField]
         private RectTransform rectTransform;
         [SerializeField]
@@ -62,6 +65,8 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
                 rectTransform.anchoredPosition = initialRectTransformPosition - Vector3.down * (initialRectTransformSize.y - rectTransform.rect.size.y) * 0.5f;
             }
+
+            onChanged.Invoke();
         }
 
         public void OnEndDrag(PointerEventData eventData)

@@ -31,6 +31,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private float accumulitiveItemPanelHeight;
         private int panelCount;
         private RectTransform rectTransform;
+        private RectTransform itemPanelPrefabRectTransform;
         private readonly List<ItemPanel> panels = new List<ItemPanel>();
         private readonly Dictionary<ItemPanel, RectTransform> panelRects = new Dictionary<ItemPanel, RectTransform>();
         private List<ICirculatedItem> items = new List<ICirculatedItem>();
@@ -61,15 +62,22 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             selectedItemPanelIndex = -1;
         }
 
+        public void DelayedInitializeVariables()
+        {
+            // Using coroutine to delay initialization until the second frame. That way the RectTransforms have a chance
+            // to update and give the correct values.
+            StartCoroutine(InitializeVariables());
+        }
+
         private void UpdatePanels()
         {
-            float baseItemPanelPosition = GetBaseItemPanelPosition();
+            float scrolledItemPanelPosition = GetScrolledItemPanelPosition();
 
             for(int i = 0; i < panels.Count; i++)
             {
                 ItemPanel panel = panels[i];
                 float panelOffset = GetItemPanelOffset(i);
-                float newPosition = baseItemPanelPosition - panelOffset;
+                float newPosition = scrolledItemPanelPosition - panelOffset;
                 int overflowCount = GetOverflowCount(i);
                 panelRects[panel].anchoredPosition = new Vector3(0, newPosition - overflowCount * accumulitiveItemPanelHeight, panel.transform.localPosition.z);
                 panel.gameObject.SetActive(i < items.Count);
@@ -83,9 +91,9 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             }
         }
 
-        private float GetBaseItemPanelPosition()
+        private float GetScrolledItemPanelPosition()
         {
-            return Scrollbar.value * Math.Max(itemPanelSpaceOccupancy * (items.Count - panels.Count + 1) + panelHeight % itemPanelSpaceOccupancy - Spacing, 0);
+            return Scrollbar.value * Math.Max(itemPanelSpaceOccupancy * (items.Count - (panelHeight / itemPanelSpaceOccupancy)), 0);
         }
 
         private float GetItemPanelOffset(int panelIndex)
@@ -95,7 +103,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private int GetOverflowCount(int panelIndex)
         {
-            float panelOverflowPoint = Mathf.Max(accumulitiveItemPanelHeight - (GetItemPanelOffset(panelIndex) + itemPanelSpaceOccupancy) + GetBaseItemPanelPosition(), 0);
+            float panelOverflowPoint = Mathf.Max(accumulitiveItemPanelHeight - (GetItemPanelOffset(panelIndex) + itemPanelSpaceOccupancy) + GetScrolledItemPanelPosition(), 0);
             int overflowCount = panelOverflowPoint == 0 ? 0 : Mathf.FloorToInt(panelOverflowPoint / accumulitiveItemPanelHeight);
 
             return overflowCount;
@@ -108,9 +116,9 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void Awake()
         {
-            // Using coroutine to delay initialization until the second frame. That way the RectTransforms have a chance
-            // to update and give the correct values.
-            StartCoroutine(InitializeVariables());
+            rectTransform = Content.GetComponent<RectTransform>();
+            itemPanelPrefabRectTransform = itemPanelPrefabRectTransform = ItemPanelPrefab.GetComponent<RectTransform>();
+            DelayedInitializeVariables();
         }
 
         private void OnEnable()
@@ -130,10 +138,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private IEnumerator InitializeVariables()
         {
+            // Allow enough time for "options" to be serialized.
             yield return new WaitForEndOfFrame();
-            rectTransform = Content.GetComponent<RectTransform>();
+            selectedItemPanelIndex = -1;
             panelHeight = rectTransform.rect.height;
-            itemPanelHeight = ItemPanelPrefab.GetComponent<RectTransform>().sizeDelta.y;
+            itemPanelHeight = itemPanelPrefabRectTransform.sizeDelta.y;
             itemPanelSpaceOccupancy = itemPanelHeight + Spacing;
             panelHeightRemainder = panelHeight % itemPanelSpaceOccupancy;
             panelCount = Mathf.CeilToInt(panelHeight / itemPanelSpaceOccupancy) + PaddedPanels;
@@ -145,7 +154,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void SetupItemPanelPool()
         {
-            for(int i = 0; i < panelCount; i++)
+            for(int i = panels.Count; i < panelCount; i++)
             {
                 ItemPanel panel = Instantiate(ItemPanelPrefab, Vector3.zero, Quaternion.identity, Content);
                 RectTransform panelRectTransform = panel.GetComponent<RectTransform>();
@@ -160,7 +169,9 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void UpdateScrollHandleSize()
         {
-            Scrollbar.size = Math.Min(items.Count == 0 ? 1 : panelCount / (items.Count + 1) - ((panelHeightRemainder > 0 && (items.Count + 1) >= panelCount) ? panelHeightRemainder / panelHeight : 0), 1);
+            BetterTraderClient.LoggerInstance.LogInfo($"Setting scrollbar size to {Math.Min(items.Count == 0 || (panelHeight / itemPanelSpaceOccupancy) == 0 ? 1 : (panelHeight / itemPanelSpaceOccupancy) / items.Count, 1)}!");
+            BetterTraderClient.LoggerInstance.LogInfo($"items.Count is {items.Count} | (panelHeight / itemPanelSpaceOccupancy) is {(panelHeight / itemPanelSpaceOccupancy)}");
+            Scrollbar.size = Math.Min(items.Count == 0 || panelHeight == 0 || itemPanelSpaceOccupancy == 0 ? 1 : (panelHeight / itemPanelSpaceOccupancy) / items.Count, 1);
             Scrollbar.gameObject.SetActive(Scrollbar.size != 1);
         }
     }
