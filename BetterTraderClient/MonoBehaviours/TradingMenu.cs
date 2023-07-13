@@ -1,4 +1,5 @@
-﻿using Menthus15Mods.Valheim.BetterTraderLibrary;
+﻿using Menthus15Mods.Valheim.BetterTraderLibrary.Utils;
+using Menthus15Mods.Valheim.BetterTraderLibrary;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Extensions;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using System;
@@ -7,16 +8,23 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using System.Collections;
+using static ClutterSystem;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 {
     public class TradingMenu : MonoBehaviour, IScrollHandler
     {
 #pragma warning disable CS0649
-        [field: SerializeField]
+        [field: SerializeField, Header("Base")]
         public CustomScrollView ItemListPanel { get; private set; }
         [field: SerializeField]
         public ItemPanel ItemPanelPrefab { get; private set; }
+        [field: SerializeField]
+        public GameObject TraderCoinsWrapper { get; private set; }
+        [field: SerializeField]
+        public GameObject RepairButtonsWrapper { get; private set; }
         [field: SerializeField]
         public TMP_Text TraderCoinsText { get; private set; }
         [field: SerializeField]
@@ -35,10 +43,15 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         public TMP_InputField TradeItemFilterInput { get; private set; }
         [field: SerializeField]
         public CustomDropdown TradeItemFilterDropdown { get; private set; }
+        [field: SerializeField]
+        public ItemInspector TradeItemInspector { get; private set; }
+
 #pragma warning restore CS0649
         private float itemPanelHoverDelay = 0.5f;
         private float itemFilterDebounceTime = 0.4f;
         private string itemFilter = string.Empty;
+        private bool canRepairItems;
+        private int perItemRepairCost;
         private ItemPanel lastHoveredItemPanel;
         private ItemPanel lastSelectedItemPanel;
         private ICirculatedItem lastSelectedItem => lastSelectedItemPanel?.Item;
@@ -46,6 +59,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private readonly List<ICirculatedItem> traderInventoryItems = new List<ICirculatedItem>();
         private readonly List<ICirculatedItem> sellablePlayerInventoryItems = new List<ICirculatedItem>();
         private TradeMode tradeMode = TradeMode.Sell;
+        private bool hasInitialized;
         [SerializeField]
 #pragma warning disable IDE0044 // Add readonly modifier
         private SortingManager sortingManager;
@@ -55,6 +69,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         {
             Buy,
             Sell
+        }
+
+        public void Hide()
+        {
+            StoreGui.instance.Hide();
         }
 
         public void SetBuyTradeMode()
@@ -125,6 +144,38 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                         RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestSellItem),
                         requestPackage);
                     }
+                }
+            }
+        }
+
+        public void OnRepairItem(bool repairAllItems)
+        {
+            if (!canRepairItems)
+            {
+                EventManager.RaiseNotification("Cannot Repair Item", "The trader is not repairing items at this time.", () => { }, () => { });
+                return;
+            }
+
+            List<ItemDrop.ItemData> wornItems = new List<ItemDrop.ItemData>();
+            Player.m_localPlayer.m_inventory.GetWornItems(wornItems);
+
+            if (wornItems.Count == 0)
+            {
+                EventManager.RaiseNotification("No Reparable Items", "None of your items are in need of repair!", () => { }, () => { });
+                return;
+            }
+
+            int repairCost = perItemRepairCost * (repairAllItems ? wornItems.Count : 1);
+            
+            if (TryGetPlayerCoinsTextAsInt(out int playerCoins))
+            {
+                if (playerCoins < repairCost)
+                {
+                    EventManager.RaiseNotification("Cannot Afford Repair", $"It costs {repairCost} to repair {wornItems.Count} item(s). You need more coins!", () => { }, () => { });
+                }
+                else
+                {
+                    RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestRepairItems), repairAllItems ? wornItems.Count : 1);
                 }
             }
         }
@@ -205,16 +256,16 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             {
                 if (tradeMode  == TradeMode.Buy)
                 {
-                    TotalTradeValueText.text = $"total: {lastSelectedItem.CurrentPurchasePrice * currentTradeQuantity}c";
+                    TotalTradeValueText.text = $"{lastSelectedItem.CurrentPurchasePrice * currentTradeQuantity}c";
                 }
                 else
                 {
-                    TotalTradeValueText.text = $"total: {lastSelectedItem.CurrentSalesPrice * currentTradeQuantity}c";
+                    TotalTradeValueText.text = $"{lastSelectedItem.CurrentSalesPrice * currentTradeQuantity}c";
                 }
             }
             else
             {
-                TotalTradeValueText.text = "total: 0c";
+                TotalTradeValueText.text = "0c";
             }
         }
 
@@ -224,34 +275,48 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             EventManager.OnMousePointerEnterItemPanel += HandleItemPanelHover;
             EventManager.OnMousePointerExitItemPanel += HandleMousePointerExitItemPanel;
             EventManager.OnMouseClickedItemPanel += HandleSelectedItemPanel;
+            EventManager.OnInspectItemPanel += HandleInspectItemPanel;
             InitializeUI();
-        }
-
-        private void Start()
-        {
-            Reset();
         }
 
         private void OnEnable()
         {
+            if (!hasInitialized)
+            {
+                return;
+            }
+
+            EventManager.OnPlayerRepairedItems += HandlePlayerRepairedItems;
             EventManager.OnPlayerInventoryChanged += HandlePlayerInventoryChanged;
+            EventManager.OnFetchedTraderInfo += HandleFetchedTraderInfo;
             EventManager.OnPlayerCoinsChanged += HandlePlayerCoinsChanged;
-            EventManager.OnFetchedTraderCoins += HandleFetchedTraderCoins;
             EventManager.OnFetchedAvailablePurchaseItems += HandleFetchedAvailablePurchaseItems;
             EventManager.OnFetchedAvailableSellItems += HandleFetchedAvailableSellItems;
+
+            if (Player.m_localPlayer)
+            {
+                Player.m_localPlayer.GetComponent<PlayerController>().enabled = false;
+            }
+
             UpdateMenu();
             RequestNewestData();
         }
 
         private void OnDisable()
         {
+            EventManager.OnPlayerRepairedItems -= HandlePlayerRepairedItems;
             EventManager.OnPlayerInventoryChanged -= HandlePlayerInventoryChanged;
+            EventManager.OnFetchedTraderInfo -= HandleFetchedTraderInfo;
             EventManager.OnPlayerCoinsChanged -= HandlePlayerCoinsChanged;
-            EventManager.OnFetchedTraderCoins -= HandleFetchedTraderCoins;
             EventManager.OnFetchedAvailablePurchaseItems -= HandleFetchedAvailablePurchaseItems;
             EventManager.OnFetchedAvailableSellItems -= HandleFetchedAvailableSellItems;
-            Reset();
+
+            if (Player.m_localPlayer != null)
+            {
+                Player.m_localPlayer.GetComponent<PlayerController>().enabled = true;
+            }
             HandleMousePointerExitItemPanel();
+            sortingManager.SetItemSortingState(SortingManager.SortingState.Off, false);
         }
 
         private void OnDestroy()
@@ -260,6 +325,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             EventManager.OnMousePointerEnterItemPanel -= HandleItemPanelHover;
             EventManager.OnMousePointerExitItemPanel -= HandleMousePointerExitItemPanel;
             EventManager.OnMouseClickedItemPanel -= HandleSelectedItemPanel;
+            EventManager.OnInspectItemPanel -= HandleInspectItemPanel;
         }
 
         private void SetupItemDetailsPopupPanel()
@@ -271,6 +337,20 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private void InitializeUI()
         {
             itemDetailsPopupPanel = Instantiate(ItemDetailsPopupPanelPrefab, transform.parent);
+            Reset();
+
+            // The menu is active with it's alpha set to 0 as the game is loading. This is so that it can
+            // perform some of the more expensive operations at startup, instead of the user experiencing
+            // a large lag spike when opening the menu.
+            StartCoroutine(DelayedDisable());
+        }
+
+        private IEnumerator DelayedDisable()
+        {
+            yield return new WaitForEndOfFrame();
+            gameObject.SetActive(false);
+            GetComponent<CanvasGroup>().alpha = 1;
+            hasInitialized = true;
         }
 
         private void Reset()
@@ -279,7 +359,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             TradeItemFilterDropdown.Reset();
             sortingManager.SetItemSortingState(SortingManager.SortingState.Off, false);
             TradeQuantityInput.SetTextWithoutNotify("1");
-            TotalTradeValueText.text = "total: 0c";
+            TotalTradeValueText.text = "0c";
             itemFilter = string.Empty;
 
             if (lastSelectedItemPanel != null)
@@ -295,6 +375,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             ItemListPanel.Reset();
         }
 
+        private void HandlePlayerRepairedItems()
+        {
+            UpdateMenu();
+        }
+
         private void HandleSelectedItemPanel(ItemPanel newlySelectedItemPanel)
         {
             if (lastSelectedItemPanel != null && newlySelectedItemPanel != lastSelectedItemPanel)
@@ -303,13 +388,36 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             }
 
             lastSelectedItemPanel = newlySelectedItemPanel;
-
             OnTradeQuantityChanged(TradeQuantityInput.text);
             UpdateTradeTotal();
         }
 
+        private void HandleInspectItemPanel(ItemPanel panel)
+        {
+            TradeItemInspector.SetInspectedItem(panel.Item);
+        }
+
+        private void HandleFetchedTraderInfo(bool hasCoins, int coins, bool newCanRepairItems, int newPerItemRepairCost)
+        {
+            if (TraderCoinsWrapper != null)
+            {
+                TraderCoinsWrapper.SetActive(hasCoins);
+            }
+
+            TraderCoinsText.text = $"{coins}c";
+
+            if (RepairButtonsWrapper != null)
+            {
+                RepairButtonsWrapper.SetActive(newCanRepairItems);
+                canRepairItems = newCanRepairItems;
+            }
+
+            perItemRepairCost = newPerItemRepairCost;
+        }
+
         private void HandlePlayerInventoryChanged()
         {
+            UpdateTradeTotal();
             RequestNewestData();
         }
 
@@ -332,12 +440,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void HandlePlayerCoinsChanged(int coins)
         {
-            PlayerCoinsText.text = $"my coins: {coins}c";
-        }
-
-        private void HandleFetchedTraderCoins(int coins)
-        {
-            TraderCoinsText.text = $"{coins}c";
+            PlayerCoinsText.text = $"{coins}c";
         }
 
         private void HandleFetchedAvailablePurchaseItems(List<ICirculatedItem> items)
@@ -369,7 +472,10 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private List<ICirculatedItem> GetFilteredItemCollection(List<ICirculatedItem> items)
         {
             List<ICirculatedItem> result;
-            result = items.Where(item => (string.IsNullOrEmpty(itemFilter) || Localization.instance.Localize(item.Drop.m_itemData.m_shared.m_name).ToLower().Replace(" ", "").StartsWith(itemFilter.ToLower().Replace(" ", ""))) && (TradeItemFilterDropdown.GetBitField() & (int)Mathf.Pow(2, (int)item.Drop.m_itemData.m_shared.m_itemType)) != 0).ToList();
+            result = items.Where(item => 
+            (string.IsNullOrEmpty(itemFilter) || Localization.instance.Localize(item.Drop.m_itemData.m_shared.m_name).ToLower().Replace(" ", "").Contains(itemFilter.ToLower().Replace(" ", ""))) && 
+            (TradeItemFilterDropdown.GetBitField() & (int)Mathf.Pow(2, (int)item.Drop.m_itemData.m_shared.m_itemType)) != 0 &&
+            (item.Drop.m_itemData.m_shared.m_dlc.Length == 0 || DLCMan.instance.IsDLCInstalled(item.Drop.m_itemData.m_shared.m_dlc))).ToList();
 
             return result;
         }
@@ -411,7 +517,12 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
                     break;
                 case SortingManager.SortingMode.Stack:
-                    result.Sort((firstItem, secondItem) => secondItem.CurrentStock - firstItem.CurrentStock);
+                    result.Sort((firstItem, secondItem) =>
+                    {
+                        int sortVal = secondItem.CurrentStock - firstItem.CurrentStock;
+
+                        return sortVal == 0 ? firstItem.Name.GetStableHashCode() - secondItem.Name.GetStableHashCode() : sortVal;
+                    });
 
                     break;
                 case SortingManager.SortingMode.Value:
@@ -419,8 +530,9 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                     {
                         int firstItemValue = tradeMode == TradeMode.Buy ? firstItem.CurrentPurchasePrice : firstItem.CurrentSalesPrice;
                         int secondItemValue = tradeMode == TradeMode.Buy ? secondItem.CurrentPurchasePrice : secondItem.CurrentSalesPrice;
+                        int sortVal = secondItemValue - firstItemValue;
 
-                        return secondItemValue - firstItemValue;
+                        return sortVal == 0 ? secondItem.Name.GetStableHashCode() - firstItem.Name.GetStableHashCode() : sortVal;
                     });
 
                     break;
@@ -444,17 +556,9 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             TradeItemFilterDropdown.SetOptions(dropdownOptions);
         }
 
-        private void ClearTransformChildren(Transform transform)
-        {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                Destroy(transform.GetChild(i).gameObject);
-            }
-        }
-
         private void RequestNewestData()
         {
-            RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestTraderCoins));
+            RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestTraderInfo));
 
             if (tradeMode == TradeMode.Buy)
             {
@@ -471,10 +575,13 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                     circulatedItem.Serialize(ref requestPackage);
                 });
 
-                RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestAvailableSellItems),
-                    requestPackage
-                    );
+                RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestAvailableSellItems), requestPackage);
             }
+        }
+
+        private bool TryGetPlayerCoinsTextAsInt(out int playerCoins)
+        {
+            return int.TryParse(PlayerCoinsText.text.Substring(0, PlayerCoinsText.text.Length - 1), out playerCoins);
         }
     }
 }

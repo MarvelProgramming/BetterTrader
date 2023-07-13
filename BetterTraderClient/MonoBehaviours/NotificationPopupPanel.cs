@@ -33,7 +33,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         {
             accept = () => { };
             deny = () => { };
-            gameObject.SetActive(false);
+            transform.parent.gameObject.SetActive(false);
         }
 
         public void Show(string title, string description, Action accept, Action deny)
@@ -42,7 +42,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             DescriptionText.text = description;
             this.accept = accept;
             this.deny = deny;
-            gameObject.SetActive(true);
+            transform.parent.gameObject.SetActive(true);
         }
     }
 }

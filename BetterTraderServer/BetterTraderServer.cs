@@ -4,7 +4,6 @@ using HarmonyLib;
 using JetBrains.Annotations;
 using Jotunn.Managers;
 using Jotunn.Utils;
-using Menthus15Mods.Valheim.BetterTraderClient;
 using Menthus15Mods.Valheim.BetterTraderLibrary;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Extensions;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
@@ -36,6 +35,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
         {
             LoggerInstance = Logger;
             PrefabManager.OnPrefabsRegistered += HandleOnPrefabsRegistered;
+            EventManager.OnGeneratedConfigs += HandleGeneratedConfigs;
             EventManager.OnFinishedRecordingObjectDBItems += HandleFinishedRecordingObjectDBItems;
             EventManager.OnGameSave += HandleGameSave;
             EventManager.OnNewDay += HandleNewDay;
@@ -45,6 +45,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
         [UsedImplicitly]
         private void OnDestroy()
         {
+            EventManager.OnGeneratedConfigs -= HandleGeneratedConfigs;
             EventManager.OnFinishedRecordingObjectDBItems -= HandleFinishedRecordingObjectDBItems;
             EventManager.OnGameSave -= HandleGameSave;
             EventManager.OnNewDay -= HandleNewDay;
@@ -57,6 +58,13 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
         }
 
         #endregion
+
+        private void HandleGeneratedConfigs(List<ITradableConfig> list)
+        {
+            TraderInstance.ItemConfigurations = list;
+            TraderInstance.UpdateAllItemAssociations();
+            TraderInstance.UpdateCirculatedItems(true);
+        }
 
         private void HandleFinishedRecordingObjectDBItems(List<ITradableConfig> tradableItems, string worldSave)
         {
@@ -79,7 +87,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
 
                 if (TraderInstance.activelyPurchasableItemsList.Count == 0)
                 {
-                    TraderInstance.UpdateCirculatedItems(skipRefreshIntervalCheck: true);
+                    TraderInstance.UpdateCirculatedItems(true);
                 }
             }
             catch(Exception e)
@@ -102,12 +110,8 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
         private void HandleOnPrefabsRegistered()
         {
             List<ITradableConfig> tradableItems = ObjectDB.instance.GetTradableItems();
-
-            // https://github.com/Digitalroot/Menthus123-BetterTrader/blob/c96fb1bfde80e3123dc5a6436fe294a02d11d6c5/src/BetterTraderRemake/Core/FileConfiguration.cs#LL113C11-L113C82
-            string worldSaveFolderName = $"{ZNet.instance.GetWorldName()}_{ZNet.instance.GetWorldUID()}";
-
+            string worldSaveFolderName = ZNet.instance.GetWorldSaveName();
             EventManager.RaiseFinishedGatheringObjectDBItems(tradableItems, worldSaveFolderName);
-
             PrefabManager.OnPrefabsRegistered -= HandleOnPrefabsRegistered;
         }
 

@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 2140646411}
   - component: {fileID: 2140646410}
   - component: {fileID: 6326931567447173807}
+  - component: {fileID: 9110058094880775354}
   m_Layer: 2
   m_Name: TradeItemDetailsHeader
   m_TagString: Untagged
@@ -140,6 +141,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &9110058094880775354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7584755910717078548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mockType: 1
 --- !u!1 &7584755911279566051
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,6 +265,7 @@ GameObject:
   - component: {fileID: 6661831593313522123}
   - component: {fileID: 5807410399375824423}
   - component: {fileID: 7492479623606346745}
+  - component: {fileID: 6515499808373587394}
   m_Layer: 2
   m_Name: ItemDetailsPopupPanel
   m_TagString: Untagged
@@ -385,6 +400,19 @@ MonoBehaviour:
   <ItemNameText>k__BackingField: {fileID: 8381411686598349194}
   <ItemTooltipText>k__BackingField: {fileID: 8381411687746328803}
   <CanvasGroup>k__BackingField: {fileID: 5807410399375824423}
+--- !u!114 &6515499808373587394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7584755911841998352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mockType: 1
 --- !u!1001 &7584755910977996648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -589,6 +617,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_overflowMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546747348975427718, guid: 436c797dc8c85fb4fac734d1db1a9162,
+        type: 3}
+      propertyPath: mockType
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4586717438487948377, guid: 436c797dc8c85fb4fac734d1db1a9162,
         type: 3}

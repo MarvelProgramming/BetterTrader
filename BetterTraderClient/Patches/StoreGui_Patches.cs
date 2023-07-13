@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using Menthus15Mods.Valheim.BetterTraderClient.Utils;
+using Menthus15Mods.Valheim.BetterTraderLibrary.Utils;
 using Menthus15Mods.Valheim.BetterTraderLibrary;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Extensions;
 using UnityEngine;
@@ -12,7 +12,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
         [HarmonyPatch(nameof(StoreGui.Awake)), HarmonyPostfix]
         public static void Awake(StoreGui __instance)
         {
-            if (!StoreGui_Utils.GetBtUIExists(__instance))
+            if (!StoreGUIUtils.GetBtUIExists(__instance, BetterTraderClient.UI_ASSET.name))
             {
                 var btUI = Object.Instantiate(BetterTraderClient.UI_ASSET, __instance.transform);
                 btUI.name = BetterTraderClient.UI_ASSET.name;
@@ -30,19 +30,25 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
         {
             if (trader.IsHaldor())
             {
-                StoreGui_Utils.GetBtUIObject(__instance)?.SetActive(true);
-                RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestTraderCoins));
+                StoreGUIUtils.GetBtUIObject(__instance, BetterTraderClient.UI_ASSET.name)?.SetActive(true);
                 EventManager.RaisePlayerCoinsChanged(Player.m_localPlayer.m_inventory.CountItems(StoreGui.instance.m_coinPrefab.m_itemData.m_shared.m_name));
             }
         }
 
         [HarmonyPatch(nameof(StoreGui.Hide)), HarmonyPrefix]
-        public static void Hide(StoreGui __instance)
+        public static bool Hide(StoreGui __instance)
         {
             if (__instance.m_trader != null && __instance.m_trader.IsHaldor())
             {
-                StoreGui_Utils.GetBtUIObject(__instance).SetActive(false);
+                if (ZInput.GetButtonDown("Use")) 
+                {
+                    return false;
+                }
+
+                StoreGUIUtils.GetBtUIObject(__instance, BetterTraderClient.UI_ASSET.name).SetActive(false);
             }
+
+            return true;
         }
     }
 }

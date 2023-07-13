@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
+using System;
+using System.Globalization;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 {
@@ -19,8 +22,12 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         public void Setup(ItemPanel itemPanel)
         {
             ItemIcon.sprite = itemPanel.ItemIcon.sprite;
-            ItemNameText.SetText($"<b>{Localization.instance.Localize(itemPanel.Item.Drop.GetHoverName())}</b>");
-            ItemTooltipText.SetText($"{Localization.instance.Localize(itemPanel.Item.Drop.m_itemData.GetTooltip())}");
+            ItemNameText.SetText($"<b>{CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Localization.instance.Localize(itemPanel.Item.Drop.GetHoverName()))}</b>");
+            string tooltipText = Localization.instance.Localize(itemPanel.Item.Drop.m_itemData.GetTooltip());
+
+            // Removing control characters so that they don't show up as text artifacts in the tooltip.
+            tooltipText = new string(tooltipText.Where(c => !char.IsControl(c) || c == '\n').ToArray());
+            ItemTooltipText.SetText(tooltipText);
             RefreshLayout();
             UpdatePosition();
         }
@@ -40,6 +47,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private void UpdatePosition()
         {
             transform.position = ZInput.instance.Input_mousePosition + positionOffset;
+            Utils.ClampUIToScreen(transform as RectTransform);
         }
     }
 }

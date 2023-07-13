@@ -17,5 +17,6 @@ public class CreateAssetBundles : MonoBehaviour
         BuildPipeline.BuildAssetBundles(assetBundleDirectory,
                                         BuildAssetBundleOptions.ForceRebuildAssetBundle,
                                         BuildTarget.StandaloneWindows);
+        Debug.Log("Finished building asset bundles!");
     }
 }
