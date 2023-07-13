@@ -27,7 +27,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Navigation.m_Mode
-    value: 3
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Navigation.m_WrapAround
@@ -71,15 +71,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_HighlightedColor.r
-    value: 0.23584908
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_HighlightedColor.g
-    value: 0.23584908
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_HighlightedColor.b
-    value: 0.23584908
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_HighlightedColor.a
@@ -87,15 +87,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_PressedColor.r
-    value: 0.23529412
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_PressedColor.g
-    value: 0.23529412
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_PressedColor.b
-    value: 0.23529412
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_PressedColor.a
@@ -103,15 +103,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_SelectedColor.r
-    value: 0.23529412
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_SelectedColor.g
-    value: 0.23529412
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_SelectedColor.b
-    value: 0.23529412
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_SelectedColor.a
@@ -119,15 +119,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_DisabledColor.r
-    value: 0.78431374
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_DisabledColor.g
-    value: 0.78431374
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_DisabledColor.b
-    value: 0.78431374
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Colors.m_DisabledColor.a

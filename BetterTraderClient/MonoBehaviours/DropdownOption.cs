@@ -13,7 +13,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
     public class DropdownOption : MonoBehaviour
     {
         [field: SerializeField]
-        public Image CheckedDecoration { get; private set; }
+        public GameObject CheckedDecoration { get; private set; }
         [field: SerializeField]
         public TMP_Text Label { get; private set; }
         [field: SerializeField]

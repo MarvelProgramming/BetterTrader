@@ -25,7 +25,6 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         public float Spacing { get; private set; }
         private int selectedItemPanelIndex = -1;
         private float panelHeight;
-        private float panelHeightRemainder;
         private float itemPanelHeight;
         private float itemPanelSpaceOccupancy;
         private float accumulitiveItemPanelHeight;
@@ -60,6 +59,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         public void Reset()
         {
             selectedItemPanelIndex = -1;
+            DelayedInitializeVariables();
         }
 
         public void DelayedInitializeVariables()
@@ -169,8 +169,6 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void UpdateScrollHandleSize()
         {
-            BetterTraderClient.LoggerInstance.LogInfo($"Setting scrollbar size to {Math.Min(items.Count == 0 || (panelHeight / itemPanelSpaceOccupancy) == 0 ? 1 : (panelHeight / itemPanelSpaceOccupancy) / items.Count, 1)}!");
-            BetterTraderClient.LoggerInstance.LogInfo($"items.Count is {items.Count} | (panelHeight / itemPanelSpaceOccupancy) is {(panelHeight / itemPanelSpaceOccupancy)}");
             Scrollbar.size = Math.Min(items.Count == 0 || panelHeight == 0 || itemPanelSpaceOccupancy == 0 ? 1 : (panelHeight / itemPanelSpaceOccupancy) / items.Count, 1);
             Scrollbar.gameObject.SetActive(Scrollbar.size != 1);
         }

@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using Menthus15Mods.Valheim.BetterTraderClient;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Extensions;
 using System;
 using System.Collections.Generic;

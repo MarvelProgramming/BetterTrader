@@ -12,10 +12,10 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         [YamlIgnore]
         public ItemDrop Drop => ObjectDBUtils.GetDropFromItemName(Name);
 
-        public int BasePurchasePrice { get; private set; } = 1;
-        public int BaseSalesPrice { get; private set; } = 1;
+        public int BasePurchasePrice { get; set; } = 1;
+        public int BaseSalesPrice { get; set; } = 1;
 
-        public int BaseTraderStorage { get; private set; } = 100;
+        public int BaseTraderStorage { get; private set; } = 1;
 
         public bool Purchasable { get; private set; } = true;
 

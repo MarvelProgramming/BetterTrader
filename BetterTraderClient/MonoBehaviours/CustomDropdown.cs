@@ -62,30 +62,13 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             }
 
             DropdownPanel.gameObject.SetActive(!DropdownPanel.gameObject.activeSelf);
-
-            if (DropdownPanel.gameObject.activeSelf)
-            {
-                DropdownPanel.Select();
-            }
-
             canToggle = false;
             Invoke(nameof(EnableToggling), toggleDebounceTime);
         }
 
-        public void OnDropdownPanelDeselected(BaseEventData eventData)
+        public void OnDropdownPanelDeselected()
         {
-            if (eventData is PointerEventData pointerEventData)
-            {
-                if (pointerEventData.hovered.All(hoverItem => hoverItem != DropdownPanel.gameObject && hoverItem.transform.parent != DropdownPanel.transform))
-                {
-                    Toggle();
-                }
-                else
-                {
-                    // Relecting DropdownPanel on next frame so that it isn't snuffed by the deselect event trigger.
-                    StartCoroutine(ReselectDropdownPanel());
-                }
-            }
+            Toggle();
         }
 
         public void Apply()
@@ -129,6 +112,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         public void Reset()
         {
+            if (optionUIAssociations.Count == 0)
+            {
+                return;
+            }
+
             OnDropdownOptionSelected(options[1]);
         }
 
@@ -209,12 +197,6 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private void EnableToggling()
         {
             canToggle = true;
-        }
-
-        private IEnumerator ReselectDropdownPanel()
-        {
-            yield return new WaitForEndOfFrame();
-            DropdownPanel.Select();
         }
     }
 }

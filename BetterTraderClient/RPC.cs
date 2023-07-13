@@ -1,6 +1,7 @@
 ﻿using Menthus15Mods.Valheim.BetterTraderLibrary;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,8 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
 
         public static void RegisterRPCMethods()
         {
-            RPCUtils.RegisterMethod(nameof(RPC_RequestTraderCoins), RPC_RequestTraderCoins);
+            RPCUtils.RegisterMethod(nameof(RPC_RequestRepairItems), RPC_RequestRepairItems);
+            RPCUtils.RegisterMethod(nameof(RPC_RequestTraderInfo), RPC_RequestTraderInfo);
             RPCUtils.RegisterMethod(nameof(RPC_RequestAvailablePurchaseItems), RPC_RequestAvailablePurchaseItems);
             RPCUtils.RegisterMethod(nameof(RPC_RequestAvailableSellItems), RPC_RequestAvailableSellItems);
             RPCUtils.RegisterMethod(nameof(RPC_RequestPurchaseItem), RPC_RequestPurchaseItem);
@@ -26,10 +28,55 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         }
 
         [Client]
-        public static void RPC_RequestTraderCoins(long sender, ZPackage pkg)
+        public static void RPC_RequestRepairItems(long sender, ZPackage pkg)
         {
-            int traderCoins = pkg.ReadInt();
-            EventManager.RaiseFetchedTraderCoins(traderCoins);
+            if (sender == ZRoutedRpc.instance.GetServerPeerID())
+            {
+                bool canRepairItems = pkg.ReadBool();
+
+                if (canRepairItems)
+                {
+                    int quantity = pkg.ReadInt();
+                    int perItemRepairCost = pkg.ReadInt();
+                    int playerCoins = Player.m_localPlayer.m_inventory.CountItems(StoreGui.instance.m_coinPrefab.m_itemData.m_shared.m_name);
+                    List<ItemDrop.ItemData> wornItems = new List<ItemDrop.ItemData>();
+                    Player.m_localPlayer.m_inventory.GetWornItems(wornItems);
+                    int repairCost = Mathf.Min(quantity, wornItems.Count) * perItemRepairCost;
+
+                    if (playerCoins < repairCost || wornItems.Count == 0)
+                    {
+                        return;
+                    }
+
+                    Player.m_localPlayer.m_inventory.RemoveItem(StoreGui.instance.m_coinPrefab.m_itemData.m_shared.m_name, repairCost);
+                    StoreGui.instance.m_trader.OnBought(null);
+                    StoreGui.instance.m_buyEffects.Create(StoreGui.instance.transform.position, Quaternion.identity);
+                    EventManager.RaisePlayerCoinsChanged(Player.m_localPlayer.m_inventory.CountItems(StoreGui.instance.m_coinPrefab.m_itemData.m_shared.m_name));
+                    EventManager.RaisePlayerRepairedItems();
+
+                    for (int i = 0; i < Mathf.Min(quantity, wornItems.Count); i++)
+                    {
+                        ItemDrop.ItemData wornItem = wornItems[i];
+                        wornItem.m_durability = wornItem.GetMaxDurability();
+                    }
+
+                    Player.m_localPlayer.Message(MessageHud.MessageType.Center, Localization.instance.Localize("$msg_repaired", quantity == 1 ? wornItems[0].m_shared.m_name : "Repaired All Items"));
+                }
+            }
+        }
+
+        [Client]
+        public static void RPC_RequestTraderInfo(long sender, ZPackage pkg)
+        {
+            if (sender == ZRoutedRpc.instance.GetServerPeerID())
+            {
+                var infoPackage = pkg.ReadPackage();
+                bool hasCoins = infoPackage.ReadBool();
+                int coins = infoPackage.ReadInt();
+                bool canRepairItems = infoPackage.ReadBool();
+                int perItemRepairCost = infoPackage.ReadInt();
+                EventManager.RaiseFetchedTraderInfo(hasCoins, coins, canRepairItems, perItemRepairCost);
+            }
         }
 
         [Client]

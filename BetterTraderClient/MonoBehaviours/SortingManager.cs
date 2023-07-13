@@ -104,6 +104,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void UpdateUI()
         {
+            if (options == null)
+            {
+                return;
+            }
+
             foreach (Option option in options)
             {
                 option.UI.StateDecoration.text = option.SortingMode == CurrentSortingMode ? sortingStateDecorations[(int)CurrentSortingState] : string.Empty;

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5192512811312481572}
   - component: {fileID: 3381790133733695869}
   - component: {fileID: 4481796827849450431}
+  - component: {fileID: 2033786666637810866}
   m_Layer: 5
   m_Name: TraderMenuText_Base
   m_TagString: Untagged
@@ -74,8 +75,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280690214
-  m_fontColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
+    rgba: 4294506744
+  m_fontColor: {r: 0.9725491, g: 0.9725491, b: 0.9725491, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -134,3 +135,16 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2033786666637810866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2055743250053435501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mockType: 8

@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using Menthus15Mods.Valheim.BetterTraderClient;
 
 namespace Menthus15Mods.Valheim.BetterTraderServer.Patches
 {

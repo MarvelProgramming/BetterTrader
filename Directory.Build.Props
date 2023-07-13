@@ -39,5 +39,7 @@
   <PropertyGroup>
     <BT_INSTALL>$(VALHEIM_INSTALL)\BepInEx\plugins\$(SolutionName)</BT_INSTALL>
     <BT_DEDICATED_INSTALL>$(VALHEIM_DEDICATED_INSTALL)\BepInEx\plugins\$(SolutionName)</BT_DEDICATED_INSTALL>
+    <BT_UI_ASSETS>$(MSBuildThisFileDirectory)UI\Assets\</BT_UI_ASSETS>
+    <BT_UI_ASSET_BUNDLE>$(MSBuildThisFileDirectory)UI\Assets\AssetBundles\canvas.unity</BT_UI_ASSET_BUNDLE>
   </PropertyGroup>
 </Project>

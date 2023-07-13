@@ -9,18 +9,30 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
 {
     public class BTrader
     {
+        public bool HasCoins { get; private set; } = true;
         public int BaseCoins { get; private set; } = 1000;
         public bool HasLimitedItems { get; private set; } = true;
         public int UpperItemLimit { get; private set; } = 15;
         public int LowerItemLimit { get; private set; } = 5;
+        public int PerItemStockMax { get; private set; } = 100;
         public bool HasRandomItems { get; private set; }
+        public bool CanRepairItems { get; private set; } = true;
+        public int PerItemRepairCost { get; private set; } = 0;
+        public bool DepreciatingSaleValues { get; private set; } = true;
+        public float SalesValueDepreciationScalar { get; private set; } = 0.8f;
         public int InventoryRefreshInterval { get; private set; } = 1;
         public int GlobalItemPriceScalar { get; private set; } = 1;
         [YamlIgnore]
         public int Coins
         {
             get => RealtimeData.CurrentCoins;
-            private set => RealtimeData.CurrentCoins = value;
+            private set
+            {
+                if (HasCoins)
+                {
+                    RealtimeData.CurrentCoins = value;
+                }
+            }
         }
         [YamlIgnore]
         public List<CirculatedItem> ItemsInCirculation => new List<CirculatedItem>(RealtimeData.ItemsInCirculation);
@@ -59,12 +71,19 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             RealtimeData = new TraderRealtimeData();
         }
 
-        public BTrader(int baseCoins, bool hasLimitedItems, int itemLimit, bool hasRandomItems, int inventoryRefreshInterval, int globalItemPriceScalar, TraderRealtimeData realtimeData)
+        public BTrader(bool hasCoins, int baseCoins, bool hasLimitedItems, int upperItemLimit, int lowerItemLimit, int perItemStockMax, bool hasRandomItems, bool canRepairItems, int perItemRepairCost, bool depreciatingSaleValues, float salesValueDepreciationScalar, int inventoryRefreshInterval, int globalItemPriceScalar, TraderRealtimeData realtimeData)
         {
+            HasCoins = hasCoins;
             BaseCoins = baseCoins;
             HasLimitedItems = hasLimitedItems;
-            UpperItemLimit = itemLimit;
+            UpperItemLimit = upperItemLimit;
+            LowerItemLimit = lowerItemLimit;
+            PerItemStockMax = perItemStockMax;
             HasRandomItems = hasRandomItems;
+            CanRepairItems = canRepairItems;
+            PerItemRepairCost = perItemRepairCost;
+            DepreciatingSaleValues = depreciatingSaleValues;
+            SalesValueDepreciationScalar = salesValueDepreciationScalar;
             InventoryRefreshInterval = inventoryRefreshInterval;
             GlobalItemPriceScalar = globalItemPriceScalar;
             RealtimeData = realtimeData;
@@ -73,6 +92,14 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         public List<ICirculatedItem> GetItemsInCirculation()
         {
             return new List<ICirculatedItem>(RealtimeData.ItemsInCirculation);
+        }
+
+        public void GetInfo(ref ZPackage pkg)
+        {
+            pkg.Write(HasCoins);
+            pkg.Write(Coins);
+            pkg.Write(CanRepairItems);
+            pkg.Write(PerItemRepairCost);
         }
 
         public void UpdateCirculatedItems(bool skipRefreshIntervalCheck = false)
@@ -87,14 +114,15 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             RealtimeData.CurrentCoins = BaseCoins;
             RealtimeData.DaysSinceLastInventoryRefresh = 0;
 
+            foreach (Tuple<ICirculatedItem, ITradableConfig> circulatedItem in activelyPurchasableItemsList)
+            {
+                circulatedItem.Item1.IsActivelyPurchasable = false;
+            }
+
+            activelyPurchasableItemsList.Clear();
+
             if (HasRandomItems)
             {
-                foreach(Tuple<ICirculatedItem, ITradableConfig> circulatedItem in activelyPurchasableItemsList)
-                {
-                    circulatedItem.Item1.IsActivelyPurchasable = false;
-                }
-
-                activelyPurchasableItemsList.Clear();
                 itemsToCirculate.Clear();
 
                 for (int i = 0; i < Math.Min(UnityEngine.Random.Range(LowerItemLimit, UpperItemLimit), purchasableItemsList.Count); i++)
@@ -113,16 +141,19 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             {
                 bool isDiscounted = item.Item2.CanBeOnDiscount && Mathf.Lerp(0, UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)) > 0.8f;
                 int purchasePrice = item.Item2.BasePurchasePrice;
+                int salesPrice = item.Item2.BaseSalesPrice;
 
                 if (isDiscounted)
                 {
                     purchasePrice *= item.Item2.DiscountScalar;
+                    salesPrice *= item.Item2.DiscountScalar;
                 }
 
                 purchasePrice *= GlobalItemPriceScalar;
                 ICirculatedItem circulatedItem = item.Item1;
                 circulatedItem.IsOnDiscount = isDiscounted;
                 circulatedItem.CurrentPurchasePrice = purchasePrice;
+                circulatedItem.CurrentSalesPrice = salesPrice;
                 circulatedItem.CurrentStock = item.Item2.BaseTraderStorage;
                 circulatedItem.IsActivelyPurchasable = true;
                 activelyPurchasableItemsList.Add(Tuple.Create(circulatedItem, item.Item2));
@@ -179,7 +210,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         {
             if (hashItemAssociations.TryGetValue(inventoryItem.Name.GetStableHashCode(), out Tuple<ICirculatedItem, ITradableConfig> item))
             {
-                if (item.Item2.Sellable && Coins >= item.Item1.CurrentSalesPrice * quantity)
+                if (item.Item2.Sellable && (!HasCoins || Coins >= item.Item1.CurrentSalesPrice * quantity))
                 {
                     return true;
                 }
@@ -208,8 +239,13 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             if (hashItemAssociations.TryGetValue(itemName.GetStableHashCode(), out Tuple<ICirculatedItem, ITradableConfig> item))
             {
                 Coins -= item.Item1.CurrentSalesPrice * quantity;
-                item.Item1.CurrentStock += quantity;
-                item.Item1.CurrentSalesPrice = Mathf.Max((int)(item.Item1.CurrentSalesPrice * 0.8f), 1);
+
+                item.Item1.CurrentStock = Mathf.Min(item.Item1.CurrentSalesPrice + quantity, PerItemStockMax);
+
+                if (DepreciatingSaleValues)
+                {
+                    item.Item1.CurrentSalesPrice = Mathf.Max((int)(item.Item1.CurrentSalesPrice * Mathf.Pow(SalesValueDepreciationScalar, quantity)), 0);
+                }
 
                 if (activelyPurchasableItemsList.All(purchasableItem => purchasableItem.Item1.Name != item.Item1.Name))
                 {
@@ -217,6 +253,11 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
                     activelyPurchasableItemsList.Add(item);
                 }
             }
+        }
+
+        public void RepairItems(int quantity)
+        {
+            Coins += PerItemRepairCost * quantity;
         }
 
         public void IncreaseDaysSinceLastInventoryRefresh()
