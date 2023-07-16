@@ -13,6 +13,8 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
         private readonly string traderConfigFilePath;
         private readonly string tradableItemConfigFolderPath;
         private readonly Dictionary<string, ISerializer> serializersByFileExtension;
+        private FileSystemWatcher traderConfigWatcher;
+        private readonly List<FileSystemWatcher> itemConfigWatchers = new List<FileSystemWatcher>();
 
         #region Custom Exceptions
         private class BTLoadTraderException : Exception
@@ -259,6 +261,18 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             ISerializer tmpItemConfigSerializer = GetSerializerBasedOnFile(tmpItemConfigFilePath);
             string leftOverItemsConfig = tmpItemConfigSerializer.Serialize(itemsWithoutConfigs.ToList());
             File.AppendAllText(tmpItemConfigFilePath, leftOverItemsConfig);
+        }
+
+        public void SetupFileWatchers(Action<object, FileSystemEventArgs> traderConfigChanged)
+        {
+            if (traderConfigWatcher == null)
+            {
+                traderConfigWatcher = new FileSystemWatcher();
+                traderConfigWatcher.Path = Path.GetDirectoryName(traderConfigFilePath);
+                traderConfigWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                traderConfigWatcher.Changed += new FileSystemEventHandler(traderConfigChanged);
+                traderConfigWatcher.EnableRaisingEvents = true;
+            }
         }
 
         private ISerializer GetSerializerBasedOnFile(string filePath)

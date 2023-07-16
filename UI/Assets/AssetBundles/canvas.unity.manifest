@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2243274444
+CRC: 2734041244
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dda9758419dcc1809065815058803664
+    Hash: 21f811e2ab0dd61fd25c6616f3a1daa6
   TypeTreeHash:
     serializedVersion: 2
-    Hash: fedbcac7b90933d8cefe5e6623585fec
+    Hash: 0d63c72a00f421657b3832c8c18a3c2e
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -20,17 +20,17 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
-  Script: {fileID: 1275261918, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+- Class: 114
+  Script: {fileID: 1275261918, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
 - Class: 114
@@ -97,6 +97,8 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: BetterTraderClient
+  ClassName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.CustomDropdown/Option
+- AssemblyName: BetterTraderClient
   ClassName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.SortingManager/Option
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.FaceInfo_Legacy
@@ -136,6 +138,8 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.Events.PersistentListenerMode
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.UnityEvent
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.UnityEvent`1[System.Int32]
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.RectOffset
 - AssemblyName: UnityEngine.TextCoreModule

@@ -10,26 +10,36 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.CustomDropdown;
+using static Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.SortingManager;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 {
-    public class CustomDropdown : MonoBehaviour
+    public class CustomDropdown : MonoBehaviour, ISerializationCallbackReceiver
     {
         [field: SerializeField]
         public Transform ContentPanel { get; private set; }
         [field: SerializeField]
         public Selectable DropdownPanel { get; private set; }
         [field: SerializeField]
+        public TMP_Text LabelText { get; private set; }
+        [field: SerializeField]
+        public bool IncludeGlobalOptions { get; private set; } = true;
+        [field: SerializeField]
+        public bool Multiselect { get; private set; } = true;
+        [field: SerializeField]
         public DropdownOption OptionUIPrefab { get; private set; }
 #pragma warning disable IDE0044 // Add readonly modifier
         [SerializeField]
-        private UnityEvent OnChanged;
+        private UnityEvent<int> OnChanged;
 #pragma warning restore IDE0044 // Add readonly modifier
-        private readonly List<Option> options = new List<Option>()
-        { 
-            new Option("None", 0),
-            new Option("All", 1, true)
-        };
+        [SerializeField]
+        private Option[] options;
+        [SerializeField, HideInInspector]
+        private bool[] _optionIsCheckedStates;
+        [SerializeField, HideInInspector]
+        private string[] _optionLabels;
+        [SerializeField, HideInInspector]
+        private int[] _optionValues;
         private readonly Dictionary<Option, DropdownOption> optionUIAssociations = new Dictionary<Option, DropdownOption>();
         private const float toggleDebounceTime = 0.2f;
         private bool canToggle = true;
@@ -37,10 +47,9 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         [Serializable]
         public class Option
         {
-            public readonly string label;
-            [HideInInspector]
-            public int value;
             public bool isChecked;
+            public string label;
+            public int value;
 
             public Option(string label, int value)
             {
@@ -73,27 +82,43 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         public void Apply()
         {
-            OnChanged.Invoke();
+            int bitField = GetBitField();
+            OnChanged.Invoke(bitField);
+
+            if (!Multiselect)
+            {
+                Toggle();
+            }
         }
 
         public void SetOptions(List<Option> additionalOptions)
         {
-            // Resetting "All" option before appending new flags.
-            options[1].value = 0;
-            options.RemoveRange(2, options.Count - 2);
+            options = new Option[additionalOptions.Count + (IncludeGlobalOptions ? 2 : 0)];
 
-            additionalOptions.ForEach(option =>
+            if (IncludeGlobalOptions)
             {
+                // Resetting "All" option before appending new flags.
+
+                options[0] = new Option("None", 0);
+                options[1] = new Option("All", 1, true);
+            }
+
+            for (int i = 0; i < additionalOptions.Count; i++)
+            {
+                Option option = additionalOptions[i];
                 string label = option.label;
 
                 if (label.ToLower() == "none" || label.ToLower() == "all")
                 {
                     return;
                 }
+                options[i + (IncludeGlobalOptions ? 2 : 0)] = option;
 
-                options.Add(option);
-                options[1].value |= option.value;
-            });
+                if (IncludeGlobalOptions)
+                {
+                    options[1].value |= option.value;
+                }
+            }
 
             InitializeUI();
         }
@@ -120,17 +145,9 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             OnDropdownOptionSelected(options[1]);
         }
 
-        private void OnValidate()
+        private void Awake()
         {
-            if (!options.Any(option => option.label == "None"))
-            {
-                options.Insert(0, new Option("None", 0));
-            }
-
-            if (!options.Any(option => option.label == "All"))
-            {
-                options.Insert(1, new Option("All", 1));
-            }
+            OnBeforeSerialize();
         }
 
         private void Start()
@@ -147,6 +164,17 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                 Destroy(child.gameObject);
             }
 
+            if (IncludeGlobalOptions)
+            {
+                if (options == null)
+                {
+                    options = new Option[2];
+                }
+
+                options[0] = new Option("None", 0);
+                options[1] = new Option("All", 1, true);
+            }
+
             foreach (Option option in options)
             {
                 DropdownOption optionUI = Instantiate(OptionUIPrefab, ContentPanel);
@@ -160,31 +188,66 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             }
         }
 
-        private void OnDropdownOptionSelected(Option option)
+        private void OnDropdownOptionSelected(Option selectedOption)
         {
-            SetOptionChecked(option, !option.isChecked);
-
-            if (option.label == "None" && option.isChecked)
+            if (!Multiselect)
             {
-                for(int i = 1; i < options.Count; i++)
+                foreach (Option option in options)
                 {
-                    Option iOption = options[i];
-                    SetOptionChecked(iOption, false);
+                    SetOptionChecked(option, false);
                 }
             }
-            else if (option.label == "All" && option.isChecked)
+
+            SetOptionChecked(selectedOption, !selectedOption.isChecked);
+
+            if (LabelText != null)
             {
-                SetOptionChecked(options[0], false);
+                int checkedOptionsCount = options.Sum(option => option.isChecked ? 1 : 0);
 
-                for(int i = 1; i < options.Count; i++)
-                { 
-                    Option iOption = options[i];
-                    SetOptionChecked(iOption, true);
+                if (checkedOptionsCount == 1)
+                {
+                    Option checkedOption = options.ToList().Find(option => option.isChecked);
+
+                    if (checkedOption != null)
+                    {
+                        LabelText.text = checkedOption.label;
+                    }
+                }
+                else if (checkedOptionsCount > 1)
+                {
+                    LabelText.text = "Mixed";
+                }
+                else
+                {
+                    LabelText.text = "None";
                 }
             }
 
-            SetOptionChecked(options[0], options.All(option => option.label == "None" || !option.isChecked));
-            SetOptionChecked(options[1], options.All(option => (option.label == "None" && !option.isChecked) || option.label == "All" || option.isChecked));
+            if (IncludeGlobalOptions)
+            {
+                if (selectedOption.label == "None" && selectedOption.isChecked)
+                {
+                    for(int i = 1; i < options.Length; i++)
+                    {
+                        Option iOption = options[i];
+                        SetOptionChecked(iOption, false);
+                    }
+                }
+                else if (selectedOption.label == "All" && selectedOption.isChecked)
+                {
+                    SetOptionChecked(options[0], false);
+
+                    for(int i = 1; i < options.Length; i++)
+                    { 
+                        Option iOption = options[i];
+                        SetOptionChecked(iOption, true);
+                    }
+                }
+
+                SetOptionChecked(options[0], options.All(option => option.label == "None" || !option.isChecked));
+                SetOptionChecked(options[1], options.All(option => (option.label == "None" && !option.isChecked) || option.label == "All" || option.isChecked));
+            }
+
             Apply();
         }
 
@@ -197,6 +260,44 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private void EnableToggling()
         {
             canToggle = true;
+        }
+
+        public void OnBeforeSerialize()
+        {
+            if (_optionValues == null || _optionLabels == null || _optionIsCheckedStates == null)
+            {
+                return;
+            }
+
+            options = new Option[_optionValues.Length];
+
+            for (int i = 0; i < _optionValues.Length; i++)
+            {
+                bool isChecked = _optionIsCheckedStates[i];
+                string label = _optionLabels[i];
+                int value = _optionValues[i];
+                options[i] = new Option(label, value, isChecked);
+            }
+        }
+
+        public void OnAfterDeserialize()
+        {
+            if (options == null)
+            {
+                return;
+            }
+
+            _optionIsCheckedStates = new bool[options.Length];
+            _optionLabels = new string[options.Length];
+            _optionValues = new int[options.Length];
+
+            for (int i = 0; i < options.Length; i++)
+            {
+                Option option = options[i];
+                _optionIsCheckedStates[i] = option.isChecked;
+                _optionLabels[i] = option.label;
+                _optionValues[i] = option.value;
+            }
         }
     }
 }

@@ -11,13 +11,13 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
     {
         public bool HasCoins { get; private set; } = true;
         public int BaseCoins { get; private set; } = 1000;
-        public bool HasLimitedItems { get; private set; } = true;
+        public bool HasLimitedItems { get; private set; }
         public int UpperItemLimit { get; private set; } = 15;
         public int LowerItemLimit { get; private set; } = 5;
         public int PerItemStockMax { get; private set; } = 100;
         public bool HasRandomItems { get; private set; }
         public bool CanRepairItems { get; private set; } = true;
-        public int PerItemRepairCost { get; private set; } = 0;
+        public int PerItemRepairCost { get; private set; } = 10;
         public bool DepreciatingSaleValues { get; private set; } = true;
         public float SalesValueDepreciationScalar { get; private set; } = 0.8f;
         public int InventoryRefreshInterval { get; private set; } = 1;
@@ -270,28 +270,51 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             hashItemAssociations.Clear();
             activelyPurchasableItemsList.Clear();
             purchasableItemsList.Clear();
+            List<CirculatedItem> itemsToRemoveFromCirculation = new List<CirculatedItem>();
 
             foreach (ITradableConfig itemConfig in ItemConfigurations)
             {
-                CirculatedItem circulatedItem = new CirculatedItem(itemConfig.Name, itemConfig.RequireDiscovery, false, false, itemConfig.BasePurchasePrice, itemConfig.BaseSalesPrice, itemConfig.BaseTraderStorage);
+                CirculatedItem circulatedItem = new CirculatedItem(itemConfig.Name, itemConfig.RequireDiscovery, false, false, itemConfig.BasePurchasePrice, itemConfig.BaseSalesPrice, Mathf.Min(itemConfig.BaseTraderStorage, PerItemStockMax));
                 int itemNameHash = itemConfig.Name.GetStableHashCode();
                 var itemRepresentation = Tuple.Create((ICirculatedItem)circulatedItem, itemConfig);
 
-                if (RealtimeData.ItemsInCirculation.All(item => item.Name != itemConfig.Name))
+                if (itemConfig.Purchasable || itemConfig.Sellable)
                 {
-                    RealtimeData.ItemsInCirculation.Add(circulatedItem);
-                    
-                    if (itemConfig.Purchasable)
+                    if (RealtimeData.ItemsInCirculation.All(item => item.Name != itemConfig.Name))
                     {
-                        purchasableItemsList.Add(itemRepresentation);
+                        RealtimeData.ItemsInCirculation.Add(circulatedItem);
+                    
+                        if (itemConfig.Purchasable)
+                        {
+                            purchasableItemsList.Add(itemRepresentation);
+                        }
+                    }
+                }
+                else
+                {
+                    CirculatedItem itemInCirculation = RealtimeData.ItemsInCirculation.Find(itemInCirculation => itemInCirculation.Name == itemConfig.Name);
+
+                    if (itemInCirculation != null)
+                    {
+                        itemsToRemoveFromCirculation.Add(itemInCirculation);
                     }
                 }
 
                 hashItemAssociations.Add(itemNameHash, itemRepresentation);
             }
 
+            foreach (CirculatedItem item in itemsToRemoveFromCirculation)
+            {
+                RealtimeData.ItemsInCirculation.Remove(item);
+            }
+
+            if (HasLimitedItems && RealtimeData.ItemsInCirculation.Count > UpperItemLimit)
+            {
+                RealtimeData.ItemsInCirculation.RemoveRange(0, RealtimeData.ItemsInCirculation.Count - UpperItemLimit);
+            }
+
             // Override cached circulated items with realtime values.
-            foreach(ICirculatedItem circulatedItem in RealtimeData.ItemsInCirculation)
+            foreach (ICirculatedItem circulatedItem in RealtimeData.ItemsInCirculation)
             {
                 int itemNameHash = circulatedItem.Name.GetHashCode();
 
@@ -299,6 +322,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
                 {
                     Tuple<ICirculatedItem, ITradableConfig> itemRepresentation = Tuple.Create(circulatedItem, item.Item2);
                     circulatedItem.RequireDiscovery = item.Item2.RequireDiscovery;
+                    circulatedItem.CurrentStock = Mathf.Min(circulatedItem.CurrentStock, PerItemStockMax);
                     hashItemAssociations[itemNameHash] = itemRepresentation;
 
                     if (item.Item2.Purchasable)

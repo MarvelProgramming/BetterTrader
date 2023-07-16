@@ -27,6 +27,13 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary.Extensions
             }
         }
 
+        public static bool HasChildWithNameThatContains(this GameObject gameObject, string name)
+        {
+            List<Transform> children = gameObject.GetAllChildTransforms();
+
+            return children.Any(child => child.name.Contains(name));
+        }
+
         /// <summary>
         /// Gets all the transforms of the children of the gameObject and returns it.
         /// </summary>

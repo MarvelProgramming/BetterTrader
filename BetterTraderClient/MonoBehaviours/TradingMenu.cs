@@ -44,7 +44,8 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         [field: SerializeField]
         public CustomDropdown TradeItemFilterDropdown { get; private set; }
         [field: SerializeField]
-        public ItemInspector TradeItemInspector { get; private set; }
+        public GameObject TradeItemInspectionPrefab { get; private set; }
+        private ItemInspector tradeItemInspector;
 
 #pragma warning restore CS0649
         private float itemPanelHoverDelay = 0.5f;
@@ -295,6 +296,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
             if (Player.m_localPlayer)
             {
+                Player.m_localPlayer.m_moveDir = Vector3.zero;
                 Player.m_localPlayer.GetComponent<PlayerController>().enabled = false;
             }
 
@@ -316,6 +318,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                 Player.m_localPlayer.GetComponent<PlayerController>().enabled = true;
             }
             HandleMousePointerExitItemPanel();
+            tradeItemInspector.RootPanel.SetActive(false);
             sortingManager.SetItemSortingState(SortingManager.SortingState.Off, false);
         }
 
@@ -337,6 +340,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private void InitializeUI()
         {
             itemDetailsPopupPanel = Instantiate(ItemDetailsPopupPanelPrefab, transform.parent);
+            tradeItemInspector = Instantiate(TradeItemInspectionPrefab, transform.parent).GetComponentInChildren<ItemInspector>();
             Reset();
 
             // The menu is active with it's alpha set to 0 as the game is loading. This is so that it can
@@ -394,7 +398,15 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void HandleInspectItemPanel(ItemPanel panel)
         {
-            TradeItemInspector.SetInspectedItem(panel.Item);
+            if (!tradeItemInspector.RootPanel.activeSelf)
+            {
+                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, tradeItemInspector.RootPanel.transform.position, null, out Vector2 localPoint))
+                {
+                    tradeItemInspector.RootPanel.transform.localPosition -= new Vector3(localPoint.x, localPoint.y, 0);
+                }
+            }
+
+            tradeItemInspector.SetInspectedItem(panel.Item);
         }
 
         private void HandleFetchedTraderInfo(bool hasCoins, int coins, bool newCanRepairItems, int newPerItemRepairCost)

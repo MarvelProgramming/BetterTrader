@@ -1,6 +1,7 @@
 ﻿using Menthus15Mods.Valheim.BetterTraderLibrary;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using System.Globalization;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -29,7 +30,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         public void SetupUI(ICirculatedItem item, TradingMenu.TradeMode tradeMode)
         {
             ItemIcon.sprite = item.Drop.m_itemData.GetIcon();
-            ItemNameText.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Localization.instance.Localize(item.Drop.GetHoverName()));
+            ItemNameText.text = Localization.instance.Localize(item.Drop.GetHoverName()).Split(' ').ToList().Select(segment => segment[0].ToString().ToUpper() + segment.Substring(1, segment.Length - 1)).Aggregate((acc, nextSegment) => acc + " " + nextSegment);
             ItemValueText.text = (tradeMode == TradingMenu.TradeMode.Buy ? item.CurrentPurchasePrice.ToString() : item.CurrentSalesPrice.ToString()) + "c";
             ItemQuantityText.text = $"x{item.CurrentStock}";
             IsEquippedDecoration.SetActive(tradeMode == TradingMenu.TradeMode.Sell && item.IsEquipped);

@@ -22,7 +22,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         public void Setup(ItemPanel itemPanel)
         {
             ItemIcon.sprite = itemPanel.ItemIcon.sprite;
-            ItemNameText.SetText($"<b>{CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Localization.instance.Localize(itemPanel.Item.Drop.GetHoverName()))}</b>");
+            ItemNameText.SetText($"<b>{Localization.instance.Localize(itemPanel.Item.Drop.GetHoverName()).Split(' ').ToList().Select(segment => segment[0].ToString().ToUpper() + segment.Substring(1, segment.Length - 1)).Aggregate((acc, nextSegment) => acc + " " + nextSegment)}</b>");
             string tooltipText = Localization.instance.Localize(itemPanel.Item.Drop.m_itemData.GetTooltip());
 
             // Removing control characters so that they don't show up as text artifacts in the tooltip.
