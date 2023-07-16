@@ -144,7 +144,6 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             panelHeight = rectTransform.rect.height;
             itemPanelHeight = itemPanelPrefabRectTransform.sizeDelta.y;
             itemPanelSpaceOccupancy = itemPanelHeight + Spacing;
-            panelHeightRemainder = panelHeight % itemPanelSpaceOccupancy;
             panelCount = Mathf.CeilToInt(panelHeight / itemPanelSpaceOccupancy) + PaddedPanels;
             accumulitiveItemPanelHeight = itemPanelSpaceOccupancy * panelCount;
             SetupItemPanelPool();

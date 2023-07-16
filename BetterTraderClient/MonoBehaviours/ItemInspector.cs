@@ -10,9 +10,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 {
     public class ItemInspector : MonoBehaviour, IDragHandler, IEndDragHandler, IScrollHandler
     {
+        public GameObject RootPanel;
         [SerializeField]
         private RawImage image;
         private Camera cam;
+        private RenderTexture renderTexture;
         private GameObject playerPreview;
         private Transform inspectedItem;
         private float pitch;
@@ -21,6 +23,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private bool dragging;
         private readonly Vector3 basePosition = new Vector3(0, 200, 1);
         private Vector3 lastMousePosition;
+
+        public void SetCameraClearFlag(int flag)
+        {
+            cam.clearFlags = (CameraClearFlags)flag;
+        }
 
         public void OnDrag(PointerEventData eventData)
         {
@@ -56,31 +63,39 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         public void SetInspectedItem(ICirculatedItem item)
         {
-            transform.parent.gameObject.SetActive(true);
-            ResetCamera();
-
             if (inspectedItem != null)
             {
                 Destroy(inspectedItem.gameObject);
             }
 
-            playerPreview.SetActive(false);
+            if (playerPreview != null)
+            {
+                playerPreview.SetActive(false);
+            }
+
             GameObject itemPrefab = ZNetScene.instance.GetPrefab(item.Drop.name);
 
-            if (item.Drop.m_itemData.IsEquipable() && item.Drop.m_itemData.m_shared.m_ammoType.Length == 0)
+            if (
+                item.Drop.m_itemData.IsEquipable() &&
+                (item.Drop.gameObject.HasChildWithNameThatContains("attach") || item.Drop.gameObject.HasChildWithNameThatContains("log"))
+                )
             {
+                Player localPlayer = Player.m_localPlayer;
+                playerPreview = playerPreview ?? CreatePlayerPreview();
                 Player playerPreviewComp = playerPreview.GetComponent<Player>();
-                playerPreviewComp.UnequipAllItems();
-                playerPreviewComp.m_inventory.m_inventory.Clear();
                 playerPreviewComp.m_inventory.AddItem(itemPrefab, 1);
 
-                foreach (ItemDrop.ItemData equippedLocalPlayerItem in Player.m_localPlayer.m_inventory.GetEquippedItems())
+                if (playerPreviewComp.m_inventory.m_inventory.Count > 1)
                 {
-                    playerPreviewComp.m_inventory.AddItem(equippedLocalPlayerItem.m_dropPrefab, 1);
-                    playerPreviewComp.EquipItem(playerPreviewComp.m_inventory.m_inventory[playerPreviewComp.m_inventory.m_inventory.Count - 1]);
+                    playerPreviewComp.m_inventory.m_inventory.RemoveAt(playerPreviewComp.m_inventory.m_inventory.Count - 2);
                 }
-
+                
                 playerPreviewComp.EquipItem(playerPreviewComp.m_inventory.m_inventory[0]);
+                playerPreviewComp.m_visEquipment.SetHairItem(localPlayer.m_hairItem);
+                playerPreviewComp.m_visEquipment.SetHairEquipped(localPlayer.m_hairItem.GetStableHashCode());
+                playerPreviewComp.m_visEquipment.SetHairColor(localPlayer.m_hairColor);
+                playerPreviewComp.m_visEquipment.SetSkinColor(localPlayer.m_skinColor);
+                playerPreviewComp.m_visEquipment.SetModel(localPlayer.m_visEquipment.m_currentModelIndex);
                 playerPreviewComp.m_visEquipment.UpdateVisuals();
                 playerPreviewComp.gameObject.SetActive(true);
                 playerPreviewComp.m_animator.SetBool("wakeup", false);
@@ -105,12 +120,37 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                 inspectedItem = randomItem.transform;
             }
 
-            transform.parent.gameObject.SetActive(true);
+            RootPanel.SetActive(true);
+        }
+
+        public void UpdateRenderTexture()
+        {
+            if (renderTexture != null)
+            {
+                renderTexture.Release();
+            }
+
+            RectTransform rectTransform = transform as RectTransform;
+            renderTexture = new RenderTexture((int)rectTransform.sizeDelta.x, (int)rectTransform.sizeDelta.y, 16, RenderTextureFormat.ARGB32);
+            renderTexture.Create();
+            cam.targetTexture = renderTexture;
+            image.texture = renderTexture;
+        }
+
+        private void OnEnable()
+        {
+            ResetCamera();
         }
 
         private void OnDisable()
         {
-            transform.parent.gameObject.SetActive(false);
+            RootPanel.SetActive(false);
+            
+            if (playerPreview != null)
+            {
+                Destroy(playerPreview);
+                playerPreview = null;
+            }
         }
 
         private void ResetCamera()
@@ -126,27 +166,42 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         {
             var camEmpty = new GameObject("Item Inspector Camera");
             camEmpty.transform.position = basePosition + Vector3.forward * zoom;
-
             cam = camEmpty.AddComponent<Camera>();
+            cam.backgroundColor = Color.gray;
             cam.cullingMask = 1 << LayerMask.NameToLayer("UI");
 
-            var camRt = new RenderTexture(256, 256, 16, RenderTextureFormat.ARGB32);
-            camRt.Create();
-            cam.targetTexture = camRt;
-            image.texture = camRt;
+            var light1 = new GameObject("Item Inspector Light1");
+            light1.transform.position = basePosition + new Vector3(1.5f, 0.5f, -2f);
+            Light light1Comp = light1.AddComponent<Light>();
+            light1Comp.type = LightType.Point;
+            light1Comp.intensity = 3.5f;
+            light1Comp.range = 3;
 
+            var light2 = new GameObject("Item Inspector Light2");
+            light2.transform.position = basePosition + new Vector3(-1.5f, -0.5f, 1.5f);
+            Light light2Comp = light2.AddComponent<Light>();
+            light2Comp.type = LightType.Point;
+            light2Comp.intensity = 2.5f;
+            light2Comp.range = 3;
+            UpdateRenderTexture();
+        }
+
+        private GameObject CreatePlayerPreview()
+        {
             ZNetView.m_forceDisableInit = true;
-            playerPreview = Instantiate(Game.instance.m_playerPrefab, basePosition - Vector3.up, Quaternion.identity);
-            Player.s_players.Remove(playerPreview.GetComponent<Player>());
-            playerPreview.GetComponent<PlayerController>().enabled = false;
-            playerPreview.GetComponent<ZSyncTransform>().enabled = false;
-            playerPreview.GetComponent<ZSyncAnimation>().enabled = false;
-            playerPreview.GetComponent<FootStep>().enabled = false;
-            playerPreview.GetComponent<Rigidbody>().isKinematic = true;
-            playerPreview.gameObject.SetActive(false);
-            playerPreview.gameObject.name = "Item Inspector Player Preview";
-            playerPreview.gameObject.SetLayerForEntireHierarchy(LayerMask.NameToLayer("UI"));
+            GameObject newPlayerPreview = Instantiate(Player.m_localPlayer.gameObject, basePosition - Vector3.up, Quaternion.identity);
+            Player.s_players.Remove(newPlayerPreview.GetComponent<Player>());
+            newPlayerPreview.GetComponent<PlayerController>().enabled = false;
+            newPlayerPreview.GetComponent<ZSyncTransform>().enabled = false;
+            newPlayerPreview.GetComponent<ZSyncAnimation>().enabled = false;
+            newPlayerPreview.GetComponent<FootStep>().enabled = false;
+            newPlayerPreview.GetComponent<Rigidbody>().isKinematic = true;
+            newPlayerPreview.gameObject.SetActive(false);
+            newPlayerPreview.gameObject.name = "Item Inspector Player Preview";
+            newPlayerPreview.gameObject.SetLayerForEntireHierarchy(LayerMask.NameToLayer("UI"));
             ZNetView.m_forceDisableInit = false;
+
+            return newPlayerPreview;
         }
     }
 }

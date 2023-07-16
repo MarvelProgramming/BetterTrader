@@ -10,6 +10,7 @@ using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -68,7 +69,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
 
         private void HandleFinishedRecordingObjectDBItems(List<ITradableConfig> tradableItems, string worldSave)
         {
-            string traderConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new InvalidOperationException(), "configs", worldSave, "trader.yml");
+            string traderConfigFilePath = Path.Combine(BepInEx.Paths.ConfigPath, "BetterTrader/configs", worldSave, "trader.yml");
             string tradableItemConfigPath = Path.Combine(Path.GetDirectoryName(traderConfigFilePath) ?? throw new InvalidOperationException(), "items");
             Dictionary<string, ISerializer> serializersByFileExtension = new Dictionary<string, ISerializer>()
             {
@@ -83,6 +84,12 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
                 configurationManager.GenerateDefaultTraderConfig();
                 configurationManager.GenerateDefaultItemConfigs<Item>(tradableItems);
                 TraderInstance = configurationManager.LoadTrader<Item>();
+                configurationManager.SetupFileWatchers((sender, args) =>
+                {
+                    BetterTraderServer.LoggerInstance.LogInfo("Updated Trader Instance!");
+                    TraderInstance = configurationManager.LoadTrader<Item>();
+                    TraderInstance.UpdateAllItemAssociations();
+                });
                 TraderInstance.UpdateAllItemAssociations();
 
                 if (TraderInstance.activelyPurchasableItemsList.Count == 0)
