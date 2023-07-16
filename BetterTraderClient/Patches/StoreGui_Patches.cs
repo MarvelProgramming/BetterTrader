@@ -37,19 +37,18 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
         }
 
         [HarmonyPatch(nameof(StoreGui.Hide)), HarmonyPrefix]
-        public static bool Hide(StoreGui __instance)
+        public static void Hide(StoreGui __instance, ref bool __runOriginal)
         {
             if (__instance.m_trader != null && __instance.m_trader.IsHaldor())
             {
                 if (ZInput.GetButtonDown("Use")) 
                 {
-                    return false;
+                    __runOriginal = false;
+                    return;
                 }
 
                 StoreGUIUtils.GetBtUIObject(__instance, BetterTraderClient.UI_ASSET.name).SetActive(false);
             }
-
-            return true;
         }
     }
 }

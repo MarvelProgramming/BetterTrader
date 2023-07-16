@@ -296,6 +296,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
             if (Player.m_localPlayer)
             {
+                Player.m_localPlayer.m_moveDir = Vector3.zero;
                 Player.m_localPlayer.GetComponent<PlayerController>().enabled = false;
             }
 

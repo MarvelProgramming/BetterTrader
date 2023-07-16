@@ -12,14 +12,12 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
     internal class Minimap_Patches
     {
         [HarmonyPatch(nameof(Minimap.SetMapMode)), HarmonyPrefix]
-        public static bool SetMapMode()
+        public static void SetMapMode(ref bool __runOriginal)
         {
             if (StoreGui.instance.m_trader != null && StoreGui.instance.m_trader.IsHaldor())
             {
-                return false;
+                __runOriginal = false;
             }
-
-            return true;
         }
     }
 }

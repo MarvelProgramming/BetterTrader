@@ -12,14 +12,12 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
     internal class InventoryGui_Patches
     {
         [HarmonyPatch(nameof(InventoryGui.Show)), HarmonyPrefix]
-        public static bool Show()
+        public static void Show(ref bool __runOriginal)
         {
             if (StoreGui.instance.m_trader != null && StoreGui.instance.m_trader.IsHaldor())
             {
-                return false;
+                __runOriginal = false;
             }
-
-            return true;
         }
     }
 }
