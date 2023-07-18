@@ -53,8 +53,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="FodyWeaver.xml" />
-    <Content Include="FodyWeavers.xml" />
     <Content Include="pdb2mdb.exe" />
   </ItemGroup>
 
@@ -74,13 +72,6 @@
       <ExcludeAssets>runtime</ExcludeAssets>
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Fody" Version="[6.6.0]">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="ILMerge.Fody" Version="[1.22.0]">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="7.0.2" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
@@ -91,10 +82,10 @@
     <ProjectReference Include="..\BetterTraderLibrary\BetterTraderLibrary.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <!-- ToDo: Clean this up w/ MSBuild -->
-    <Exec Command="      if NOT EXIST &quot;$(BT_INSTALL)&quot; (&#xD;&#xA;      mkdir &quot;$(BT_INSTALL)&quot;&#xD;&#xA;      )&#xD;&#xA;&#xD;&#xA;      xcopy &quot;$(TargetPath)&quot; &quot;$(BT_INSTALL)&quot; /Y&#xD;&#xA;&#xD;&#xA;      if EXIST &quot;$(BT_UI_ASSETS)&quot; (&#xD;&#xA;      xcopy &quot;$(TargetPath)&quot; &quot;$(BT_UI_ASSETS)&quot; /Y&#xD;&#xA;      )&#xD;&#xA;&#xD;&#xA;      if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; (&#xD;&#xA;      cd &quot;$(TargetDir)&quot;&#xD;&#xA;      &quot;$(ProjectDir)pdb2mdb.exe&quot; &quot;$(TargetPath)&quot;&#xD;&#xA;      xcopy &quot;$(TargetDir)$(TargetName).dll.mdb&quot; &quot;$(BT_INSTALL)&quot; /Y&#xD;&#xA;      )&#xD;&#xA;" />
-  </Target>
+  <!-- <Target Name="PostBuild" AfterTargets="PostBuildEvent"> -->
+  <!--   ~1~ ToDo: Clean this up w/ MSBuild @1@ -->
+  <!--   <Exec Command="      if NOT EXIST &quot;$(BT_INSTALL)&quot; (&#xD;&#xA;      mkdir &quot;$(BT_INSTALL)&quot;&#xD;&#xA;      )&#xD;&#xA;&#xD;&#xA;      xcopy &quot;$(TargetPath)&quot; &quot;$(BT_INSTALL)&quot; /Y&#xD;&#xA;&#xD;&#xA;      if EXIST &quot;$(BT_UI_ASSETS)&quot; (&#xD;&#xA;      xcopy &quot;$(TargetPath)&quot; &quot;$(BT_UI_ASSETS)&quot; /Y&#xD;&#xA;      )&#xD;&#xA;&#xD;&#xA;      if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; (&#xD;&#xA;      cd &quot;$(TargetDir)&quot;&#xD;&#xA;      &quot;$(ProjectDir)pdb2mdb.exe&quot; &quot;$(TargetPath)&quot;&#xD;&#xA;      xcopy &quot;$(TargetDir)$(TargetName).dll.mdb&quot; &quot;$(BT_INSTALL)&quot; /Y&#xD;&#xA;      )&#xD;&#xA;" /> -->
+  <!-- </Target> -->
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="      if EXIST &quot;$(BT_UI_ASSET_BUNDLE)&quot; (&#xD;&#xA;      xcopy &quot;$(BT_UI_ASSET_BUNDLE)&quot; &quot;$(MSBuildThisFileDirectory)Assets&quot; /Y&#xD;&#xA;      )" />

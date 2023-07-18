@@ -122,7 +122,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
                 }
                 else if (requestedPurchasableItems.Count > totalItemCount)
                 {
-                    BetterTraderClient.LoggerInstance.LogError
+                    Jotunn.Logger.LogError
                         (
                         "Received more items from request than expected! There may be an error " +
                         "in what the server said the total should be in the payload, or the collection " +

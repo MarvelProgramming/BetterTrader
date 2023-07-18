@@ -1,40 +1,48 @@
-﻿using BepInEx;
-using BepInEx.Logging;
-using HarmonyLib;
-using JetBrains.Annotations;
-using Jotunn.Utils;
+﻿using JetBrains.Annotations;
 using Menthus15Mods.Valheim.BetterTraderClient.Interfaces;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Utils;
+using System;
 using System.Reflection;
 using UnityEngine;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient
 {
-    [BepInPlugin(GUID, NAME, VERSION)]
-    [BepInDependency(Jotunn.Main.ModGuid)]
-    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Minor)]
     [UsedImplicitly]
-    public class BetterTraderClient : BaseUnityPlugin
+    public class BetterTraderClient
     {
-        public static ManualLogSource LoggerInstance;
         public static GameObject UI_ASSET;
-        private const string GUID = "Menthus15Mods.Valheim." + nameof(BetterTraderClient);
-        private const string NAME = nameof(BetterTraderClient);
-        private const string VERSION = "1.0.0";
+        public static readonly BetterTraderClient Instance;
+
+        static BetterTraderClient()
+        {
+            Instance = new BetterTraderClient();
+        }
 
         #region Unity
 
-        [UsedImplicitly]
-        private void Awake()
+        public void OnAwake()
         {
-            LoggerInstance = Logger;
-            Setup();
+            try
+            {
+                Jotunn.Logger.LogInfo($"{nameof(BetterTraderClient)}.{MethodBase.GetCurrentMethod()?.DeclaringType?.Name}.{MethodBase.GetCurrentMethod()?.Name}");
+                Setup();
+            }
+            catch (Exception e)
+            {
+                Jotunn.Logger.LogError(e);
+            }
         }
 
-        [UsedImplicitly]
-        private void FixedUpdate() // ToDo: Is this really the update to use?
+        public void OnFixedUpdate()
         {
-            ThreadingUtils.ExecutePendingActions();
+            try
+            {
+                ThreadingUtils.ExecutePendingActions();
+            }
+            catch (Exception e)
+            {
+                Jotunn.Logger.LogError(e);
+            }
         }
 
         #endregion
@@ -42,18 +50,12 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         private void Setup()
         {
             SetupAssets();
-            SetupPatches();
         }
 
         private void SetupAssets()
         {
             IAssetBundleManager assetBundleManager = new AssetBundleManager();
             UI_ASSET = assetBundleManager.LoadAssetFromBundle<GameObject>(Properties.Settings.Default.UIAssetName);
-        }
-
-        private void SetupPatches()
-        {
-            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), GUID);
         }
     }
 }

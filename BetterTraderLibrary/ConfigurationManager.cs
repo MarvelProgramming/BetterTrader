@@ -83,7 +83,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
             return trader;
         }
 
-        public List<ITradableConfig> LoadItems<T>() where T : ITradableConfig
+        private List<ITradableConfig> LoadItems<T>() where T : ITradableConfig
         {
             ConcurrentBag<ITradableConfig> loadedItems = new ConcurrentBag<ITradableConfig>();
             string[] tradableItemConfigFilePaths = Directory.GetFiles(tradableItemConfigFolderPath);

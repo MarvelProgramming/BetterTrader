@@ -1,61 +1,73 @@
-﻿using BepInEx;
-using BepInEx.Logging;
-using HarmonyLib;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Jotunn.Managers;
-using Jotunn.Utils;
 using Menthus15Mods.Valheim.BetterTraderLibrary;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Extensions;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Utils;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
 namespace Menthus15Mods.Valheim.BetterTraderServer
 {
-    [BepInPlugin(GUID, NAME, VERSION)]
-    [BepInDependency(Jotunn.Main.ModGuid)]
-    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Minor)]
     [UsedImplicitly]
-    public class BetterTraderServer : BaseUnityPlugin
+    public class BetterTraderServer
     {
-        internal static ManualLogSource LoggerInstance { get; private set; }
         internal static BTrader TraderInstance { get; private set; }
-        private const string GUID = "Menthus15Mods.Valheim." + nameof(BetterTraderServer);
-        private const string NAME = nameof(BetterTraderServer);
-        private const string VERSION = "1.0.0";
         private ConfigurationManager configurationManager;
+        public static readonly BetterTraderServer Instance;
+
+        static BetterTraderServer()
+        {
+            Instance = new BetterTraderServer();
+        }
 
         #region Unity
 
-        [UsedImplicitly]
-        private void Awake()
+        public void OnAwake()
         {
-            LoggerInstance = Logger;
-            PrefabManager.OnPrefabsRegistered += HandleOnPrefabsRegistered;
-            EventManager.OnGeneratedConfigs += HandleGeneratedConfigs;
-            EventManager.OnFinishedRecordingObjectDBItems += HandleFinishedRecordingObjectDBItems;
-            EventManager.OnGameSave += HandleGameSave;
-            EventManager.OnNewDay += HandleNewDay;
-            SetupPatches();
+            try
+            {
+                Jotunn.Logger.LogInfo($"{nameof(BetterTraderServer)}.{MethodBase.GetCurrentMethod()?.DeclaringType?.Name}.{MethodBase.GetCurrentMethod()?.Name}");
+                PrefabManager.OnPrefabsRegistered += HandleOnPrefabsRegistered;
+                EventManager.OnGeneratedConfigs += HandleGeneratedConfigs;
+                EventManager.OnFinishedRecordingObjectDBItems += HandleFinishedRecordingObjectDBItems;
+                EventManager.OnGameSave += HandleGameSave;
+                EventManager.OnNewDay += HandleNewDay;
+            }
+            catch (Exception e)
+            {
+                Jotunn.Logger.LogError(e);
+            }
         }
 
-        [UsedImplicitly]
-        private void OnDestroy()
+        public void OnDestroy()
         {
-            EventManager.OnGeneratedConfigs -= HandleGeneratedConfigs;
-            EventManager.OnFinishedRecordingObjectDBItems -= HandleFinishedRecordingObjectDBItems;
-            EventManager.OnGameSave -= HandleGameSave;
-            EventManager.OnNewDay -= HandleNewDay;
+            try
+            {
+                Jotunn.Logger.LogInfo($"{nameof(BetterTraderServer)}.{MethodBase.GetCurrentMethod()?.DeclaringType?.Name}.{MethodBase.GetCurrentMethod()?.Name}");
+                EventManager.OnGeneratedConfigs -= HandleGeneratedConfigs;
+                EventManager.OnFinishedRecordingObjectDBItems -= HandleFinishedRecordingObjectDBItems;
+                EventManager.OnGameSave -= HandleGameSave;
+                EventManager.OnNewDay -= HandleNewDay;
+            }
+            catch (Exception e)
+            {
+                Jotunn.Logger.LogError(e);
+            }
         }
 
-        [UsedImplicitly]
-        private void FixedUpdate() // ToDo: Is this really the update to use?
+        public void OnFixedUpdate()
         {
-            ThreadingUtils.ExecutePendingActions();
+            try
+            {
+                ThreadingUtils.ExecutePendingActions();
+            }
+            catch (Exception e)
+            {
+                Jotunn.Logger.LogError(e);
+            }
         }
 
         #endregion
@@ -86,7 +98,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
                 TraderInstance = configurationManager.LoadTrader<Item>();
                 configurationManager.SetupFileWatchers((sender, args) =>
                 {
-                    BetterTraderServer.LoggerInstance.LogInfo("Updated Trader Instance!");
+                    Jotunn.Logger.LogInfo("Updated Trader Instance!");
                     TraderInstance = configurationManager.LoadTrader<Item>();
                     TraderInstance.UpdateAllItemAssociations();
                 });
@@ -99,7 +111,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
             }
             catch(Exception e)
             {
-                LoggerInstance.LogError(e);
+                Jotunn.Logger.LogError(e);
             }
         }
 
@@ -120,11 +132,6 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
             string worldSaveFolderName = ZNet.instance.GetWorldSaveName();
             EventManager.RaiseFinishedGatheringObjectDBItems(tradableItems, worldSaveFolderName);
             PrefabManager.OnPrefabsRegistered -= HandleOnPrefabsRegistered;
-        }
-
-        private void SetupPatches()
-        {
-            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), GUID);
         }
     }
 }

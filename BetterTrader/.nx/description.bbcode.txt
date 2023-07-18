@@ -1,0 +1,122 @@
+﻿[size=4][quote][color=#ff0000][b]Notice:[/b][/color] Menthus is working on a rewrite (2023.06.12).[/quote][/size]
+
+[center][color=#fff2cc][size=3][b]Menthus and Digitalroot can be found in the Valhalla Legends' Discord[/b][/size][/color]
+
+[url=https://discord.gg/SsMW3rm67u][img]https://digitalroot.net/img/vl/vl_logo_125x154.png[/img][/url]﻿[/center]
+
+[color=#50ffea][b][size=5]GPORTAL Server Hosting[/size][/b][/color][line]
+I've partnered with GPORTAL, a leading supplier of online game-hosting services around the globe. GPORTAL makes no compromises when it comes to your server's hardware, connection, routing and provides the best servers at an affordable cost!
+
+[url=http://www.g-portal.com/?ref=Menthus15][img]https://staticdelivery.nexusmods.com/images/3667/53098546-1624964607.png[/img][/url]
+
+[size=5][color=#FF424D][b]Patreon[/b][/color][/size]
+[line]
+I spend countless hours every day working on, updating, and fixing mods for everyone to enjoy. While I will never ask for anyone to pay me to make a mod or add a feature, any support is greatly appreciated. >>[url=https://www.patreon.com/Menthus]Check it out[/url]﻿<<, you might find benefits that catch your eye!
+
+
+
+[b][size=5]Better Trader[/size][/b]
+[line]
+Vanilla Valheim's trader is very bare bones, only allows you to purchase a total of 6 items and has a clunky way of selling 'valuables'. Better Trader comes with a custom menu, adds over 310+ items, is highly configurable, and comes with built-in support for Epic Loot. Updates are ongoing and there is more to come, so stay tuned!
+
+
+
+[b][u][size=4]Configuration[/size][/u][/b]
+
+Included with the mod are two config files.
+[list]
+[*][b]Menthus.bepinex.plugins.BetterTrader.cfg.vanilla[/b] closely emulates the vanilla values for buying and selling items.
+[*][b]Menthus.bepinex.plugins.BetterTrader.cfg.full[/b] has most of the game items in it with the values Menthus set for them.
+[/list]Select one of these files and copy it to [b][i]Valheim\BepInEx\config[/i],[/b] [u]then[/u] rename it to [b]Menthus.bepinex.plugins.BetterTrader.cfg[/b]
+[b]
+
+You have 2 methods of editing the configuration:[/b][list=1]
+
+[*]Going to Valheim\BepInEx\config and opening Menthus.bepinex.plugins.BetterTrader.cfg.
+[*]Using the >>[url=https://github.com/BepInEx/BepInEx.ConfigurationManager/releases/tag/v16.1]BepInEx ConfigurationManager[/url]﻿<< plugin. Simply download it, put it in your Valheim\BepInEx\plugins folder, and press F1 when in-game.
+[/list]
+[b]You have a growing list of configuration options:
+[/b]
+[b][A_General.Trader][/b]
+[b]Trader Wait For Discovery (defaults to true):[/b] True means the Trader will only sell items the player has discovered.
+ [b]Trader Price Fluctuation (defaults to true):[/b] True means the Trader's prices will fluctuate every so often (the amount to fluctuate by and time it takes before the Trader's prices fluctuate are configurable).
+[b]Trader Price Fluctuation Scale (defaults to 0.3):[/b] Determines how much the prices should fluctuate from the base price of an item.
+[b]Trader Price Fluctuation Frequency (defaults to 1):[/b] How many days that pass between each price fluctuation.
+[b]Trader Has Coins (defaults to true):[/b] True means the Trader will use coins to purchase player items (the Trader's starting coin amount and time it takes before the Trader's coin reset are configurable).
+[b]Trader Base Coin Amount (defaults to 2000):[/b] How many coins the Trader has as a baseline.
+[b]Trader Coin Refresh Frequency (defaults to 2):[/b] How many days need to pass before refreshing the Trader's coin amount to [Trader Base Coin Amount].
+[b]Trader Can Repair Items (defaults to true):[/b] True means the Trader can repair items for the Player.
+
+[b][B_General.ItemTypes.NameOfItemType][/b]
+[b]enabled (defaults to true):[/b] True means every item of this type is enabled.
+
+[b][C_Items.NameOfItemType.NameOfItem][/b]
+[b]Purchase Price (defaults to 100):[/b] The base amount the Trader sells this item for (before fluctuating/scaling if [Trader Price Fluctuation] is true).
+[b]Sell Price (defaults to 100):[/b] The base amount this item can be sold for by the Player.
+[b]Tradeable (defaults to true):[/b] True means the Trader will sell this item to the Player.
+[b]Sellable (defaults to true):[/b] True means the Player can sell this item to the Trader.
+[b]Ignore Trader Wait For Discovery (defaults to false):[/b] True means this item will show up in the Trader's purchase list even if [Trader Wait For Discovery] is true and this item hasn't been discovered by the Player yet.
+
+[b]Example of an item's price being fluctuated:[/b]
+[code]﻿priceFluctuationFactor = basePrice * TraderPriceFluctuationScale;
+newPrice = basePrice + Random.Range(-priceFluctuationFactor, priceFluctuationFactor);[/code]
+
+
+[b][u][size=4]Installation[/size][/u][/b]
+
+[list=1]
+[*]This mod requires >>[url=https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/]BepInExPack[/url]<< to work. Follow the BepInExPack installation instructions, then place the BepInEx folder (from the Better Trader download) into the Valheim folder. Make sure to replace all if you have a previous version of Better Trader installed!
+[*]If you're playing the game in a different language [b]and you are missing items[/b], you must run the game in English and load into a world first. Then you can swap it back to your language and continue from there.
+[/list]
+
+
+[size=4][b][u]Compatibility Info[/u][/b][/size]
+
+If you're a mod developer and something you've made adds custom items, in order for them to be loaded by Better Trader you must include them in Valheim's ObjectDB and ensure your mod loads before Better Trader.
+
+For adding items to Valheim's ObjectDB: Consider creating postfix patches for ObjectDB's Awake and CopyOtherDB methods, then accessing ObjectDB's m_items field and adding your items there. An example of this might be:
+[code]﻿namespace MyMod
+{
+   ﻿[HarmonyBefore(new string[] { "Menthus.bepinex.plugins.BetterTrader" }), HarmonyPatch(typeof(ObjectDB))]
+   ﻿class ObjectDB_Patches
+   ﻿{
+   ﻿   ﻿[HarmonyPostfix, HarmonyPatch("Awake")]
+   ﻿   ﻿static void AwakePostfix(ObjectDB __instance)
+   ﻿   ﻿{
+   ﻿   ﻿   ﻿__instance.m_items.Add(YourCustomItemGameObject);
+   ﻿   ﻿}
+
+      ﻿[HarmonyPostfix, HarmonyPatch("CopyOtherDB")]
+   ﻿   ﻿static void CopyOtherDBPostfix(ObjectDB __instance)
+   ﻿   ﻿{
+   ﻿   ﻿   ﻿__instance.m_items.Add(YourCustomItemGameObject);
+   ﻿   ﻿}
+   ﻿}
+}
+[/code]
+
+For changing your mod's load order: https://harmony.pardeike.net/articles/priorities.html for determining when your mod should load.
+
+
+
+[b][u][size=4]Server Info[/size][/u][/b]
+
+Better Trader forces players to have the same (unmodified) version installed in order to join your server. Otherwise they're given an "Incompatible Version" error.
+
+Better Trader syncs the server's config to connecting players without overwriting their config file (i.e., if a player connects to a server that has a different config, their config file won't change at all, but the values the Trader has will reflect the settings the server has). This was done so players can have a "solo" config, but also join servers where the config is different.
+
+
+
+[u][size=4][b]Links[/b][/size][/u]
+
+[b]GPORTAL[/b]
+[url=http://www.g-portal.com/?ref=Menthus15]http://www.g-portal.com/?ref=Menthus15[/url]
+
+[b]Patreon
+[/b][url=https://www.patreon.com/Menthus]https://www.patreon.com/Menthus[/url]
+
+[b]Youtube[/b]
+[url=https://www.youtube.com/channel/UCfVYisJ8c6p37ol154rTHnw]https://www.youtube.com/channel/UCfVYisJ8c6p37ol154rTHnw[/url]
+
+[b]Twitter[/b]
+[url=https://twitter.com/OriginalMenthus]https://twitter.com/OriginalMenthus[/url]

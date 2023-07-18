@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Digitalroot-Valheim/Digitalroot.Valheim.Common.Interfaces/main/src/json/tsio-manifest.json",
+  "name": "Better_Trader",
+  "author": "Menthus ",
+  "description": "Adds a custom trader menu, 310+ items to buy/sell, built-in support for Epic Loot, and an extensive list of configuration options.",
+  "version_number": "%VERSION_NUMBER%",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2105",
+    "ValheimModding-Jotunn-2.12.4"
+  ],
+  "website_url": "https://github.com/MarvelProgramming/BetterTrader"
+}
