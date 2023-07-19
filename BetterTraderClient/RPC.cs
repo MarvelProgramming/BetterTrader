@@ -19,25 +19,21 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
 
         public static void RegisterRPCMethods()
         {
-            RPCUtils.RegisterMethod(nameof(RPC_RequestRepairItems), RPC_RequestRepairItems);
-            RPCUtils.RegisterMethod(nameof(RPC_RequestTraderInfo), RPC_RequestTraderInfo);
-            RPCUtils.RegisterMethod(nameof(RPC_RequestAvailablePurchaseItems), RPC_RequestAvailablePurchaseItems);
-            RPCUtils.RegisterMethod(nameof(RPC_RequestAvailableSellItems), RPC_RequestAvailableSellItems);
-            RPCUtils.RegisterMethod(nameof(RPC_RequestPurchaseItem), RPC_RequestPurchaseItem);
-            RPCUtils.RegisterMethod(nameof(RPC_RequestSellItem), RPC_RequestSellItem);
+            ZRoutedRpc.instance.Register<bool, int, int>(nameof(RPC_RequestRepairItemsClient), RPC_RequestRepairItemsClient);
+            ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestTraderInfoClient), RPC_RequestTraderInfoClient);
+            ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestAvailablePurchaseItemsClient), RPC_RequestAvailablePurchaseItemsClient);
+            ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestAvailableSellItemsClient), RPC_RequestAvailableSellItemsClient);
+            ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestPurchaseItemClient), RPC_RequestPurchaseItemClient);
+            ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestSellItemClient), RPC_RequestSellItemClient);
         }
 
         [Client]
-        public static void RPC_RequestRepairItems(long sender, ZPackage pkg)
+        public static void RPC_RequestRepairItemsClient(long sender, bool canRepairItems, int quantity, int perItemRepairCost)
         {
             if (sender == ZRoutedRpc.instance.GetServerPeerID())
             {
-                bool canRepairItems = pkg.ReadBool();
-
                 if (canRepairItems)
                 {
-                    int quantity = pkg.ReadInt();
-                    int perItemRepairCost = pkg.ReadInt();
                     int playerCoins = Player.m_localPlayer.m_inventory.CountItems(StoreGui.instance.m_coinPrefab.m_itemData.m_shared.m_name);
                     List<ItemDrop.ItemData> wornItems = new List<ItemDrop.ItemData>();
                     Player.m_localPlayer.m_inventory.GetWornItems(wornItems);
@@ -66,28 +62,26 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         }
 
         [Client]
-        public static void RPC_RequestTraderInfo(long sender, ZPackage pkg)
+        public static void RPC_RequestTraderInfoClient(long sender, ZPackage pkg)
         {
             if (sender == ZRoutedRpc.instance.GetServerPeerID())
             {
-                var infoPackage = pkg.ReadPackage();
-                bool hasCoins = infoPackage.ReadBool();
-                int coins = infoPackage.ReadInt();
-                bool canRepairItems = infoPackage.ReadBool();
-                int perItemRepairCost = infoPackage.ReadInt();
+                bool hasCoins = pkg.ReadBool();
+                int coins = pkg.ReadInt();
+                bool canRepairItems = pkg.ReadBool();
+                int perItemRepairCost = pkg.ReadInt();
                 EventManager.RaiseFetchedTraderInfo(hasCoins, coins, canRepairItems, perItemRepairCost);
             }
         }
 
         [Client]
-        public static void RPC_RequestAvailablePurchaseItems(long sender, ZPackage pkg)
+        public static void RPC_RequestAvailablePurchaseItemsClient(long sender, ZPackage pkg)
         {
             if (sender == ZRoutedRpc.instance.GetServerPeerID() && pkg.Size() > 0)
             {
-                ZPackage itemPkg = pkg.ReadPackage();
-                int requestID = itemPkg.ReadInt();
-                int totalItemCount = itemPkg.ReadInt();
-                int itemsInPackage = itemPkg.ReadInt();
+                int requestID = pkg.ReadInt();
+                int totalItemCount = pkg.ReadInt();
+                int itemsInPackage = pkg.ReadInt();
 
                 if (finishedItemRequest || lastRequestID != requestID)
                 {
@@ -99,7 +93,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
                 for (int i = 0; i < itemsInPackage; i++)
                 {
                     ICirculatedItem item = new CirculatedItem();
-                    item.Deserialize(ref itemPkg);
+                    item.Deserialize(ref pkg);
                     requestedPurchasableItems.Add(item);
                 }
 
@@ -133,18 +127,17 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         }
 
         [Client]
-        public static void RPC_RequestAvailableSellItems(long sender, ZPackage pkg)
+        public static void RPC_RequestAvailableSellItemsClient(long sender, ZPackage pkg)
         {
             if (sender == ZRoutedRpc.instance.GetServerPeerID() && pkg.Size() > 0)
             {
-                ZPackage itemsPkg = pkg.ReadPackage();
-                int itemsCount = itemsPkg.ReadInt();
+                int itemsCount = pkg.ReadInt();
                 List<ICirculatedItem> sellableItems = new List<ICirculatedItem>();
                 
                 for(int i = 0; i < itemsCount; i++)
                 {
                     var item = new CirculatedItem();
-                    item.Deserialize(ref itemsPkg);
+                    item.Deserialize(ref pkg);
                     sellableItems.Add(item);
                 }
 
@@ -153,7 +146,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         }
 
         [Client]
-        public static void RPC_RequestPurchaseItem(long sender, ZPackage pkg)
+        public static void RPC_RequestPurchaseItemClient(long sender, ZPackage pkg)
         {
             if (sender == ZRoutedRpc.instance.GetServerPeerID() && pkg.Size() > 0)
             {
@@ -185,7 +178,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
         }
 
         [Client]
-        public static void RPC_RequestSellItem(long sender, ZPackage pkg)
+        public static void RPC_RequestSellItemClient(long sender, ZPackage pkg)
         {
             if (sender == ZRoutedRpc.instance.GetServerPeerID() && pkg.Size() > 0)
             {

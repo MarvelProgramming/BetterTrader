@@ -81,38 +81,36 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
 
         public static void RegisterRPCMethods()
         {
-            RPCUtils.RegisterMethod(nameof(RPC_RequestRepairItems), RPC_RequestRepairItems);
-            RPCUtils.RegisterMethod(nameof(RPC_RequestTraderInfo), RPC_RequestTraderInfo);
-            RPCUtils.RegisterMethod(nameof(RPC_RequestAvailablePurchaseItems), RPC_RequestAvailablePurchaseItems);
-            RPCUtils.RegisterMethod(nameof(RPC_RequestAvailableSellItems), RPC_RequestAvailableSellItems);
-            RPCUtils.RegisterMethod(nameof(RPC_RequestPurchaseItem), RPC_RequestPurchaseItem);
-            RPCUtils.RegisterMethod(nameof(RPC_RequestSellItem), RPC_RequestSellItem);
-            RPCUtils.RegisterMethod(nameof(RPC_RequestGenerateConfigs), RPC_RequestGenerateConfigs);
+            ZRoutedRpc.instance.Register<int>(nameof(RPC_RequestRepairItems), RPC_RequestRepairItems);
+            ZRoutedRpc.instance.Register(nameof(RPC_RequestTraderInfo), RPC_RequestTraderInfo);
+            ZRoutedRpc.instance.Register(nameof(RPC_RequestAvailablePurchaseItems), RPC_RequestAvailablePurchaseItems);
+            ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestAvailableSellItems), RPC_RequestAvailableSellItems);
+            ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestPurchaseItem), RPC_RequestPurchaseItem);
+            ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestSellItem), RPC_RequestSellItem);
+            ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestGenerateConfigs), RPC_RequestGenerateConfigs);
         }
 
         [Server]
-        public static void RPC_RequestRepairItems(long sender, ZPackage pkg)
+        public static void RPC_RequestRepairItems(long sender, int quantity)
         {
-            int quantity = pkg.ReadInt();
-
             if (BetterTraderServer.TraderInstance.CanRepairItems)
             {
                 BetterTraderServer.TraderInstance.RepairItems(quantity);
             }
 
-            RPCUtils.InvokeClientServerRoutedRPC(sender, nameof(RPC_RequestRepairItems), BetterTraderServer.TraderInstance.CanRepairItems, quantity, BetterTraderServer.TraderInstance.PerItemRepairCost);
+            ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestRepairItemsClient", BetterTraderServer.TraderInstance.CanRepairItems, quantity, BetterTraderServer.TraderInstance.PerItemRepairCost);
         }
 
         [Server]
-        public static void RPC_RequestTraderInfo(long sender, ZPackage pkg)
+        public static void RPC_RequestTraderInfo(long sender)
         {
             var infoPackage = new ZPackage();
             BetterTraderServer.TraderInstance.GetInfo(ref infoPackage);
-            RPCUtils.InvokeClientServerRoutedRPC(sender, nameof(RPC_RequestTraderInfo), infoPackage);
+            ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestTraderInfoClient", infoPackage);
         }
 
         [Server]
-        public static void RPC_RequestAvailablePurchaseItems(long sender, ZPackage _)
+        public static void RPC_RequestAvailablePurchaseItems(long sender)
         {
             if (!inventoryRequests.ContainsKey(sender))
             {
@@ -150,7 +148,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
                             item.Serialize(ref segmentedPackage);
                         }
 
-                        ThreadingUtils.ExecuteOnMainThread(() => RPCUtils.InvokeClientServerRoutedRPC(sender, nameof(RPC_RequestAvailablePurchaseItems), new object[] { segmentedPackage }));
+                        ThreadingUtils.ExecuteOnMainThread(() => ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestAvailablePurchaseItemsClient", new object[] { segmentedPackage }));
                         Thread.Sleep(0);
                     }
                 });
@@ -164,20 +162,19 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
         [Server]
         public static void RPC_RequestAvailableSellItems(long sender, ZPackage pkg)
         {
-            ZPackage playerInventoryPkg = pkg.ReadPackage();
-            int playerInventoryItemCount = playerInventoryPkg.ReadInt();
+            int playerInventoryItemCount = pkg.ReadInt();
             var responsePackage = new ZPackage();
             List<ICirculatedItem> items = new List<ICirculatedItem>();
 
             for (int i = 0; i < playerInventoryItemCount; i++)
             {
                 var item = new CirculatedItem();
-                item.Deserialize(ref playerInventoryPkg);
+                item.Deserialize(ref pkg);
                 items.Add(item);
             }
 
             BetterTraderServer.TraderInstance.GetItemsClientCanSell(items, ref responsePackage);
-            RPCUtils.InvokeClientServerRoutedRPC(sender, nameof(RPC_RequestAvailableSellItems), responsePackage);
+            ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestAvailableSellItemsClient", responsePackage);
         }
 
         [Server]
@@ -190,11 +187,11 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
             {
                 int purchasePrice = BetterTraderServer.TraderInstance.hashItemAssociations[itemToPurchase.GetStableHashCode()].Item1.CurrentPurchasePrice;
                 BetterTraderServer.TraderInstance.PurchaseItem(itemToPurchase, quantity);
-                RPCUtils.InvokeClientServerRoutedRPC(sender, nameof(RPC_RequestPurchaseItem), true, itemToPurchase, quantity, purchasePrice * quantity);
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestPurchaseItemClient", true, itemToPurchase, quantity, purchasePrice * quantity);
             }
             else
             {
-                RPCUtils.InvokeClientServerRoutedRPC(sender, nameof(RPC_RequestPurchaseItem), false);
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestPurchaseItemClient", false);
             }
         }
 
@@ -214,11 +211,11 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
                 responsePackage.Write(quantity);
                 inventoryItem.Serialize(ref responsePackage);
                 BetterTraderServer.TraderInstance.SellItem(inventoryItem.Name, quantity);
-                RPCUtils.InvokeClientServerRoutedRPC(sender, nameof(RPC_RequestSellItem), true, responsePackage);
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestSellItemClient", true, responsePackage);
             }
             else
             {
-                RPCUtils.InvokeClientServerRoutedRPC(sender, nameof(RPC_RequestSellItem), false);
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestSellItemClient", false);
             }
         }
 

@@ -33,7 +33,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Assets\canvas.unity" />
+    <None Remove="Assets\canvas.unity" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +54,10 @@
 
   <ItemGroup>
     <Content Include="pdb2mdb.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\canvas.unity" />
   </ItemGroup>
 
   <ItemGroup>

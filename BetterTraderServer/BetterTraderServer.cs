@@ -82,7 +82,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
         private void HandleFinishedRecordingObjectDBItems(List<ITradableConfig> tradableItems, string worldSave)
         {
             string traderConfigFilePath = Path.Combine(BepInEx.Paths.ConfigPath, "BetterTrader/configs", worldSave, "trader.yml");
-            string tradableItemConfigPath = Path.Combine(Path.GetDirectoryName(traderConfigFilePath) ?? throw new InvalidOperationException(), "items");
+            string tradableItemConfigPath = Path.Combine(Path.GetDirectoryName(traderConfigFilePath), "items");
             Dictionary<string, ISerializer> serializersByFileExtension = new Dictionary<string, ISerializer>()
             {
                 { ".yml", new YamlSerializer() },

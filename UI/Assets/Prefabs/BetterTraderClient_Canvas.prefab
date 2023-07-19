@@ -85,7 +85,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 134625213905289695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 16
@@ -380,7 +380,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 494148455825537022}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 8
@@ -399,8 +399,8 @@ GameObject:
   - component: {fileID: 8715171418575142730}
   - component: {fileID: 3353978724234979604}
   - component: {fileID: 6188044934197936873}
-  - component: {fileID: 684895832}
   - component: {fileID: 6913488043665954728}
+  - component: {fileID: 7005373884308613537}
   m_Layer: 5
   m_Name: DropdownPanel
   m_TagString: Untagged
@@ -576,19 +576,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &684895832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1136113369478530448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mockType: 1
 --- !u!114 &6913488043665954728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -598,17 +585,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 1136113369478530448}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 692745098, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mockType: 1
+--- !u!114 &7005373884308613537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136113369478530448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 692745098, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   events:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6676285241995804204}
-        m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.CustomDropdown,
-          BetterTraderClient
-        m_MethodName: OnDropdownPanelDeselected
-        m_Mode: 0
+      - m_Target: {fileID: 1136113369478530448}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -761,7 +760,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2186133439170166315}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 8
@@ -780,7 +779,7 @@ GameObject:
   - component: {fileID: 1894213037216144909}
   - component: {fileID: 8965802756314716848}
   - component: {fileID: 2220834342789782179}
-  - component: {fileID: 6676285241995804204}
+  - component: {fileID: 1810233091485324341}
   m_Layer: 5
   m_Name: ItemTypeDropdownFilter
   m_TagString: Untagged
@@ -917,7 +916,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &6676285241995804204
+--- !u!114 &1810233091485324341
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -926,7 +925,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2273195304308247143}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 879694809, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 879694809, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <ContentPanel>k__BackingField: {fileID: 7276785844881195090}
@@ -939,9 +938,9 @@ MonoBehaviour:
   OnChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4524553464559101786}
+      - m_Target: {fileID: 894766239300907030}
         m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.TradingMenu,
-          BetterTraderClient
+          BetterTrader
         m_MethodName: OnItemDropdownFilterChanged
         m_Mode: 1
         m_Arguments:
@@ -952,18 +951,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  options:
-  - isChecked: 0
-    label: None
-    value: 0
-  - isChecked: 0
-    label: All
-    value: 1
-  _optionIsCheckedStates: 0000
-  _optionLabels:
-  - None
-  - All
-  _optionValues: 0000000001000000
+  options: []
+  _optionIsCheckedStates: 
+  _optionLabels: []
+  _optionValues: 
 --- !u!1 &2681101001606980002
 GameObject:
   m_ObjectHideFlags: 0
@@ -1173,10 +1164,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2969294766557559705}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mockType: 32
+  mockType: 8
 --- !u!1 &2988297838458799037
 GameObject:
   m_ObjectHideFlags: 0
@@ -1321,10 +1312,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2988297838458799037}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mockType: 32
+  mockType: 8
 --- !u!1 &3001823532189879624
 GameObject:
   m_ObjectHideFlags: 0
@@ -1505,7 +1496,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3001823532189879624}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1374113287, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 1374113287, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <StateDecoration>k__BackingField: {fileID: 2586712181955794744}
@@ -1518,7 +1509,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3001823532189879624}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 8
@@ -1679,7 +1670,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3078928012554398671}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -1732,7 +1723,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3747558643130373595}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1059978188, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: -1059978188, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onChanged:
@@ -1740,8 +1731,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1209913000}
         m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.CustomScrollView,
-          BetterTraderClient
-        m_MethodName: DelayedInitializeVariables
+          BetterTrader
+        m_MethodName: UpdateView
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1843,7 +1834,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3747558643130373595}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -1932,7 +1923,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3873447536865046289}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 16
@@ -2021,7 +2012,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3934391754843010899}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 16
@@ -2241,7 +2232,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4078696099853682543}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1374113287, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 1374113287, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <StateDecoration>k__BackingField: {fileID: 368614986437016004}
@@ -2254,7 +2245,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4078696099853682543}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 8
@@ -2416,21 +2407,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 4078696101133945714}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -295452316, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: -295452316, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   options:
   - <SortingMode>k__BackingField: 0
     <UI>k__BackingField: {fileID: 6750111053158294899}
-  - <SortingMode>k__BackingField: 2
-    <UI>k__BackingField: {fileID: 8834401983211744667}
   - <SortingMode>k__BackingField: 1
     <UI>k__BackingField: {fileID: 4071094576043527987}
-  _optionSortingModes: 000000000200000001000000
+  - <SortingMode>k__BackingField: 2
+    <UI>k__BackingField: {fileID: 8834401983211744667}
+  _optionSortingModes: 000000000100000002000000
   _optionUIS:
   - {fileID: 6750111053158294899}
-  - {fileID: 8834401983211744667}
   - {fileID: 4071094576043527987}
+  - {fileID: 8834401983211744667}
   sortingStateDecorations:
   - 
   - "\u2191"
@@ -2438,9 +2429,9 @@ MonoBehaviour:
   onChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4524553464559101786}
+      - m_Target: {fileID: 894766239300907030}
         m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.TradingMenu,
-          BetterTraderClient
+          BetterTrader
         m_MethodName: OnSortingModeChanged
         m_Mode: 1
         m_Arguments:
@@ -2694,7 +2685,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4895932489455049815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -683555728, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: -683555728, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rectTransform: {fileID: 9217923100585096260}
@@ -2786,7 +2777,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4895932489455049815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -2875,7 +2866,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4939125484063082588}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -3704,7 +3695,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6134961100499561392}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1374113287, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 1374113287, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <StateDecoration>k__BackingField: {fileID: 462552782513905369}
@@ -3717,7 +3708,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6134961100499561392}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 8
@@ -4083,7 +4074,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6702443613877874945}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 8
@@ -4211,9 +4202,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4524553464559101786}
+      - m_Target: {fileID: 894766239300907030}
         m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.TradingMenu,
-          BetterTraderClient
+          BetterTrader
         m_MethodName: Hide
         m_Mode: 1
         m_Arguments:
@@ -4435,9 +4426,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 6676285241995804204}
+        - m_Target: {fileID: 1810233091485324341}
           m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.CustomDropdown,
-            BetterTraderClient
+            BetterTrader
           m_MethodName: Toggle
           m_Mode: 1
           m_Arguments:
@@ -4457,10 +4448,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7054063526927454932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mockType: 32
+  mockType: 8
 --- !u!1 &7056760554586368394
 GameObject:
   m_ObjectHideFlags: 0
@@ -4605,7 +4596,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7056760554586368394}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 4
@@ -4792,7 +4783,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7833900725277113118}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1059978188, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: -1059978188, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onChanged:
@@ -4800,8 +4791,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1209913000}
         m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.CustomScrollView,
-          BetterTraderClient
-        m_MethodName: DelayedInitializeVariables
+          BetterTrader
+        m_MethodName: UpdateView
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4903,7 +4894,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7833900725277113118}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -5442,10 +5433,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 9212565592419196349}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mockType: 32
+  mockType: 8
 --- !u!1 &9217923100034938762
 GameObject:
   m_ObjectHideFlags: 0
@@ -5611,10 +5602,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923100034938762}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mockType: 32
+  mockType: 8
 --- !u!1 &9217923100105854455
 GameObject:
   m_ObjectHideFlags: 0
@@ -5703,15 +5694,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923100105854455}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1957833493, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 1957833493, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <Content>k__BackingField: {fileID: 8418947814435994086}
   <Scrollbar>k__BackingField: {fileID: 9217923101357903376}
   <ItemPanelPrefab>k__BackingField: {fileID: 7896984532027133900, guid: e95db18553f2a02439753c0d079e694d,
     type: 3}
-  PaddedPanels: 1
-  <Spacing>k__BackingField: 4
+  PaddedPanels: 2
+  <Spacing>k__BackingField: 3
 --- !u!114 &892381941241251001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5876,10 +5867,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923100184380312}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mockType: 32
+  mockType: 8
 --- !u!1 &9217923100349996115
 GameObject:
   m_ObjectHideFlags: 0
@@ -5990,7 +5981,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923100349996115}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 1
@@ -6249,10 +6240,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923100381148406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mockType: 32
+  mockType: 8
 --- !u!1 &9217923100384800985
 GameObject:
   m_ObjectHideFlags: 0
@@ -6403,9 +6394,9 @@ MonoBehaviour:
   m_OnDeselect:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4524553464559101786}
+      - m_Target: {fileID: 894766239300907030}
         m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.TradingMenu,
-          BetterTraderClient
+          BetterTrader
         m_MethodName: OnTradeQuantityChanged
         m_Mode: 0
         m_Arguments:
@@ -6425,9 +6416,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4524553464559101786}
+      - m_Target: {fileID: 894766239300907030}
         m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.TradingMenu,
-          BetterTraderClient
+          BetterTrader
         m_MethodName: OnTradeQuantityChanged
         m_Mode: 0
         m_Arguments:
@@ -6656,10 +6647,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923100566346738}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mockType: 32
+  mockType: 8
 --- !u!1 &9217923100581092993
 GameObject:
   m_ObjectHideFlags: 0
@@ -6735,9 +6726,9 @@ GameObject:
   - component: {fileID: 9217923100585096260}
   - component: {fileID: 9217923100585096262}
   - component: {fileID: 9217923100585096263}
-  - component: {fileID: 4524553464559101786}
   - component: {fileID: 2078865600}
   - component: {fileID: 1907564729471181331}
+  - component: {fileID: 894766239300907030}
   m_Layer: 5
   m_Name: BetterTraderClient_Canvas
   m_TagString: Untagged
@@ -6808,36 +6799,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4524553464559101786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9217923100585096261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1241544694, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <ItemListPanel>k__BackingField: {fileID: 1209913000}
-  <ItemPanelPrefab>k__BackingField: {fileID: 7896984532027133900, guid: e95db18553f2a02439753c0d079e694d,
-    type: 3}
-  <TraderCoinsWrapper>k__BackingField: {fileID: 4947997906696934176}
-  <RepairButtonsWrapper>k__BackingField: {fileID: 9217923100623834221}
-  <TraderCoinsText>k__BackingField: {fileID: 7358648700390596850}
-  <PlayerCoinsText>k__BackingField: {fileID: 3952785367212654355}
-  <TradeButtonText>k__BackingField: {fileID: 9217923101774717692}
-  <TotalTradeValueText>k__BackingField: {fileID: 3309748274343464962}
-  <ItemDetailsPopupPanelPrefab>k__BackingField: {fileID: 7492479623606346745, guid: 6cf63a6433ccc4d4ebe8cf901be3c2da,
-    type: 3}
-  <NotificationPopupPanelInstance>k__BackingField: {fileID: 4291938692484838235}
-  <TradeQuantityInput>k__BackingField: {fileID: 9217923100384800987}
-  <TradeItemFilterInput>k__BackingField: {fileID: 9217923101162157353}
-  <TradeItemFilterDropdown>k__BackingField: {fileID: 6676285241995804204}
-  <TradeItemInspectionPrefab>k__BackingField: {fileID: 2596864692822056092, guid: b610cd11d31067946bd40c56ca4ddbc7,
-    type: 3}
-  sortingManager: {fileID: 8927693966395496378}
 --- !u!114 &2078865600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6847,7 +6808,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923100585096261}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 1
@@ -6863,6 +6824,36 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &894766239300907030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9217923100585096261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1241544694, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ItemListPanel>k__BackingField: {fileID: 1209913000}
+  <ItemPanelPrefab>k__BackingField: {fileID: 7896984532027133900, guid: e95db18553f2a02439753c0d079e694d,
+    type: 3}
+  <TraderCoinsWrapper>k__BackingField: {fileID: 4947997906696934176}
+  <RepairButtonsWrapper>k__BackingField: {fileID: 9217923100623834221}
+  <TraderCoinsText>k__BackingField: {fileID: 7358648700390596850}
+  <PlayerCoinsText>k__BackingField: {fileID: 3952785367212654355}
+  <TradeButtonText>k__BackingField: {fileID: 9217923101774717692}
+  <TotalTradeValueText>k__BackingField: {fileID: 3309748274343464962}
+  <ItemDetailsPopupPanelPrefab>k__BackingField: {fileID: 7492479623606346745, guid: 6cf63a6433ccc4d4ebe8cf901be3c2da,
+    type: 3}
+  <NotificationPopupPanelInstance>k__BackingField: {fileID: 7494972990159346841}
+  <TradeQuantityInput>k__BackingField: {fileID: 9217923100384800987}
+  <TradeItemFilterInput>k__BackingField: {fileID: 9217923101162157353}
+  <TradeItemFilterDropdown>k__BackingField: {fileID: 1810233091485324341}
+  <TradeItemInspectionPrefab>k__BackingField: {fileID: 2596864692822056092, guid: 0410e791d14b98f47a9ebdc67cea922e,
+    type: 3}
+  sortingManager: {fileID: 8927693966395496378}
 --- !u!1 &9217923100623834221
 GameObject:
   m_ObjectHideFlags: 0
@@ -7317,7 +7308,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923100967549108}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 4
@@ -7427,7 +7418,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923100992899576}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -7673,9 +7664,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4524553464559101786}
+      - m_Target: {fileID: 894766239300907030}
         m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.TradingMenu,
-          BetterTraderClient
+          BetterTrader
         m_MethodName: OnItemFilterChanged
         m_Mode: 0
         m_Arguments:
@@ -7933,7 +7924,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923101340568524}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -8086,7 +8077,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923101357903598}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -8175,7 +8166,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923101387454661}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -8285,7 +8276,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923101504636288}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -8461,7 +8452,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9217923102025547240}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 1
@@ -8819,24 +8810,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 197428a835235154dbe0dfaa9810165c, type: 3}
---- !u!114 &4291938692484838235 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1769830979826414048, guid: 197428a835235154dbe0dfaa9810165c,
-    type: 3}
-  m_PrefabInstance: {fileID: 2530939867837809339}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -2126790967, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &4291938692484838229 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1769830979826414062, guid: 197428a835235154dbe0dfaa9810165c,
     type: 3}
   m_PrefabInstance: {fileID: 2530939867837809339}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7494972990159346841 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5412423361793924642, guid: 197428a835235154dbe0dfaa9810165c,
+    type: 3}
+  m_PrefabInstance: {fileID: 2530939867837809339}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2126790967, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5868855046651436047
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8844,6 +8835,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9217923100354078278}
     m_Modifications:
+    - target: {fileID: 2496909809683310193, guid: 5e8afd1d45ebfd249b19097f46b54ead,
+        type: 3}
+      propertyPath: mockType
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3359395784931884826, guid: 5e8afd1d45ebfd249b19097f46b54ead,
         type: 3}
       propertyPath: m_Transition
@@ -8863,7 +8859,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 4524553464559101786}
+      objectReference: {fileID: 894766239300907030}
     - target: {fileID: 3359395784931884826, guid: 5e8afd1d45ebfd249b19097f46b54ead,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -8878,7 +8874,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.TradingMenu,
-        BetterTraderClient
+        BetterTrader
       objectReference: {fileID: 0}
     - target: {fileID: 3359395784931884826, guid: 5e8afd1d45ebfd249b19097f46b54ead,
         type: 3}
@@ -9000,14 +8996,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: TradeButtonText (TMP)
       objectReference: {fileID: 0}
+    - target: {fileID: 3598395434147360240, guid: 5e8afd1d45ebfd249b19097f46b54ead,
+        type: 3}
+      propertyPath: mockType
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e8afd1d45ebfd249b19097f46b54ead, type: 3}
---- !u!224 &9217923101523043090 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3359395784931884829, guid: 5e8afd1d45ebfd249b19097f46b54ead,
-    type: 3}
-  m_PrefabInstance: {fileID: 5868855046651436047}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &9217923101774717692 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3359395785216950003, guid: 5e8afd1d45ebfd249b19097f46b54ead,
@@ -9020,6 +9015,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &9217923101523043090 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3359395784931884829, guid: 5e8afd1d45ebfd249b19097f46b54ead,
+    type: 3}
+  m_PrefabInstance: {fileID: 5868855046651436047}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9217923101523043091 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3359395784931884828, guid: 5e8afd1d45ebfd249b19097f46b54ead,
@@ -9294,7 +9295,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 4524553464559101786}
+      objectReference: {fileID: 894766239300907030}
     - target: {fileID: 1589659899582679171, guid: 0494dbfe9e133164ba16302b07eb4d50,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -9354,7 +9355,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.TradingMenu,
-        BetterTraderClient
+        BetterTrader
       objectReference: {fileID: 0}
     - target: {fileID: 1589659899582679171, guid: 0494dbfe9e133164ba16302b07eb4d50,
         type: 3}
@@ -9639,6 +9640,8 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2073975809666061047, guid: 0494dbfe9e133164ba16302b07eb4d50, type: 3}
     - {fileID: 1411426139345793395, guid: 0494dbfe9e133164ba16302b07eb4d50, type: 3}
+    - {fileID: 48795157845188611, guid: 0494dbfe9e133164ba16302b07eb4d50, type: 3}
+    - {fileID: 6114587583666079997, guid: 0494dbfe9e133164ba16302b07eb4d50, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0494dbfe9e133164ba16302b07eb4d50, type: 3}
 --- !u!1 &4797700756707497478 stripped
 GameObject:
@@ -9658,6 +9661,25 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7949844392847693042}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3101507363789018643 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4997097662373577441, guid: 0494dbfe9e133164ba16302b07eb4d50,
+    type: 3}
+  m_PrefabInstance: {fileID: 7949844392847693042}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3327020176884076295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3101507363789018643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mockType: 4
 --- !u!114 &3384261512986069656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9704,6 +9726,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &6644391991900674466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4797700756707497478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mockType: 32
 --- !u!1001 &8866913477158371193
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9750,6 +9785,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_enableWordWrapping
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2291736514132394976, guid: 22cbe4008ddb1724aace8af2d0ff0814,
+        type: 3}
+      propertyPath: mockType
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4586717438487948377, guid: 22cbe4008ddb1724aace8af2d0ff0814,
         type: 3}
@@ -9863,18 +9903,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22cbe4008ddb1724aace8af2d0ff0814, type: 3}
---- !u!1 &4947997906696934176 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4586717438487948377, guid: 22cbe4008ddb1724aace8af2d0ff0814,
-    type: 3}
-  m_PrefabInstance: {fileID: 8866913477158371193}
-  m_PrefabAsset: {fileID: 0}
---- !u!224 &1162531912609793641 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7723601108434450704, guid: 22cbe4008ddb1724aace8af2d0ff0814,
-    type: 3}
-  m_PrefabInstance: {fileID: 8866913477158371193}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7358648700390596850 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2094937803859042187, guid: 22cbe4008ddb1724aace8af2d0ff0814,
@@ -9887,6 +9915,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &1162531912609793641 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7723601108434450704, guid: 22cbe4008ddb1724aace8af2d0ff0814,
+    type: 3}
+  m_PrefabInstance: {fileID: 8866913477158371193}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4947997906696934176 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4586717438487948377, guid: 22cbe4008ddb1724aace8af2d0ff0814,
+    type: 3}
+  m_PrefabInstance: {fileID: 8866913477158371193}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9217923100784057416
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9894,6 +9934,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9217923100623834220}
     m_Modifications:
+    - target: {fileID: 2496909809683310193, guid: 5e8afd1d45ebfd249b19097f46b54ead,
+        type: 3}
+      propertyPath: mockType
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3359395784931884826, guid: 5e8afd1d45ebfd249b19097f46b54ead,
         type: 3}
       propertyPath: m_Transition
@@ -9913,7 +9958,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 4524553464559101786}
+      objectReference: {fileID: 894766239300907030}
     - target: {fileID: 3359395784931884826, guid: 5e8afd1d45ebfd249b19097f46b54ead,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -9928,7 +9973,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.TradingMenu,
-        BetterTraderClient
+        BetterTrader
       objectReference: {fileID: 0}
     - target: {fileID: 3359395784931884826, guid: 5e8afd1d45ebfd249b19097f46b54ead,
         type: 3}
@@ -10065,6 +10110,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RepairButtonText (TMP)
       objectReference: {fileID: 0}
+    - target: {fileID: 3598395434147360240, guid: 5e8afd1d45ebfd249b19097f46b54ead,
+        type: 3}
+      propertyPath: mockType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7881459095690916277, guid: 5e8afd1d45ebfd249b19097f46b54ead,
         type: 3}
       propertyPath: queryList
@@ -10124,6 +10174,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9217923100623834220}
     m_Modifications:
+    - target: {fileID: 2496909809683310193, guid: 5e8afd1d45ebfd249b19097f46b54ead,
+        type: 3}
+      propertyPath: mockType
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3359395784931884826, guid: 5e8afd1d45ebfd249b19097f46b54ead,
         type: 3}
       propertyPath: m_Transition
@@ -10143,7 +10198,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 4524553464559101786}
+      objectReference: {fileID: 894766239300907030}
     - target: {fileID: 3359395784931884826, guid: 5e8afd1d45ebfd249b19097f46b54ead,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -10158,7 +10213,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.TradingMenu,
-        BetterTraderClient
+        BetterTrader
       objectReference: {fileID: 0}
     - target: {fileID: 3359395784931884826, guid: 5e8afd1d45ebfd249b19097f46b54ead,
         type: 3}
@@ -10300,6 +10355,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RepairAllButtonText (TMP)
       objectReference: {fileID: 0}
+    - target: {fileID: 3598395434147360240, guid: 5e8afd1d45ebfd249b19097f46b54ead,
+        type: 3}
+      propertyPath: mockType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7881459095690916277, guid: 5e8afd1d45ebfd249b19097f46b54ead,
         type: 3}
       propertyPath: queryList
@@ -10391,7 +10451,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 4524553464559101786}
+      objectReference: {fileID: 894766239300907030}
     - target: {fileID: 1589659899582679171, guid: 0494dbfe9e133164ba16302b07eb4d50,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -10451,7 +10511,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.TradingMenu,
-        BetterTraderClient
+        BetterTrader
       objectReference: {fileID: 0}
     - target: {fileID: 1589659899582679171, guid: 0494dbfe9e133164ba16302b07eb4d50,
         type: 3}
@@ -10740,16 +10800,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2073975809666061047, guid: 0494dbfe9e133164ba16302b07eb4d50, type: 3}
+    - {fileID: 48795157845188611, guid: 0494dbfe9e133164ba16302b07eb4d50, type: 3}
+    - {fileID: 6114587583666079997, guid: 0494dbfe9e133164ba16302b07eb4d50, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0494dbfe9e133164ba16302b07eb4d50, type: 3}
---- !u!224 &6920044553173043046 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2298045151291656567, guid: 0494dbfe9e133164ba16302b07eb4d50,
+--- !u!1 &4230540183624977648 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4997097662373577441, guid: 0494dbfe9e133164ba16302b07eb4d50,
     type: 3}
   m_PrefabInstance: {fileID: 9217923101324332561}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &3025755081458750731 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6201738230365379354, guid: 0494dbfe9e133164ba16302b07eb4d50,
+    type: 3}
+  m_PrefabInstance: {fileID: 9217923101324332561}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &6920044553173043046 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2298045151291656567, guid: 0494dbfe9e133164ba16302b07eb4d50,
     type: 3}
   m_PrefabInstance: {fileID: 9217923101324332561}
   m_PrefabAsset: {fileID: 0}
@@ -10785,6 +10853,32 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1699880903686440686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4230540183624977648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mockType: 4
+--- !u!114 &5405542484230317428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5993158645778533605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mockType: 32
 --- !u!114 &8424732116335512906
 MonoBehaviour:
   m_ObjectHideFlags: 0

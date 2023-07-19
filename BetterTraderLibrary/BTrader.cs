@@ -154,7 +154,7 @@ namespace Menthus15Mods.Valheim.BetterTraderLibrary
                 circulatedItem.IsOnDiscount = isDiscounted;
                 circulatedItem.CurrentPurchasePrice = purchasePrice;
                 circulatedItem.CurrentSalesPrice = salesPrice;
-                circulatedItem.CurrentStock = item.Item2.BaseTraderStorage;
+                circulatedItem.CurrentStock = Mathf.Min(PerItemStockMax, item.Item2.BaseTraderStorage);
                 circulatedItem.IsActivelyPurchasable = true;
                 activelyPurchasableItemsList.Add(Tuple.Create(circulatedItem, item.Item2));
             }

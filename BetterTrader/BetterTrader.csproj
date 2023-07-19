@@ -62,7 +62,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BetterTraderClient\BetterTraderClient.csproj" />
+    <ProjectReference Include="..\BetterTraderClient\BetterTraderClient.csproj">
+      <Private></Private>
+    </ProjectReference>
     <ProjectReference Include="..\BetterTraderLibrary\BetterTraderLibrary.csproj" />
     <ProjectReference Include="..\BetterTraderServer\BetterTraderServer.csproj" />
   </ItemGroup>

@@ -162,7 +162,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 371230083033136406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 879694809, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 879694809, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <ContentPanel>k__BackingField: {fileID: 2619966943130963500}
@@ -177,7 +177,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4639771288532061583}
         m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.ItemInspector,
-          BetterTraderClient
+          BetterTrader
         m_MethodName: SetCameraClearFlag
         m_Mode: 0
         m_Arguments:
@@ -477,7 +477,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 469999628902018634}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 8
@@ -662,7 +662,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 469999629211496322}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 1
@@ -715,7 +715,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 469999629270471792}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -683555728, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: -683555728, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rectTransform: {fileID: 4371383775763900004}
@@ -807,7 +807,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 469999629270471792}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -955,10 +955,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 469999630441261699}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mockType: 4
+  mockType: 8
 --- !u!1 &615206314957599813
 GameObject:
   m_ObjectHideFlags: 0
@@ -1134,7 +1134,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 615206314957599813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -1230,8 +1230,8 @@ GameObject:
   - component: {fileID: 8138932596962004911}
   - component: {fileID: 7945093559787551206}
   - component: {fileID: 4465125224939863620}
-  - component: {fileID: 6365974906834036937}
   - component: {fileID: 3496746421252333315}
+  - component: {fileID: 2975269671631062874}
   m_Layer: 5
   m_Name: DropdownPanel
   m_TagString: Untagged
@@ -1407,19 +1407,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &6365974906834036937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1493679611555974448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mockType: 1
 --- !u!114 &3496746421252333315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1429,17 +1416,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 1493679611555974448}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 692745098, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mockType: 1
+--- !u!114 &2975269671631062874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493679611555974448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 692745098, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   events:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7653944102346575310}
-        m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.CustomDropdown,
-          BetterTraderClient
-        m_MethodName: OnDropdownPanelDeselected
-        m_Mode: 0
+      - m_Target: {fileID: 1493679611555974448}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1608,7 +1607,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2596864692822056092}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 1
@@ -1921,7 +1920,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2845596304247338536}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 8
@@ -2040,7 +2039,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3327459104946049730}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -2130,28 +2129,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3896955137397251495}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1059978188, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: -1059978188, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4639771288532061583}
-        m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.ItemInspector,
-          BetterTraderClient
-        m_MethodName: UpdateRenderTexture
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   rectTransform: {fileID: 4371383775763900004}
   axis: 0
-  maxScale: 550
+  maxScale: 700
   minScale: 300
 --- !u!222 &1701322124232664387
 CanvasRenderer:
@@ -2241,7 +2227,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3896955137397251495}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -2333,7 +2319,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4142207909622135657}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -661290357, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: -661290357, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   RootPanel: {fileID: 2596864692822056092}
@@ -2786,7 +2772,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7594785215091560167}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32
@@ -2840,28 +2826,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 8544973517045388169}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1059978188, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: -1059978188, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4639771288532061583}
-        m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.ItemInspector,
-          BetterTraderClient
-        m_MethodName: UpdateRenderTexture
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   rectTransform: {fileID: 4371383775763900004}
   axis: 1
-  maxScale: 550
+  maxScale: 700
   minScale: 300
 --- !u!222 &2791891880480051359
 CanvasRenderer:
@@ -2951,7 +2924,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8544973517045388169}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 32

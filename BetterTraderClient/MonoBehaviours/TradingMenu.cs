@@ -1,5 +1,4 @@
-﻿using Menthus15Mods.Valheim.BetterTraderLibrary.Utils;
-using Menthus15Mods.Valheim.BetterTraderLibrary;
+﻿using Menthus15Mods.Valheim.BetterTraderLibrary;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Extensions;
 using Menthus15Mods.Valheim.BetterTraderLibrary.Interfaces;
 using System;
@@ -10,7 +9,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
-using static ClutterSystem;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 {
@@ -119,7 +117,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                         return;
                     }
 
-                    RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestPurchaseItem),
+                    ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestPurchaseItem",
                             lastSelectedItem.Name,
                             tradeQuantity);
                 }
@@ -135,14 +133,14 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                         EventManager.RaiseNotification("Selling Equipped Item", "The item you've chosen to sell is currently equipped. Are you sure you want to sell it?",
                             () =>
                             {
-                                RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestSellItem),
+                                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestSellItem",
                                 requestPackage);
                             },
                             () => { });
                     }
                     else
                     {
-                        RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestSellItem),
+                        ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestSellItem",
                         requestPackage);
                     }
                 }
@@ -176,7 +174,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                 }
                 else
                 {
-                    RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestRepairItems), repairAllItems ? wornItems.Count : 1);
+                    ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestRepairItems", repairAllItems ? wornItems.Count : 1);
                 }
             }
         }
@@ -570,11 +568,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void RequestNewestData()
         {
-            RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestTraderInfo));
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestTraderInfo");
 
             if (tradeMode == TradeMode.Buy)
             {
-                RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestAvailablePurchaseItems));
+                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestAvailablePurchaseItems");
             }
             else
             {
@@ -587,7 +585,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                     circulatedItem.Serialize(ref requestPackage);
                 });
 
-                RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), nameof(RPC.RPC_RequestAvailableSellItems), requestPackage);
+                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestAvailableSellItems", requestPackage);
             }
         }
 
