@@ -17,6 +17,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private MockType mockType = MockType.Background;
         private TMP_Text text;
 
+        [Flags]
         public enum MockType
         {
             Background = 1,
@@ -40,7 +41,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                 }
                 else
                 {
-                    BetterTraderClient.LoggerInstance.LogWarning($"Failed to mock {nameof(MockType.Background)} for object {name}.");
+                    Jotunn.Logger.LogWarning($"Failed to mock {nameof(MockType.Background)} for object {name}.");
                 }
             }
 
@@ -59,7 +60,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                 }
                 else
                 {
-                    BetterTraderClient.LoggerInstance.LogWarning($"Failed to mock {nameof(MockType.Button)} for object {name}.");
+                    Jotunn.Logger.LogWarning($"Failed to mock {nameof(MockType.Button)} for object {name}.");
                 }
             }
 
@@ -73,7 +74,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                 }
                 else
                 {
-                    BetterTraderClient.LoggerInstance.LogWarning($"Failed to mock {nameof(MockType.HeadingText)} for object {name}.");
+                    Jotunn.Logger.LogWarning($"Failed to mock {nameof(MockType.HeadingText)} for object {name}.");
                 }
             }
 
@@ -87,7 +88,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                 }
                 else
                 {
-                    BetterTraderClient.LoggerInstance.LogWarning($"Failed to mock {nameof(MockType.SecondaryText)} for object {name}.");
+                    Jotunn.Logger.LogWarning($"Failed to mock {nameof(MockType.SecondaryText)} for object {name}.");
                 }
             }
 
@@ -99,7 +100,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                 }
                 else
                 {
-                    BetterTraderClient.LoggerInstance.LogWarning($"Failed to mock {nameof(MockType.CoinsIcon)} for object {name}.");
+                    Jotunn.Logger.LogWarning($"Failed to mock {nameof(MockType.CoinsIcon)} for object {name}.");
                 }
             }
 
@@ -115,7 +116,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                 }
                 else
                 {
-                    BetterTraderClient.LoggerInstance.LogWarning($"Failed to mock {nameof(MockType.LitPanelOnly)} for object {name}.");
+                    Jotunn.Logger.LogWarning($"Failed to mock {nameof(MockType.LitPanelOnly)} for object {name}.");
                 }
             }
 

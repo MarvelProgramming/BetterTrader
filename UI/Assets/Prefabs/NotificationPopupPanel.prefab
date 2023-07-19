@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 1769830979826414061}
   - component: {fileID: 7506750738663914739}
   - component: {fileID: 3296160209072244276}
-  - component: {fileID: 1769830979826414048}
-  - component: {fileID: 8154204626976421962}
+  - component: {fileID: 5412423361793924642}
+  - component: {fileID: 2841193869481295220}
   m_Layer: 2
   m_Name: NotificationPopupPanel
   m_TagString: Untagged
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 1
---- !u!114 &1769830979826414048
+--- !u!114 &5412423361793924642
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,12 +131,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1769830979826414063}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2126790967, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: -2126790967, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <TitleText>k__BackingField: {fileID: 404485259752277621}
   <DescriptionText>k__BackingField: {fileID: 404485258739142428}
---- !u!114 &8154204626976421962
+--- !u!114 &2841193869481295220
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1769830979826414063}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 1
@@ -262,7 +262,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1769830981121862635}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 1
@@ -388,9 +388,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1769830979826414048}
+      - m_Target: {fileID: 5412423361793924642}
         m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.NotificationPopupPanel,
-          BetterTraderClient
+          BetterTrader
         m_MethodName: Accept
         m_Mode: 1
         m_Arguments:
@@ -410,7 +410,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2530939866110055396}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 2
@@ -536,9 +536,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1769830979826414048}
+      - m_Target: {fileID: 5412423361793924642}
         m_TargetAssemblyTypeName: Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.NotificationPopupPanel,
-          BetterTraderClient
+          BetterTrader
         m_MethodName: Deny
         m_Mode: 1
         m_Arguments:
@@ -558,7 +558,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2530939866554533583}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 2
@@ -706,10 +706,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2530939866716925924}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mockType: 4
+  mockType: 8
 --- !u!1 &2530939867043805315
 GameObject:
   m_ObjectHideFlags: 0
@@ -860,7 +860,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2530939867073267934}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 1
@@ -1008,10 +1008,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2530939867560242890}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mockType: 4
+  mockType: 8
 --- !u!1 &2530939867725697902
 GameObject:
   m_ObjectHideFlags: 0
@@ -1086,7 +1086,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 320, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &1531513588335316446
 CanvasRenderer:
@@ -1229,7 +1229,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2821778752132922574}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 8
@@ -1377,7 +1377,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2821778753276704167}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2110502069, guid: 9a653e21b87bc944bb042aaf7a8efe3d, type: 3}
+  m_Script: {fileID: 2110502069, guid: ea9b39b15ed465d458e5cbef32d9b0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mockType: 8

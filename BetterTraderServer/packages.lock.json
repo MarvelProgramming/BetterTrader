@@ -24,21 +24,6 @@
         "resolved": "0.216.902",
         "contentHash": "JVCiFpGS5lwVYEAGt00CcK0c2JHN/hB9Ssx2rcDZBmxXf6eQEAC7mjTcnHc+AzG/fNLzZ6+1VV8PJuEp1yFYGQ=="
       },
-      "Fody": {
-        "type": "Direct",
-        "requested": "[6.6.0, 6.6.0]",
-        "resolved": "6.6.0",
-        "contentHash": "NWWM8KiR9DGiAi47q9px9oI27xYBiM5KXxSnI4R5mz2/rG8LIcXJfw5zDLLH1xOgzqRNJgc8KTPQPoiQCidYUw=="
-      },
-      "ILMerge.Fody": {
-        "type": "Direct",
-        "requested": "[1.22.0, 1.22.0]",
-        "resolved": "1.22.0",
-        "contentHash": "VCWQM8q7wZwHMgksBsFfbImRUmlgn7E6EKkrnUV86/keqBvMTjhlA7mBYtz6Dace8XsJYufYJvRP25uur5W5WA==",
-        "dependencies": {
-          "Fody": "6.3.0"
-        }
-      },
       "HarmonyX": {
         "type": "Transitive",
         "resolved": "2.7.0",

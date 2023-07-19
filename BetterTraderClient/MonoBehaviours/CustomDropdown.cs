@@ -166,7 +166,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
             if (IncludeGlobalOptions)
             {
-                if (options == null)
+                if (options == null || options.Length < 2)
                 {
                     options = new Option[2];
                 }
