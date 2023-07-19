@@ -284,7 +284,8 @@ jobs:
         if: ${{ !inputs.is-nuget-package }}
         uses: actions/upload-artifact@v3
         with:
-          path: ${{ github.workspace }}/${{ needs.prebuild.outputs.src-path }}/${{ needs.prebuild.outputs.proj-file-name }}/bin/Release/*.zip
+          #path: ${{ github.workspace }}/${{ needs.prebuild.outputs.src-path }}/${{ needs.prebuild.outputs.proj-file-name }}/bin/Release/*.zip
+          path: ${{ github.workspace }}/${{ needs.prebuild.outputs.proj-file-name }}/bin/Release/*.zip # Hack to get around "Relative pathing '.' and '..' is not allowed." error.
           name: zip-package
           retention-days: 1
 
