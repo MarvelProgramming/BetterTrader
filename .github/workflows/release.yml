@@ -30,7 +30,7 @@ jobs:
       sln-file-name: BetterTrader
       proj-file-name: BetterTrader
       src-path: "."
-      create-github-release: false
+      create-github-release: true
       nexus-enable-upload: false
       nexus-mod-id: 433
       ts-enable-upload: false
