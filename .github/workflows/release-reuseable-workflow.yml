@@ -401,7 +401,8 @@ jobs:
     needs: [prebuild, build]
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    if: ${{ github.ref == 'refs/heads/main' && inputs.create-github-release }}
+    # if: ${{ github.ref == 'refs/heads/main' && inputs.create-github-release }} 
+    if: ${{ github.ref == 'refs/heads/GHA-Automation' && inputs.create-github-release }} #ToDo: Restore before merging.
 
     steps:
       - name: Dump needs context
