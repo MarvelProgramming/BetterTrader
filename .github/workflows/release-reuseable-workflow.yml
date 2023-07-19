@@ -415,24 +415,20 @@ jobs:
         run: exit 1
 
       - name: Download zip package
-        # if: ${{ github.ref == 'refs/heads/main' && inputs.create-github-release }}
-        if: ${{ inputs.create-github-release }} #ToDo: Restore before merging.
         uses: actions/download-artifact@v3
         with:
           name: zip-package
 
       - name: Build Release Notes
-        # if: ${{ github.ref == 'refs/heads/main' && inputs.create-github-release }}
-        if: ${{ inputs.create-github-release }} #ToDo: Restore before merging.
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           default_bump: false
+          dry_run: true
+          release_branches: main,GHA-Automation
 
       - name: Create a GitHub release (w/ Version Bump)
-        # if: ${{ !inputs.force-assembly-version && github.ref == 'refs/heads/main' && inputs.create-github-release }}
-        if: ${{ inputs.create-github-release }} #ToDo: Restore before merging.
         uses: ncipollo/release-action@v1.11.2
         with:
           tag: v${{ needs.prebuild.outputs.next-tag }}
@@ -446,6 +442,4 @@ jobs:
           omitNameDuringUpdate: true
 
       - name: Print Release Info
-        # if: ${{ github.ref == 'refs/heads/main' && inputs.create-github-release }}
-        if: ${{ inputs.create-github-release }} #ToDo: Restore before merging.
         run: echo "::notice title=Release::${{ needs.build.outputs.tag-version }}"
