@@ -52,8 +52,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         private bool canRepairItems;
         private int perItemRepairCost;
         private ItemPanel lastHoveredItemPanel;
-        private ItemPanel lastSelectedItemPanel;
-        private ICirculatedItem lastSelectedItem => lastSelectedItemPanel?.Item;
+        private ICirculatedItem lastSelectedItem => ItemListPanel.GetSelectedItem();
         private ItemDetailsPopupPanel itemDetailsPopupPanel;
         private readonly List<ICirculatedItem> traderInventoryItems = new List<ICirculatedItem>();
         private readonly List<ICirculatedItem> sellablePlayerInventoryItems = new List<ICirculatedItem>();
@@ -93,7 +92,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         public void SubmitTrade()
         {
-            if (lastSelectedItemPanel == null)
+            if (lastSelectedItem == null)
             {
                 return;
             }
@@ -133,15 +132,13 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
                         EventManager.RaiseNotification("Selling Equipped Item", "The item you've chosen to sell is currently equipped. Are you sure you want to sell it?",
                             () =>
                             {
-                                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestSellItem",
-                                requestPackage);
+                                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestSellItem", requestPackage);
                             },
                             () => { });
                     }
                     else
                     {
-                        ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestSellItem",
-                        requestPackage);
+                        ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestSellItem", requestPackage);
                     }
                 }
             }
@@ -363,13 +360,6 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             TradeQuantityInput.SetTextWithoutNotify("1");
             TotalTradeValueText.text = "0c";
             itemFilter = string.Empty;
-
-            if (lastSelectedItemPanel != null)
-            {
-                lastSelectedItemPanel.Deselect();
-            }
-
-            lastSelectedItemPanel = null;
             lastHoveredItemPanel = null;
             traderInventoryItems.Clear();
             sellablePlayerInventoryItems.Clear();
@@ -382,14 +372,8 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             UpdateMenu();
         }
 
-        private void HandleSelectedItemPanel(ItemPanel newlySelectedItemPanel)
+        private void HandleSelectedItemPanel(ItemPanel _)
         {
-            if (lastSelectedItemPanel != null && newlySelectedItemPanel != lastSelectedItemPanel)
-            {
-                lastSelectedItemPanel.Deselect();
-            }
-
-            lastSelectedItemPanel = newlySelectedItemPanel;
             OnTradeQuantityChanged(TradeQuantityInput.text);
             UpdateTradeTotal();
         }

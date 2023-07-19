@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using static Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours.TradingMenu;
 
 namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 {
@@ -23,7 +24,24 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         public int PaddedPanels;
         [field: SerializeField]
         public float Spacing { get; private set; }
-        private int selectedItemPanelIndex = -1;
+        private int lastSelectedBuyItemIndex = -1;
+        private int lastSelectedSellItemIndex = -1;
+        private int SelectedItemPanelIndex
+        {
+            get => tradeMode == TradeMode.Buy ? lastSelectedBuyItemIndex : lastSelectedSellItemIndex;
+
+            set
+            {
+                if (tradeMode == TradeMode.Buy)
+                {
+                    lastSelectedBuyItemIndex = value;
+                }
+                else
+                {
+                    lastSelectedSellItemIndex = value;
+                }
+            }
+        }
         private float panelHeight;
         private float itemPanelHeight;
         private float itemPanelSpaceOccupancy;
@@ -47,7 +65,12 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         {
             this.tradeMode = tradeMode;
             this.items = items;
-            Scrollbar.value = 0;
+
+            if (SelectedItemPanelIndex >= items.Count)
+            {
+                SelectedItemPanelIndex = items.Count - 1;
+            }
+
             UpdateScrollHandleSize();
         }
 
@@ -58,7 +81,6 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         public void Reset()
         {
-            selectedItemPanelIndex = -1;
             DelayedInitializeVariables();
         }
 
@@ -67,6 +89,11 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             // Using coroutine to delay initialization until the second frame. That way the RectTransforms have a chance
             // to update and give the correct values.
             StartCoroutine(InitializeVariables());
+        }
+
+        public ICirculatedItem GetSelectedItem()
+        {
+            return items.Count > 0 && SelectedItemPanelIndex >= 0 && SelectedItemPanelIndex <= items.Count - 1 ? items[SelectedItemPanelIndex] : null;
         }
 
         private void UpdatePanels()
@@ -85,7 +112,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
                 if (itemIndex < items.Count)
                 {
-                    panel.IsSelectedDecoration.SetActive(selectedItemPanelIndex == itemIndex);
+                    panel.IsSelectedDecoration.SetActive(SelectedItemPanelIndex == itemIndex);
                     panel.SetupUI(items[itemIndex], tradeMode);
                 }
             }
@@ -123,6 +150,10 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void OnEnable()
         {
+            Scrollbar.value = 0;
+            lastSelectedBuyItemIndex = -1;
+            lastSelectedSellItemIndex = -1;
+            UpdateView();
             EventManager.OnMouseClickedItemPanel += HandleMouseClickItemPanel;
         }
 
@@ -133,14 +164,14 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
 
         private void HandleMouseClickItemPanel(ItemPanel panel)
         {
-            selectedItemPanelIndex = GetItemIndex(panel.transform.GetSiblingIndex());
+            SelectedItemPanelIndex = GetItemIndex(panel.transform.GetSiblingIndex());
+            UpdateView();
         }
 
         private IEnumerator InitializeVariables()
         {
             // Allow enough time for "options" to be serialized.
             yield return new WaitForEndOfFrame();
-            selectedItemPanelIndex = -1;
             panelHeight = rectTransform.rect.height;
             itemPanelHeight = itemPanelPrefabRectTransform.sizeDelta.y;
             itemPanelSpaceOccupancy = itemPanelHeight + Spacing;

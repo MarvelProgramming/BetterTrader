@@ -186,10 +186,9 @@ namespace Menthus15Mods.Valheim.BetterTraderClient
 
                 if (canSell)
                 {
-                    ZPackage responsePackage = pkg.ReadPackage();
-                    int quantity = responsePackage.ReadInt();
+                    int quantity = pkg.ReadInt();
                     ICirculatedItem inventoryItem = new CirculatedItem();
-                    inventoryItem.Deserialize(ref responsePackage);
+                    inventoryItem.Deserialize(ref pkg);
                     int totalSellPrice = inventoryItem.CurrentSalesPrice * quantity;
                     ItemDrop.ItemData sellItemDrop = Player.m_localPlayer.m_inventory.GetItemAt(inventoryItem.GridPosition.x, inventoryItem.GridPosition.y);
                     string sellText = quantity > 1 ? sellItemDrop.m_shared.m_name : $"{quantity}x{sellItemDrop.m_shared.m_name}";
