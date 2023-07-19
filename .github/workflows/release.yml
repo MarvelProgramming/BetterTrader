@@ -7,7 +7,7 @@ on:
   push:
     branches: [ main, GHA-Automation ] # Default release branch
     paths-ignore:
-      - '.github/**'
+      #- '.github/**'
       - 'docs/**'
       - '**/.ts/**'
       - '**/.nx/**'
