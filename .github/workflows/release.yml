@@ -1,0 +1,40 @@
+name: Release
+
+concurrency: ci-${{ github.ref }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, GHA-Automation ] # Default release branch
+    paths-ignore:
+      - '.github/**'
+      - 'docs/**'
+      - '**/.ts/**'
+      - '**/.nx/**'
+      - '**/README.md'
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  call-release-reuseable-workflow:
+    uses: MarvelProgramming/BetterTrader/.github/workflows/release-reuseable-workflow.yml@GHA-Automation
+    secrets:
+      nexus-api-key: ${{ secrets.NEXUS_API_KEY }}
+      nexus-cookie-nxid-header: ${{ secrets.NEXUS_COOKIE_HEADER_NEXUSID }}
+      nexus-cookie-sid-header: ${{ secrets.NEXUS_COOKIE_HEADER_SID_DEVELOP }}
+      ts-api-key: ${{ secrets.TS_SERVICEACCOUNT }}
+
+    with:
+      sln-file-name: BetterTrader
+      proj-file-name: BetterTrader
+      src-path: "."
+      create-github-release: false
+      nexus-enable-upload: false
+      nexus-mod-id: 433
+      ts-enable-upload: false
+      ts-name: Better_Trader
+      ts-description: "Adds a custom trader menu, 310+ items to buy/sell, built-in support for Epic Loot, and an extensive list of configuration options."
+      ts-categories: "server-side client-side tweaks" # https://thunderstore.io/api/experimental/community/valheim/category/
+      ts-dependencies: denikson-BepInExPack_Valheim@5.4.2105 ValheimModding-Jotunn@2.12.4
