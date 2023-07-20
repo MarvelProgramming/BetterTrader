@@ -5,9 +5,9 @@ concurrency: ci-${{ github.ref }}
 on:
   workflow_dispatch:
   push:
-    branches: [ main, GHA-Automation ] # Default release branch
+    branches: [ main ] # Default release branch
     paths-ignore:
-      #- '.github/**'
+      - '.github/**'
       - 'docs/**'
       - '**/.ts/**'
       - '**/.nx/**'
@@ -19,7 +19,7 @@ env:
 
 jobs:
   call-release-reuseable-workflow:
-    uses: MarvelProgramming/BetterTrader/.github/workflows/release-reuseable-workflow.yml@GHA-Automation
+    uses: MarvelProgramming/BetterTrader/.github/workflows/release-reuseable-workflow.yml@main
     secrets:
       nexus-api-key: ${{ secrets.NEXUS_API_KEY }}
       nexus-cookie-nxid-header: ${{ secrets.NEXUS_COOKIE_HEADER_NEXUSID }}

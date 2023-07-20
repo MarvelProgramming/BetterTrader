@@ -403,8 +403,7 @@ jobs:
     permissions:
       contents: write
 
-    # if: ${{ github.ref == 'refs/heads/main' && inputs.create-github-release }} 
-    if: ${{ inputs.create-github-release }} #ToDo: Restore before merging.
+    if: ${{ github.ref == 'refs/heads/main' && inputs.create-github-release }} 
 
     steps:
       - name: Dump needs context
