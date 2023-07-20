@@ -428,3 +428,6 @@ UI/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 # Temporary auto-generated Android Assets
 UI/[Aa]ssets/[Ss]treamingAssets/aa.meta
 UI/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Valheim Dlls
+UI/**/assembly_*.dll

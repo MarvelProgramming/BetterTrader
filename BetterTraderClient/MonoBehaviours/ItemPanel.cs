@@ -24,6 +24,8 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
         public GameObject IsSelectedDecoration { get; private set; }
         [field: SerializeField]
         public GameObject IsEquippedDecoration { get; private set; }
+        [field: SerializeField]
+        public CanvasGroup CanvasGroup { get; private set; }
 #pragma warning restore CS0649
         public ICirculatedItem Item { get; private set; }
 
@@ -35,6 +37,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.MonoBehaviours
             ItemQuantityText.text = $"x{item.CurrentStock}";
             IsEquippedDecoration.SetActive(tradeMode == TradingMenu.TradeMode.Sell && item.IsEquipped);
             Item = item;
+            CanvasGroup.alpha = tradeMode == TradingMenu.TradeMode.Sell || Player.m_localPlayer.m_inventory.CountItems(StoreGui.instance.m_coinPrefab.m_itemData.m_shared.m_name) >= Item.CurrentPurchasePrice ? 1 : 0.4f;
         }
 
         public void Deselect()

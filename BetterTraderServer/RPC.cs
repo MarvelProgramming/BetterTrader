@@ -85,7 +85,7 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
             ZRoutedRpc.instance.Register(nameof(RPC_RequestTraderInfo), RPC_RequestTraderInfo);
             ZRoutedRpc.instance.Register(nameof(RPC_RequestAvailablePurchaseItems), RPC_RequestAvailablePurchaseItems);
             ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestAvailableSellItems), RPC_RequestAvailableSellItems);
-            ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestPurchaseItem), RPC_RequestPurchaseItem);
+            ZRoutedRpc.instance.Register<string, int>(nameof(RPC_RequestPurchaseItem), RPC_RequestPurchaseItem);
             ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestSellItem), RPC_RequestSellItem);
             ZRoutedRpc.instance.Register<ZPackage>(nameof(RPC_RequestGenerateConfigs), RPC_RequestGenerateConfigs);
         }
@@ -178,44 +178,50 @@ namespace Menthus15Mods.Valheim.BetterTraderServer
         }
 
         [Server]
-        public static void RPC_RequestPurchaseItem(long sender, ZPackage pkg)
+        public static void RPC_RequestPurchaseItem(long sender, string itemToPurchase, int quantity)
         {
-            string itemToPurchase = pkg.ReadString();
-            int quantity = pkg.ReadInt();
+            var responsePackage = new ZPackage();
 
             if (BetterTraderServer.TraderInstance.CanSell(itemToPurchase, quantity))
             {
                 int purchasePrice = BetterTraderServer.TraderInstance.hashItemAssociations[itemToPurchase.GetStableHashCode()].Item1.CurrentPurchasePrice;
                 BetterTraderServer.TraderInstance.PurchaseItem(itemToPurchase, quantity);
-                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestPurchaseItemClient", true, itemToPurchase, quantity, purchasePrice * quantity);
+                responsePackage.Write(true);
+                responsePackage.Write(itemToPurchase);
+                responsePackage.Write(quantity);
+                responsePackage.Write(purchasePrice * quantity);
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestPurchaseItemClient", responsePackage);
             }
             else
             {
-                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestPurchaseItemClient", false);
+                responsePackage.Write(false);
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestPurchaseItemClient", responsePackage);
             }
         }
 
         [Server]
         public static void RPC_RequestSellItem(long sender, ZPackage pkg)
         {
-            ZPackage requestPackage = pkg.ReadPackage();
-            int quantity = requestPackage.ReadInt();
+            int quantity = pkg.ReadInt();
             ICirculatedItem inventoryItem = new CirculatedItem();
-            inventoryItem.Deserialize(ref requestPackage);
+            inventoryItem.Deserialize(ref pkg);
+
+            var responsePackage = new ZPackage();
 
             if (BetterTraderServer.TraderInstance.CanBeSold(quantity, inventoryItem))
             {
-                var responsePackage = new ZPackage();
                 ICirculatedItem equivalentTraderItem = BetterTraderServer.TraderInstance.GetItem(inventoryItem.Name);
                 inventoryItem.CurrentSalesPrice = equivalentTraderItem.CurrentSalesPrice;
+                responsePackage.Write(true);
                 responsePackage.Write(quantity);
                 inventoryItem.Serialize(ref responsePackage);
                 BetterTraderServer.TraderInstance.SellItem(inventoryItem.Name, quantity);
-                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestSellItemClient", true, responsePackage);
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestSellItemClient", responsePackage);
             }
             else
             {
-                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestSellItemClient", false);
+                responsePackage.Write(false);
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "RPC_RequestSellItemClient", responsePackage);
             }
         }
 

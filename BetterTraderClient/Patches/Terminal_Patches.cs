@@ -42,7 +42,18 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
                     return true;
                 }
 
-                RPCUtils.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestGenerateConfigs", new object[] { maxStackPricingWeight, weightPricingWeight, teleportationPricingWeight, prevalencePricingWeight, usefulnessPricingWeight, biomePricingWeight, enemyPricingWeight, globalWeight, globalBasePricing });
+                var commandPackage = new ZPackage();
+                commandPackage.Write(maxStackPricingWeight);
+                commandPackage.Write(weightPricingWeight);
+                commandPackage.Write(teleportationPricingWeight);
+                commandPackage.Write(prevalencePricingWeight);
+                commandPackage.Write(usefulnessPricingWeight);
+                commandPackage.Write(biomePricingWeight);
+                commandPackage.Write(enemyPricingWeight);
+                commandPackage.Write(globalWeight);
+                commandPackage.Write(globalBasePricing);
+
+                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RPC_RequestGenerateConfigs", commandPackage);
 
                 return true;
             }, false, false, true, false, false);
