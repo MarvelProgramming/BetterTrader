@@ -17,12 +17,6 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
             {
                 var btUI = Object.Instantiate(BetterTraderClient.UI_ASSET, __instance.transform);
                 btUI.name = BetterTraderClient.UI_ASSET.name;
-
-                // Effectively hides the original trade menu from view without confusing StoreGui into thinking it's been closed.
-                foreach (Transform child in __instance.m_rootPanel.transform)
-                {
-                    child.gameObject.SetActive(false);
-                }
             }
         }
 
@@ -31,6 +25,7 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
         {
             if (trader.IsHaldor())
             {
+                SetOriginalGUIVisibility(__instance, false);
                 StoreGUIUtils.GetBtUIObject(__instance, BetterTraderClient.UI_ASSET.name)?.SetActive(true);
                 EventManager.RaisePlayerCoinsChanged(Player.m_localPlayer.m_inventory.CountItems(StoreGui.instance.m_coinPrefab.m_itemData.m_shared.m_name));
             }
@@ -47,7 +42,17 @@ namespace Menthus15Mods.Valheim.BetterTraderClient.Patches
                     return;
                 }
 
+                SetOriginalGUIVisibility(__instance, true);
                 StoreGUIUtils.GetBtUIObject(__instance, BetterTraderClient.UI_ASSET.name).SetActive(false);
+            }
+        }
+
+        private static void SetOriginalGUIVisibility(StoreGui __instance, bool visibility)
+        {
+            // Effectively hides the original trade menu from view without confusing StoreGui into thinking it's been closed.
+            foreach (Transform child in __instance.m_rootPanel.transform)
+            {
+                child.gameObject.SetActive(visibility);
             }
         }
     }
