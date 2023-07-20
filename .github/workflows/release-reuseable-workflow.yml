@@ -234,7 +234,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: read
     timeout-minutes: 10
 
     steps:
@@ -401,6 +400,9 @@ jobs:
     needs: [prebuild, build]
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: write
+
     # if: ${{ github.ref == 'refs/heads/main' && inputs.create-github-release }} 
     if: ${{ inputs.create-github-release }} #ToDo: Restore before merging.
 
