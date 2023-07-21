@@ -1,0 +1,446 @@
+name: Build and Release
+
+on:
+  workflow_call:
+    inputs:
+      sln-file-name:
+        description: 'Name of SLN file w/o .sln, assumes sln file is in the src-path dir. e.g. ./src-path/sln-file-name.sln'
+        required: true
+        type: string
+
+      proj-file-name:
+        description: 'Name of proj file w/o .csproj, assumes proj dir is named the same as the proj-file-name. e.g. ./src-path/proj-file-name/proj-file-name.csproj'
+        required: true
+        type: string
+
+      src-path:
+        description: 'Path to source w/o trailing /'
+        required: false
+        default: 'src'
+        type: string
+
+      create-github-release:
+        description: 'Create a github release.'
+        required: false
+        default: true
+        type: boolean
+
+      nexus-enable-upload:
+        description: 'Upload Mod to Nexus'
+        required: false
+        default: false
+        type: boolean
+
+      nexus-mod-id:
+        description: 'Nexus Id for the mod.'
+        required: false
+        default: -1
+        type: number
+        
+      ts-enable-upload:
+        description: 'Upload Mod to Thunderstore'
+        required: false
+        default: false
+        type: boolean
+
+      ts-categories:
+        description: 'A list, separated by spaces of categories to give to the mod when published. See https://thunderstore.io/api/experimental/community/valheim/category/'
+        required: false
+        default: "Server-side Client-side"
+        type: string
+        
+      ts-dependencies:
+        description: 'A list, separated by spaces, of mods this mod depends on. Must be in namespace-modname@1.2.3 format.'
+        required: false
+        default: "denikson-BepInExPack_Valheim@5.4.2105"
+        type: string
+        
+      ts-name:
+        description: 'Name of the package.'
+        required: false
+        default: false
+        type: string
+        
+      ts-description:
+        description: 'Description of the package that will appear on Thunderstore.'
+        required: false
+        default: false
+        type: string      
+        
+      ts-community:
+        description: 'Thunderstore community to publish to.'
+        required: false
+        default: "valheim"
+        type: string
+        
+      ts-namespace:
+        description: 'Name of the team to publish under.'
+        required: false
+        default: "Menthus"
+        type: string
+
+    secrets:
+      nexus-api-key:
+        description: 'Nexus Api key'
+        required: false
+
+      nexus-cookie-nxid-header:
+        description: 'Nexus nexusid cookie'
+        required: false
+
+      nexus-cookie-sid-header:
+        description: 'Nexus sid_develop cookie'
+        required: false
+
+      ts-api-key:
+        description: 'Thunderstore Api key'
+        required: false
+
+env:
+  NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+jobs:
+  #[PREBUILD]
+  prebuild:
+    name: Pre-Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      sln-file-name: ${{ steps.vars.outputs.sln-file-name }}
+      proj-file-name: ${{ steps.vars.outputs.proj-file-name }}
+      src-path: ${{ steps.vars.outputs.src-path }}
+      create-github-release: ${{ steps.vars.create-github-release }}
+      nexus-enable-upload: ${{ steps.vars.outputs.nexus-enable-upload }}
+      nexus-mod-id: ${{ steps.vars.outputs.nexus-mod-id }}
+      date: ${{ steps.vars.outputs.date }}
+      version: ${{ steps.vars.outputs.version }}
+      version-prefix: ${{ steps.vars.outputs.version-prefix }}
+      version-suffix: ${{ steps.vars.outputs.version-suffix }}
+      package-version: ${{ steps.vars.outputs.package-version }}
+      artifactName: ${{ steps.vars.outputs.artifactName }}
+      artifactVersion: ${{ steps.vars.outputs.artifactVersion }}
+      file-version: ${{ steps.vars.outputs.file-version }}
+      informational-version: ${{ steps.vars.outputs.informational-version }}
+      previous-tag: ${{ steps.vars.outputs.previous-tag }}
+      next-tag: ${{ steps.vars.outputs.next-tag }}
+      ts-enable-upload: ${{ steps.vars.outputs.ts-enable-upload }}
+      ts-namespace: ${{ steps.vars.outputs.ts-namespace }}
+      ts-name: ${{ steps.vars.outputs.ts-name }}
+      ts-description: ${{ steps.vars.outputs.ts-description }}
+      ts-categories: ${{ steps.vars.outputs.ts-categories }}
+      ts-community: ${{ steps.vars.outputs.ts-community }}
+      ts-dependencies: ${{ steps.vars.outputs.ts-dependencies }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get Assembly Version
+        uses: kzrnm/get-net-sdk-project-versions-action@v1.3.0
+        id: get-version
+        with:
+          proj-path: ${{ github.workspace }}/${{ inputs.src-path }}/${{ inputs.proj-file-name }}/${{ inputs.proj-file-name }}.csproj
+
+      - name: Get Previous tag
+        uses: KrogerWalt/action-get-latest-tag@v4
+        id: previoustag
+        with:
+          initial_version: ${{steps.get-version.outputs.assembly-version}}
+
+      - name: Get next minor version
+        uses: WyriHaximus/github-action-next-semvers@v1.2.1
+        id: semvers
+        with:
+          version: ${{ steps.previoustag.outputs.tag }}
+
+      - name: Setup Variables
+        id: vars
+        env:
+          LC_ALL: en_US.utf8
+        run: |
+          echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+          echo "sln-file-name=${{ inputs.sln-file-name }}" >> $GITHUB_OUTPUT
+          echo "proj-file-name=${{ inputs.proj-file-name }}" >> $GITHUB_OUTPUT
+          echo "src-path=${{ inputs.src-path }}" >> $GITHUB_OUTPUT
+          echo "create-github-release=${{ inputs.create-github-release }}" >> $GITHUB_OUTPUT
+          echo "nexus-enable-upload=${{ inputs.nexus-enable-upload }}" >> $GITHUB_OUTPUT
+          echo "nexus-mod-id=${{ inputs.nexus-mod-id }}" >> $GITHUB_OUTPUT
+          echo "version=${{ steps.get-version.outputs.version }}" >> $GITHUB_OUTPUT
+          echo "version-prefix=${{ steps.get-version.outputs.version-prefix }}" >> $GITHUB_OUTPUT
+          echo "version-suffix=${{ steps.get-version.outputs.version-suffix }}" >> $GITHUB_OUTPUT
+          echo "package-version=${{ steps.get-version.outputs.package-version }}" >> $GITHUB_OUTPUT
+          echo "assembly-version=${{ steps.get-version.outputs.assembly-version }}" >> $GITHUB_OUTPUT
+          echo "file-version=${{ steps.get-version.outputs.file-version }}" >> $GITHUB_OUTPUT
+          echo "informational-version=${{ steps.get-version.outputs.informational-version }}" >> $GITHUB_OUTPUT
+          echo "previous-tag=${{ steps.previoustag.outputs.tag }}" >> $GITHUB_OUTPUT
+          echo "next-tag=${{ steps.semvers.outputs.patch }}" >> $GITHUB_OUTPUT
+          echo "ts-enable-upload=${{ inputs.ts-enable-upload }}" >> $GITHUB_OUTPUT
+          echo "ts-namespace=${{ inputs.ts-namespace }}" >> $GITHUB_OUTPUT
+          echo "ts-name=${{ inputs.ts-name }}" >> $GITHUB_OUTPUT
+          echo "ts-description=${{ inputs.ts-description }}" >> $GITHUB_OUTPUT
+          echo "ts-categories=${{ inputs.ts-categories }}" >> $GITHUB_OUTPUT
+          echo "ts-community=${{ inputs.ts-community }}" >> $GITHUB_OUTPUT
+          echo "ts-dependencies=${{ inputs.ts-dependencies }}" >> $GITHUB_OUTPUT 
+        shell: bash
+
+      - name: Log Inputs
+        run: |
+          echo "::notice title=sln-file-name::${{ inputs.sln-file-name }}"
+          echo "::notice title=proj-file-name::${{ inputs.proj-file-name }}"
+          echo "::notice title=src-path::${{ inputs.src-path }}"
+          echo "::notice title=create-github-release::${{ inputs.create-github-release }}"
+          echo "::notice title=nexus-enable-upload::${{ inputs.nexus-enable-upload }}"
+          echo "::notice title=nexus-mod-id::${{ inputs.nexus-mod-id }}"
+          echo "::notice title=ts-enable-upload::${{ inputs.ts-enable-upload }}"
+          echo "::notice title=ts-namespace::${{ inputs.ts-namespace }}"
+          echo "::notice title=ts-name::${{ inputs.ts-name }}"
+          echo "::notice title=ts-description::${{ inputs.ts-description }}"
+          echo "::notice title=ts-categories::${{ inputs.ts-categories }}"
+          echo "::notice title=ts-community::${{ inputs.ts-community }}"
+          echo "::notice title=ts-dependencies::${{ inputs.ts-dependencies }}"
+        shell: bash
+
+      - name: Log Variables
+        run: |
+          echo "::notice title=date::${{ steps.vars.outputs.date }}"
+          #echo "::notice title=version::${{ steps.vars.outputs.version }}"
+          #echo "::notice title=version-prefix::${{ steps.vars.outputs.version-prefix }}"
+          #echo "::notice title=version-suffix::${{ steps.vars.outputs.version-suffix }}"
+          #echo "::notice title=package-version::${{ steps.vars.outputs.package-version }}"
+          echo "::notice title=assembly-version::${{ steps.vars.outputs.assembly-version }}"
+          #echo "::notice title=file-version::${{ steps.vars.outputs.file-version }}"
+          #echo "::notice title=informational-version::${{ steps.vars.outputs.informational-version }}"
+          echo "::notice title=previous-tag::${{ steps.vars.outputs.previous-tag }}"
+          echo "::notice title=next-tag::${{ steps.vars.outputs.next-tag }}"
+        shell: bash
+
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJSON(steps) }}
+        run: echo "$STEPS_CONTEXT"
+        
+      - name: Dump github context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+  #[BUILD]
+  build:
+    name: Build
+    needs: [prebuild]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 10
+
+    steps:
+
+      - name: Dump needs context
+        env:
+            NEEDS_CONTEXT: ${{ toJSON(needs) }}
+        run: echo "$NEEDS_CONTEXT"
+
+      - name: Check for failure.
+        if: ${{ needs.prebuild.result == 'failure' }}
+        run: exit 1
+
+      - name: Setup .NET 6 SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            2.1.x
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Package Cache
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: ${{ github.workspace }}/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: dotnet restore $GITHUB_WORKSPACE/${{ needs.prebuild.outputs.src-path }}/${{ needs.prebuild.outputs.sln-file-name }}.sln --nologo -v d
+
+      - name: Install replace-in-file tool
+        run: dotnet tool install -g replace-in-file
+
+      - name: Build (w/ Version Bump)
+        run: |
+          replace-in-file "$GITHUB_WORKSPACE/${{ needs.prebuild.outputs.src-path }}/${{ needs.prebuild.outputs.proj-file-name }}/MetaData.cs" -set "0.0.1" "${{ needs.prebuild.outputs.next-tag }}"
+          replace-in-file "$GITHUB_WORKSPACE/${{ needs.prebuild.outputs.src-path }}/${{ needs.prebuild.outputs.proj-file-name }}/${{ needs.prebuild.outputs.proj-file-name }}.csproj" -set "0.0.1" "${{ needs.prebuild.outputs.next-tag }}"          
+          dotnet build $GITHUB_WORKSPACE/${{ needs.prebuild.outputs.src-path }}/${{ needs.prebuild.outputs.sln-file-name }}.sln -c Release --nologo -v n
+
+      - name: Save Zip Package
+        if: ${{ !inputs.is-nuget-package }}
+        uses: actions/upload-artifact@v3
+        with:
+          #path: ${{ github.workspace }}/${{ needs.prebuild.outputs.src-path }}/${{ needs.prebuild.outputs.proj-file-name }}/bin/Release/*.zip
+          path: ${{ github.workspace }}/${{ needs.prebuild.outputs.proj-file-name }}/bin/Release/*.zip # Hack to get around "Relative pathing '.' and '..' is not allowed." error.
+          name: zip-package
+          retention-days: 1
+
+  # Nexus Upload
+  nexusupload:
+    name: Upload to Nexus
+    needs: [prebuild, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    if: ${{ github.ref == 'refs/heads/main' && inputs.nexus-enable-upload }}
+
+    steps:
+      - name: Dump needs context
+        env:
+            NEEDS_CONTEXT: ${{ toJSON(needs) }}
+        run: echo "$NEEDS_CONTEXT"
+
+      - name: Check for failure.
+        if: ${{ needs.prebuild.result == 'failure' || needs.build.result == 'failure' }}
+        run: exit 1
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        id: download
+        with:
+          name: zip-package
+
+      - name: Setup .NET 6 SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Restore tools
+        run: dotnet tool install -g Digitalroot.ModUploader
+
+      - name: Upload
+        env:
+          NEXUSMOD_API_KEY: ${{ secrets.nexus-api-key }}
+          NEXUSMOD_COOKIE_NEXUSID: ${{ secrets.nexus-cookie-nxid-header }}
+          NEXUSMOD_COOKIE_SID_DEVELOP: ${{ secrets.nexus-cookie-sid-header }}
+        run: |
+          drmu nx check
+          drmu nx upload ${{ inputs.nexus-mod-id }} ${{ steps.download.outputs.download-path }}/${{ needs.prebuild.outputs.proj-file-name }}.v${{ needs.prebuild.outputs.next-tag }}.zip -v ${{ needs.prebuild.outputs.next-tag }} -d "Automated Release (CI/CD)" -f ${{ needs.prebuild.outputs.proj-file-name }} -dmv
+
+  # Thunderstore Upload
+  tsupload:
+    name: Upload to Thunderstore
+    needs: [prebuild, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    if: ${{ github.ref == 'refs/heads/main' && inputs.ts-enable-upload }}
+
+    steps:
+
+      - name: Dump needs context
+        env:
+            NEEDS_CONTEXT: ${{ toJSON(needs) }}
+        run: echo "$NEEDS_CONTEXT"
+
+      - name: Check for failure.
+        if: ${{ needs.prebuild.result == 'failure' || needs.build.result == 'failure' }}
+        run: exit 1
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        id: download
+        with:
+          name: zip-package
+          
+      - name: Log Variables
+        run: |
+          echo "::notice title=ts-download-path::${{ steps.download.outputs.download-path }}"
+          echo "::notice title=ts-proj-file-namen::${{ needs.prebuild.outputs.proj-file-namen }}"
+          echo "::notice title=ts-next-tag:${{ needs.prebuild.outputs.next-tag }}"
+          echo "::notice title=version-suffix::${{ steps.vars.outputs.version-suffix }}"
+          echo "::notice title=ts-file::${{ steps.download.outputs.download-path }}/${{ needs.prebuild.outputs.proj-file-name }}.v${{ needs.prebuild.outputs.next-tag }}.ts.zip"
+        shell: bash
+
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJSON(steps) }}
+        run: echo "$STEPS_CONTEXT"
+
+      - name: Dump needs context
+        env:
+          NEEDS_CONTEXT: ${{ toJSON(needs) }}
+        run: echo "$NEEDS_CONTEXT"        
+        
+      - name: List Files
+        run: |
+          pwd
+          ls -laR
+        shell: bash
+
+      #- uses: GreenTF/upload-thunderstore-package@v3.1
+      - uses: Digitalroot/upload-thunderstore-package@dr-main
+      
+        with:
+          namespace: ${{ inputs.ts-namespace }} # the thunderstore 'team' to publish under
+          description: ${{ inputs.ts-description }}
+          token: ${{ secrets.ts-api-key }}
+          name: ${{ inputs.ts-name }} # the name of the package
+          version: ${{ needs.prebuild.outputs.next-tag }} # Use the tag as the package version
+          community: ${{ inputs.ts-community }} 
+          categories: ${{ inputs.ts-categories }}
+          deps: ${{ inputs.ts-dependencies }}
+          path: ${{ steps.download.outputs.download-path }}
+          file: ./${{ needs.prebuild.outputs.proj-file-name }}.v${{ needs.prebuild.outputs.next-tag }}.ts.zip
+
+  #[PUBLISH]
+  publish:
+    name: Create github release
+    needs: [prebuild, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+
+    if: ${{ github.ref == 'refs/heads/main' && inputs.create-github-release }} 
+
+    steps:
+      - name: Dump needs context
+        env:
+            NEEDS_CONTEXT: ${{ toJSON(needs) }}
+        run: echo "$NEEDS_CONTEXT"
+
+      - name: Check for failure.
+        if: ${{ needs.prebuild.result == 'failure' || needs.build.result == 'failure' }}
+        run: exit 1
+
+      - name: Download zip package
+        uses: actions/download-artifact@v3
+        with:
+          name: zip-package
+
+      - name: Build Release Notes
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: false
+          dry_run: true
+          release_branches: main,GHA-Automation
+
+      - name: Create a GitHub release (w/ Version Bump)
+        uses: ncipollo/release-action@v1.11.2
+        with:
+          tag: v${{ needs.prebuild.outputs.next-tag }}
+          name: Release ${{ needs.prebuild.outputs.next-tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit: main
+          artifacts: "${{ github.workspace }}/*.zip"
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
+
+      - name: Print Release Info
+        run: echo "::notice title=Release::${{ needs.build.outputs.tag-version }}"
