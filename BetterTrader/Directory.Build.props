@@ -1,6 +1,6 @@
 ﻿<Project>
   <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
-
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
   <Target Name="RefreshVars" AfterTargets="PostBuildEvent" Label="MyRefreshVars">
     <Message Text="RefreshVars Called" Importance="high" />
     <ItemGroup>
@@ -31,10 +31,10 @@
   <Target Name="DebugPostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Debug'" DependsOnTargets="RefreshVars">
     <Message Text="+--------------------------------------------------------------+" Importance="high" />
     <Message Text="PostBuild (Debug) Called" Importance="high" />
-    <Message Text="Copying assemblies to C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\plugins\$(ProjectName)\" Importance="high" />
+    <Message Text="Copying assemblies to $(BT_INSTALL)" Importance="high" />
     <CallTarget Targets="RefreshVars" />
     <Message Text="DigitalrootOutputFile = @(DigitalrootOutputFile)" Importance="high" />
-    <Copy SourceFiles="@(DigitalrootOutputFile)" DestinationFiles="@(DigitalrootOutputFile->'C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\plugins\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
+    <Copy SourceFiles="@(DigitalrootOutputFile)" DestinationFiles="@(DigitalrootOutputFile->'$(BT_INSTALL)\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
     <Message Text="+--------------------------------------------------------------+" Importance="high" />
   </Target>
 
